@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Sky Tower/Scenes/Shop.unity
     guid: 5a9081c13e16bfb4c976ffbce522e1cd
   - enabled: 1
-    path: Assets/Shaders Learning/Scene/Shaders.unity
+    path: Assets/Shaders&vfx_exp/Scene/Shaders.unity
     guid: c4f4b97269aec1e4d85e13f0c22abeb1
   m_configObjects: {}

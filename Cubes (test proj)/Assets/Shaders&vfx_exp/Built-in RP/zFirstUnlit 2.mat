@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: zFirstUnlit 2
+  m_Shader: {fileID: 4800000, guid: 8d70d8e5502c0444e821830347abf840, type: 3}
+  m_ShaderKeywords: _EMISSION
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _HeightTex:
+        m_Texture: {fileID: 2800000, guid: d67b582fb861fba47a6e9dbb8d06981f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 3abdaa566263d2348937152e3f351d76, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 2800000, guid: 25d4414c805bf4546836363bc603d984, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _DispStrenght: 0.05
+    - _DispacementStrenght: 1
+    - _Gloss: 0.282
+    - _NormalIntensity: 1
+    - _UOffset: 0.75
+    - _VOffset: 0.875
+    - _distortionAmp: 0.035
+    - _pulseAmp: 1
+    - _pulseDist: 1
+    - _pulseDistortionAmp: 0.035
+    - _waveAmp: 0.2
+    m_Colors:
+    - _AmbientLight: {r: 0.077830195, g: 0.086478, b: 0.103773594, a: 1}
+    - _ColorBase: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorSecond: {r: 0.3820755, g: 0.8786899, b: 1, a: 1}
+  m_BuildTextureStacks: []

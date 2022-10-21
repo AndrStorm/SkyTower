@@ -6,11 +6,8 @@ public class Singleton<T> : MonoBehaviour where T: MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (Instance == null) //audiosource don't work without this if
+       if (Instance == null) 
             Instance = this as T;
-        //else
-        //    Destroy(gameObject);
-
     }
 
     protected void OnApplicationQuit()
@@ -25,7 +22,11 @@ public class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
 {
     protected override void Awake()
     {
-        if (Instance != null) Destroy(gameObject); //don't work (reloading)
+        if (Instance != null)
+        {
+            Destroy(gameObject);    //without (if (Instance == null)) sound source doesn't work when switching scene back (obj destroy)
+            return;                 //work fine with this, probably, scripts continue after GO destroyed
+        }
         DontDestroyOnLoad(gameObject);
         base.Awake();
     }

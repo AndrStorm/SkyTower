@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8173687355280265453}
   - component: {fileID: 6235851738990371879}
   m_Layer: 0
-  m_Name: plane_pulse
+  m_Name: plane_pulse1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5587505260222105074}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.36, y: 1.738, z: -6.76}
   m_LocalScale: {x: 7.4109554, y: 7.4109554, z: 7.4109554}
   m_Children: []
@@ -39,7 +39,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5587505260222105074}
-  m_Mesh: {fileID: 1332339827199181524, guid: 36f8e5e9bcd55e34ea5ef65fb34a8ef3, type: 3}
+  m_Mesh: {fileID: 1332339827199181524, guid: 4f09fcfe9b297714480a929097dd5298, type: 3}
 --- !u!23 &6235851738990371879
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b274a1648ecf50e4c81805f0360885e3, type: 2}
+  - {fileID: 2100000, guid: 8eb2def6430b4a74bb58d945991cd8d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

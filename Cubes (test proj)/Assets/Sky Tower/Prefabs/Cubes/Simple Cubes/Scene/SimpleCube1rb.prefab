@@ -7,9 +7,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 998354796117334216, guid: 4920bb4604d6ab648931412a0eaadd8b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211246710988852093, guid: 4920bb4604d6ab648931412a0eaadd8b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2823120304225344146, guid: 4920bb4604d6ab648931412a0eaadd8b, type: 3}
       propertyPath: m_Name
-      value: SimpleCube1 (1)
+      value: SimpleCube1rb
       objectReference: {fileID: 0}
     - target: {fileID: 3199363715090284584, guid: 4920bb4604d6ab648931412a0eaadd8b, type: 3}
       propertyPath: m_RootOrder

@@ -29,6 +29,7 @@ namespace Tarodev {
             _tokenSource = new CancellationTokenSource();
             _task = SaveInterval(_tokenSource.Token);
         }
+        
 
         private static void FetchConfig() {
             while (true) {

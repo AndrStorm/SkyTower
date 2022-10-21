@@ -67,6 +67,6 @@ public class SceneLoader : MonoBehaviour
         loadingFinished = true;
         loadingOperation.allowSceneActivation = true;
     }
-
+    
 
 }

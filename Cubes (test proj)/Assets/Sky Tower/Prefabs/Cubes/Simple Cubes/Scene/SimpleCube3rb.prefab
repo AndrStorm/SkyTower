@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2823120304225344146, guid: 1e8414bca82bafd449cc874a9bc468d5, type: 3}
       propertyPath: m_Name
-      value: SimpleCube3
+      value: SimpleCube3rb
       objectReference: {fileID: 0}
     - target: {fileID: 3199363715090284584, guid: 1e8414bca82bafd449cc874a9bc468d5, type: 3}
       propertyPath: m_RootOrder
@@ -53,6 +53,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3199363715090284584, guid: 1e8414bca82bafd449cc874a9bc468d5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302187929562632975, guid: 1e8414bca82bafd449cc874a9bc468d5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385034175242904424, guid: 1e8414bca82bafd449cc874a9bc468d5, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

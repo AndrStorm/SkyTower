@@ -6,6 +6,7 @@ using System;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.VFX;
 
 public class GameController : MonoBehaviour
 {
@@ -30,10 +31,10 @@ public class GameController : MonoBehaviour
     public Text score;
     public Transform cubeSpawner;
     public Transform cameraViewDirection;
-    public GameObject allCubes, restartButton, exploseOnSpawn;
+    public GameObject allCubes, restartButton;
     public GameObject cubeToCreate;
-    public GameObject[] vfxsOnSpawn;
     public List<GameObject> cubesToCreate;
+    public GameObject[] vfxsOnSpawn;
     public GameObject[] canvasMenu;
 
 
@@ -214,13 +215,13 @@ public class GameController : MonoBehaviour
         ResetTimer(curLevel);
 
         CreateCube(cubeSpawner.position);
-
+        
+        
         foreach (var vfx in vfxsOnSpawn)
         {
             PlayVFX(vfx,lastCube.getVector(),3f);
         }
         
-        //PlayVFX(exploseOnSpawn,lastCube.getVector(),3f);
         SoundManager.Instance.PlayCubeSpawnSound();
         ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1827919843797331034}
   - component: {fileID: 2164973682164599356}
   m_Layer: 0
-  m_Name: Sparks 8
+  m_Name: Sparks 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,10 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 2.0541432, y: 0.3964136, z: 3.4415908, w: 1}
+        m_Name: Sparks Color
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:

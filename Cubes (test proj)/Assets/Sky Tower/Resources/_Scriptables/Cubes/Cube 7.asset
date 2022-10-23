@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7730e0bdb20a5c4ba8335754ec638c3, type: 3}
+  m_Name: Cube 7
+  m_EditorClassIdentifier: 
+  cubeId: 7
+  cube: {fileID: 2823120304225344146, guid: 1a538bf81513b18458bd08898573de4a, type: 3}
+  vfx: {fileID: 972420559682001289, guid: 3149b12a295f7b446b02663686ada602, type: 3}

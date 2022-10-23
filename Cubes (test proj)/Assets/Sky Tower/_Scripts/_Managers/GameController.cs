@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
-using UnityEngine.VFX;
+
 
 public class GameController : MonoBehaviour
 {
@@ -93,9 +91,7 @@ public class GameController : MonoBehaviour
         CreateCube(new Vector3(0, 1, 0));
         showCubePlace = StartCoroutine(ShowCubePlace());  
     }
-
     
-
     IEnumerator ShowCubePlace()
     {
         while (true)
@@ -123,8 +119,8 @@ public class GameController : MonoBehaviour
                         ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
                     }
                 }
-                
             }
+            
             InitializeSpawnerMovement();
             yield return new WaitForSeconds(timeToPlace[curLevel]);
         }
@@ -160,6 +156,8 @@ public class GameController : MonoBehaviour
             LoseGame();
     }
 
+    
+    
     #region Methods;
     public bool IsLoose()
     {
@@ -216,12 +214,8 @@ public class GameController : MonoBehaviour
 
         CreateCube(cubeSpawner.position);
         
-        
-        foreach (var vfx in vfxsOnSpawn)
-        {
-            PlayVFX(vfx,lastCube.getVector(),3f);
-        }
-        
+        VfxManager.Instance.playSpawnVfx(lastCube.getVector(),12);
+
         SoundManager.Instance.PlayCubeSpawnSound();
         ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
@@ -268,12 +262,6 @@ public class GameController : MonoBehaviour
         allCubesRB.isKinematic = true;
         allCubesRB.isKinematic = false;
 
-    }
-
-    private void PlayVFX(GameObject vfxSample, Vector3 pos, float timeToDestroy)
-    {
-        GameObject vfx = Instantiate(vfxSample, pos, Quaternion.identity) as GameObject;
-        Destroy(vfx, timeToDestroy);
     }
 
     private void ChangeScore()
@@ -397,6 +385,8 @@ public class GameController : MonoBehaviour
 
     #endregion;
 
+    
+    
     struct CubePos
     {
         public int x, y, z;

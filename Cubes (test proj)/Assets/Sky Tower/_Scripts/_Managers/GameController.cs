@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Unity.Mathematics;
 using UnityEngine.EventSystems;
 
 
@@ -30,29 +31,36 @@ public class GameController : MonoBehaviour
     public Transform cubeSpawner;
     public Transform cameraViewDirection;
     public GameObject allCubes, restartButton;
-    public GameObject cubeToCreate;
-    public List<GameObject> cubesToCreate;
-    public GameObject[] vfxsOnSpawn;
+    public CubeScriptable cubeToCreate;
     public GameObject[] canvasMenu;
 
-
+    private List<CubeInfo> cubeInfos = new List<CubeInfo>();
+    private List<CubeScriptable> cubesToCreate;
+    private Rigidbody allCubesRB;
+    
+    
+    
     private CubePos lastCube = new CubePos(0, 1, 0);
     private Color targetBGColor;
     private Vector3 cameraTargetPos,cameraStartPos, lastSpawnerVector = Vector3.up;
     private float maxZX = 0f, timerAutoPlace;
     private bool gameLost,gameStart,achievmentsOpened;
-    private Rigidbody allCubesRB;
-    private Coroutine showCubePlace;
-
-    public static Camera playerCam;
-    string lastScore = "lastScore";
-    string bestScore = "bestScore";
-
+    
     List<Vector3> cubesPositions = new List<Vector3>
     {
         new Vector3(0, 1, 0)
     };
-
+    
+    
+    private Coroutine showCubePlace;
+    public static Camera playerCam;
+    
+    
+    string lastScore = "lastScore";
+    string bestScore = "bestScore";
+    
+    
+    
     private void OnEnable()
     {
         AchievmentsButtons.OnAchievmentsWindowOpen += SetAchievmentsOpened;  
@@ -70,15 +78,19 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         if (timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length)
-            Debug.LogError("Warning: timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length");
-
+            Debug.LogError("Warning arrays(haven't make custom class yet): timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length");
         
-        for (int i = cubesToCreate.Count - 1; i >= 0; i--)
+        
+        cubesToCreate = new List<CubeScriptable>();
+        foreach (var cube in CubesManager.Instance.cubesDict)
         {
-            if (PlayerPrefs.GetInt($"Cube{i + 1}") == 0)
-                cubesToCreate.RemoveAt(i);
+            if (cube.Value.active)
+            {
+                cubesToCreate.Add(cube.Value);
+            }
         }
 
+        
         ResetTimer(curLevel);
 
         targetBGColor = playerCam.backgroundColor;
@@ -159,6 +171,12 @@ public class GameController : MonoBehaviour
     
     
     #region Methods;
+
+
+    public List<CubeInfo> GetCubeInfos()
+    {
+        return cubeInfos;
+    }
     public bool IsLoose()
     {
         if (gameLost)
@@ -211,20 +229,29 @@ public class GameController : MonoBehaviour
     private void InitializeCubeCreation()
     {
         ResetTimer(curLevel);
-
-        CreateCube(cubeSpawner.position);
         
-        VfxManager.Instance.playSpawnVfx(lastCube.getVector(),12);
+        
+        Vector3 vfxDir = cubeSpawner.position - lastCube.getVector();
+        
+        CreateCube(cubeSpawner.position);
 
+        Vector3 vfxPos = lastCube.getVector();
+        vfxPos.x -= vfxDir.x/2;
+        vfxPos.z -= vfxDir.z/2;
+        if (vfxDir.y < 0.1f) vfxPos.y += 0.5f;
+ 
+        Quaternion vfxRotation = Quaternion.LookRotation(vfxDir, Vector3.up) * Quaternion.Euler(90, 0, 0);
+        VfxManager.Instance.PlaySpawnVfx(vfxPos, vfxRotation, cubeToCreate.cubeId);
+        
+        
         SoundManager.Instance.PlayCubeSpawnSound();
         ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
+        
         ChangeScore();
-
         ChangeTargetBGColor();
         MoveCameraTargetPos();
         MoveCameraTiltDirection();
-
         IncriseDifficulty();
     }
 
@@ -251,7 +278,7 @@ public class GameController : MonoBehaviour
             cubeToCreate = cubesToCreate[UnityEngine.Random.Range(0, cubesToCreate.Count)];
 
         GameObject newCube = Instantiate(
-                cubeToCreate,
+                cubeToCreate.cube,
                 position,
                 Quaternion.identity) as GameObject;
 
@@ -261,7 +288,11 @@ public class GameController : MonoBehaviour
 
         allCubesRB.isKinematic = true;
         allCubesRB.isKinematic = false;
+        
 
+        CubeInfo cubeInfo = new CubeInfo(newCube.transform, cubeToCreate.cubeId);
+        cubeInfos.Add(cubeInfo);
+        
     }
 
     private void ChangeScore()
@@ -407,6 +438,18 @@ public class GameController : MonoBehaviour
         public Vector3 getVector ()
         {
             return new Vector3(x, y, z);
+        }
+    }
+
+    public class CubeInfo
+    {
+        public Transform cube;
+        public int cubeId;
+
+        public CubeInfo(Transform transform, int id)
+        {
+            cube = transform;
+            cubeId = id;
         }
     }
 

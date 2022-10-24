@@ -899,6 +899,7 @@ Transform:
   - {fileID: 843554499}
   - {fileID: 843034916}
   - {fileID: 1927756840}
+  - {fileID: 1592614656}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1799,23 +1800,7 @@ MonoBehaviour:
   cameraViewDirection: {fileID: 2097426643}
   allCubes: {fileID: 1660574463}
   restartButton: {fileID: 434290888}
-  cubeToCreate: {fileID: 2823120304225344146, guid: 4920bb4604d6ab648931412a0eaadd8b, type: 3}
-  cubesToCreate:
-  - {fileID: 2823120304225344146, guid: 4920bb4604d6ab648931412a0eaadd8b, type: 3}
-  - {fileID: 2823120304225344146, guid: 999eb83831f7ffb49abddf0ddb1f27b9, type: 3}
-  - {fileID: 2823120304225344146, guid: 1e8414bca82bafd449cc874a9bc468d5, type: 3}
-  - {fileID: 2823120304225344146, guid: 5523fdcfd4c50f3429476703208e1b48, type: 3}
-  - {fileID: 2823120304225344146, guid: 0d4c9e70908bc1543a6885f6a2bf9f98, type: 3}
-  - {fileID: 2823120304225344146, guid: aae2f0521672a054ba4b44eb8f80e5ae, type: 3}
-  - {fileID: 2823120304225344146, guid: 1a538bf81513b18458bd08898573de4a, type: 3}
-  - {fileID: 2823120304225344146, guid: 39cd5171502007c44b83aecf0b214dee, type: 3}
-  - {fileID: 2823120304225344146, guid: 7d207520e53961e45ac36f7d316fb4a0, type: 3}
-  - {fileID: 2823120304225344146, guid: daded8a8e2f6a034fb394f14a844b2cc, type: 3}
-  - {fileID: 2823120304225344146, guid: 5c57c366144082644b11911501d90e20, type: 3}
-  - {fileID: 2823120304225344146, guid: 792b6c27502c4864383ae59cb5244e07, type: 3}
-  vfxsOnSpawn:
-  - {fileID: 8963722182653973489, guid: c02b773dd4513a24482ca93733545721, type: 3}
-  - {fileID: 6232253651686861528, guid: 60ce737bca37114489dfae5b23bacbdf, type: 3}
+  cubeToCreate: {fileID: 11400000, guid: c7dd9418dd0070d4d91c57a658e69564, type: 2}
   canvasMenu:
   - {fileID: 5040188}
   - {fileID: 143035204}
@@ -3326,6 +3311,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 261766035282611732, guid: 4c2c0882403bc8342ac192556382fdb3, type: 3}
   m_PrefabInstance: {fileID: 3442885964825763849}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1592614655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592614656}
+  - component: {fileID: 1592614657}
+  m_Layer: 0
+  m_Name: CubesManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1592614656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592614655}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 480894140}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1592614657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592614655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 738163343e4c7a642a0981426f8880b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubesScriptables:
+  - {fileID: 11400000, guid: c7dd9418dd0070d4d91c57a658e69564, type: 2}
+  - {fileID: 11400000, guid: f407551debcb4394ebf91532d5d8fb54, type: 2}
+  - {fileID: 11400000, guid: e6fb1d7ac7620624fad7f35b2899e0bc, type: 2}
+  - {fileID: 11400000, guid: 22e28731f3bbae444b1f704291624e1c, type: 2}
+  - {fileID: 11400000, guid: c0ba832a2f76a65418c508a43abe35c0, type: 2}
+  - {fileID: 11400000, guid: aad55d34dd567e44e80b11f4747378e1, type: 2}
+  - {fileID: 11400000, guid: 7667075419ddc364e8f78a1ef30c1547, type: 2}
+  - {fileID: 11400000, guid: ca1e8a62b4acd5d4c8816d47681b77a9, type: 2}
+  - {fileID: 11400000, guid: d3e4770da9bc1d84f927881b425aecba, type: 2}
+  - {fileID: 11400000, guid: feff87c6216b16e4489986ca7e4e6268, type: 2}
+  - {fileID: 11400000, guid: 9e721768b0153f641bea0ca986daea81, type: 2}
+  - {fileID: 11400000, guid: e273308877cf4424da41f91dd13cd9d2, type: 2}
 --- !u!1001 &1596837435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3728,21 +3769,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b906e92eea02584eb5802d3c3e21601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubesVfx:
-  - {fileID: 972420559682001289, guid: 702068a0339d5da4098b57ed56646c6c, type: 3}
-  - {fileID: 972420559682001289, guid: 7e93b41e179590c4fb8f203b8578987e, type: 3}
-  - {fileID: 972420559682001289, guid: d56a41f64013cf34089c7de36c6a031d, type: 3}
-  - {fileID: 972420559682001289, guid: f8558552ee7381a4f81f4027fc775786, type: 3}
-  - {fileID: 972420559682001289, guid: d6f5a9fd1b2e68b4a8523be4c37e1b3f, type: 3}
-  - {fileID: 972420559682001289, guid: 49c40d69a0e375b4ab773db49e0c3f77, type: 3}
-  - {fileID: 972420559682001289, guid: 3149b12a295f7b446b02663686ada602, type: 3}
-  - {fileID: 972420559682001289, guid: d04cf5a9dd2663d4bbc8cffa5818b286, type: 3}
-  - {fileID: 972420559682001289, guid: e8a1b297b82b5ba469be5e9933d5fe78, type: 3}
-  - {fileID: 972420559682001289, guid: a33164638b76a434eac5833ca51dba8f, type: 3}
-  - {fileID: 972420559682001289, guid: dbe66e09d550d1b438864fd6325799fc, type: 3}
-  - {fileID: 972420559682001289, guid: 6aa1aa36d20c71f4991939998662be4b, type: 3}
   onSpawnVfx:
   - {fileID: 6232253651686861528, guid: 60ce737bca37114489dfae5b23bacbdf, type: 3}
+  onExplodeVfx:
+  - {fileID: 6232253651686861528, guid: 63da223620539e44b8f8f9f5ba2237be, type: 3}
+  - {fileID: 9127283156229930307, guid: 74a7ab02ee105b74ea1fcefd80976f61, type: 3}
   timeToDestroy: 3
 --- !u!1 &1966830412
 GameObject:

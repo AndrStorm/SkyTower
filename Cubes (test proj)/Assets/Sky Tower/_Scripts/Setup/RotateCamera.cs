@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RotateCamera : MonoBehaviour
@@ -35,7 +34,7 @@ public class RotateCamera : MonoBehaviour
         else if (!trackDownAllCubes)
         {
             trackDownAllCubes = true;
-            TrackVelocity(allCubesRB.velocity, cinematicOffset, out allCubesTracker);
+            TrackVelocity(allCubesRB.velocity, cinematicOffset, out allCubesTracker,false);
         }
     }
 
@@ -74,6 +73,7 @@ public class RotateCamera : MonoBehaviour
             Debug.Log("velocity - " + velocity.ToString() + " Atan(z/x) = " + arcTan.ToString() + " Quarter - " + quarter); 
     }
 
+    
     private int CheckQuarter(float x, float z)
     {
 
@@ -89,6 +89,7 @@ public class RotateCamera : MonoBehaviour
         else
             return 3;
     }
+    
 
     private void RotateToTracker(Transform rotator, Quaternion tracker, float speed)
     {

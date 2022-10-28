@@ -67,7 +67,7 @@ VisualEffect:
       m_Array: []
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 2.6082377, y: 1.0651442, z: 0.38235945, w: 1}
+      - m_Value: {x: 3.4415908, y: 0.88292116, z: 0.2883008, w: 1}
         m_Name: Sparks Color
         m_Overridden: 1
     m_Uint:

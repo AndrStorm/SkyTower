@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class CanvasButtons : MonoBehaviour
 {
@@ -14,9 +15,9 @@ public class CanvasButtons : MonoBehaviour
             GetComponent<Image>().sprite = soundOn;
 
         if (gameObject.name == "Score")
-            GetComponent<Text>().text = $"Score: {PlayerPrefs.GetInt("lastScore")}";
+            GetComponent<TextMeshProUGUI>().text = $"Score: {PlayerPrefs.GetInt("lastScore")}";
         if (gameObject.name == "Best Score")
-            GetComponent<Text>().text = $"Best Score: {PlayerPrefs.GetInt("bestScore")}";
+            GetComponent<TextMeshProUGUI>().text = $"Best Score: {PlayerPrefs.GetInt("bestScore")}";
     }
 
     public void Shop()

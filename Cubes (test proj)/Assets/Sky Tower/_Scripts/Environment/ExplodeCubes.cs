@@ -6,10 +6,9 @@ using Random = UnityEngine.Random;
 
 public class ExplodeCubes : MonoBehaviour
 {
-    public GameObject exploseOnCollision;
-    public GameController controller;
-
-
+    public GameObject cubesTower;
+   
+    private GameController controller;
     private List<GameController.CubeInfo> cubeInfos;
     private bool collisionDestroyed=false;
 
@@ -17,23 +16,33 @@ public class ExplodeCubes : MonoBehaviour
     
     private void Start()
     {
+        controller = GameController.Instance;
         cubeInfos = controller.GetCubeInfos();
     }
 
-
-    
-    private void OnCollisionEnter(Collision collision)
+    private void OnEnable()
     {
-        if (collision.gameObject.tag=="Cube" && !collisionDestroyed)
+        TowerCollision.OnColide += CheckTowerCollision;
+    }
+
+    private void OnDisable()
+    {
+        TowerCollision.OnColide -= CheckTowerCollision;
+    }
+
+
+    private void CheckTowerCollision(Collision collision)
+    {
+        if (collision.gameObject.tag=="Obstacle" && !collisionDestroyed)
         {
-            for (int i = collision.transform.childCount-1; i >=0; i--)
+            for (int i = cubesTower.transform.childCount-1; i >=0; i--)
             {
-                Transform child = collision.transform.GetChild(i);
+                Transform child = cubesTower.transform.GetChild(i);
                 child.gameObject.AddComponent<Rigidbody>();
                 child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(100f, Vector3.up, 5f);
                 child.SetParent(null);
             }
-            Destroy(collision.gameObject);
+            Destroy(cubesTower.gameObject);
             collisionDestroyed = true;
             
             
@@ -55,6 +64,8 @@ public class ExplodeCubes : MonoBehaviour
 
             SoundManager.Instance.PlayExplodeSound();
             GameController.playerCam.gameObject.AddComponent<ShakeCamera>();
+            
+            
         }
     }
 }

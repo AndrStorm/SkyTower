@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using Unity.Mathematics;
 using UnityEngine.EventSystems;
+using TMPro;
 
 
-public class GameController : MonoBehaviour
+public class GameController : Singleton<GameController>
 {
     public static event Action<int> OnDifficultyChanged;
     public static event Action<int> OnScoreIncrised;
 
     [Header("Game property")]
     public float camMovSpeed = 2f;
+    public float cameraMoveCoefficient =1.7f;
+    public int cameraMoveThreshold = 2;
     public float ambColorIntensity;
     public int colorScoreStep = 10;
     public Color[] bgColors;
@@ -27,7 +29,7 @@ public class GameController : MonoBehaviour
 
 
     [Header("References")]
-    public Text score;
+    public TextMeshProUGUI score;
     public Transform cubeSpawner;
     public Transform cameraViewDirection;
     public GameObject allCubes, restartButton;
@@ -37,13 +39,14 @@ public class GameController : MonoBehaviour
     private List<CubeInfo> cubeInfos = new List<CubeInfo>();
     private List<CubeScriptable> cubesToCreate;
     private Rigidbody allCubesRB;
-    
-    
+
+
+
     
     private CubePos lastCube = new CubePos(0, 1, 0);
     private Color targetBGColor;
     private Vector3 cameraTargetPos,cameraStartPos, lastSpawnerVector = Vector3.up;
-    private float maxZX = 0f, timerAutoPlace;
+    private float maxZX, timerAutoPlace;
     private bool gameLost,gameStart,achievmentsOpened;
     
     List<Vector3> cubesPositions = new List<Vector3>
@@ -70,8 +73,9 @@ public class GameController : MonoBehaviour
         AchievmentsButtons.OnAchievmentsWindowOpen -= SetAchievmentsOpened;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerCam = Camera.main;
     }
 
@@ -172,11 +176,16 @@ public class GameController : MonoBehaviour
     
     #region Methods;
 
+    public Vector3 GetLastCubePosition()
+    {
+        return lastCube.getVector();
+    }
 
     public List<CubeInfo> GetCubeInfos()
     {
         return cubeInfos;
     }
+    
     public bool IsLoose()
     {
         if (gameLost)
@@ -199,7 +208,7 @@ public class GameController : MonoBehaviour
     {
         gameStart = true;
         PlayerPrefs.SetInt("lastScore", 0);
-        score.text = $"Score: {PlayerPrefs.GetInt("lastScore")}";
+        score.text = $"Score: 0";
         foreach (GameObject obj in canvasMenu)
             Destroy(obj);
     }
@@ -332,7 +341,8 @@ public class GameController : MonoBehaviour
         camPos.y = cameraStartPos.y + lastCube.y - 1f;
         
 
-        if (Mathf.Abs(lastCube.z) > 2 || Mathf.Abs(lastCube.x) > 2)
+        // move camera backward
+        if (Mathf.Abs(lastCube.z) > cameraMoveThreshold || Mathf.Abs(lastCube.x) > cameraMoveThreshold)
             foreach (var pos in cubesPositions)
             {
                 x = Mathf.Abs(pos.x);
@@ -341,9 +351,10 @@ public class GameController : MonoBehaviour
                     maxZX = x > z ? x : z;
             }
         if (maxZX > 0)
-            camPos.z = cameraStartPos.z - ((maxZX * maxZX) / (maxZX*0.6f));
+            camPos.z = cameraStartPos.z - (maxZX * cameraMoveCoefficient);
 
-        cameraTargetPos = new Vector3(camPos.x,camPos.y,camPos.z);
+
+        cameraTargetPos = new Vector3(0,camPos.y,camPos.z);
     }
 
     private void MoveCamera()

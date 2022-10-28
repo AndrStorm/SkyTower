@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class RotateCamera : MonoBehaviour
 {
-    public float speed = 5f, trackSpeed = 2f;
+    public float speed = 5f, trackSpeed = 2f, rotatorMoveSpeed=1f;
     public float cinematicOffset = 140f;
-    public GameController controller;
+    
 
 
+    private Vector3 lastCubePos, curCubePos, rotatorStartPos, rotatorTargetPos;
+    private GameController controller;
     private Transform rotator;
     private Rigidbody allCubesRB;
     private bool trackDownAllCubes/*, rotatorReady*/;
@@ -16,7 +18,10 @@ public class RotateCamera : MonoBehaviour
     void Start()
     {
         rotator = GetComponent<Transform>();
+        controller = GameController.Instance;
         allCubesRB = controller.allCubes.GetComponent<Rigidbody>();
+        lastCubePos = controller.GetLastCubePosition();
+        rotatorStartPos = rotator.localPosition;
     }
 
     void Update()
@@ -24,6 +29,12 @@ public class RotateCamera : MonoBehaviour
         if (!controller.IsLoose() || controller.allCubes == null /*|| rotatorReady*/)
         {
             rotator.rotation *= Quaternion.Euler(new Vector3(0, speed * Time.deltaTime, 0));
+            
+            if (lastCubePos != (curCubePos = controller.GetLastCubePosition()))
+            {
+                moveRotatorTarget(curCubePos);
+            }
+            moveRotator();
         }
         else if(controller.allCubes != null && trackDownAllCubes)
         {
@@ -35,7 +46,21 @@ public class RotateCamera : MonoBehaviour
         {
             trackDownAllCubes = true;
             TrackVelocity(allCubesRB.velocity, cinematicOffset, out allCubesTracker,false);
+            moveRotatorTarget(rotatorStartPos);
         }
+    }
+
+    private void moveRotator()
+    {
+        Vector3 rotPos = rotator.localPosition;
+        rotPos = Vector3.MoveTowards(rotPos, rotatorTargetPos, Time.deltaTime * rotatorMoveSpeed);
+        rotator.localPosition = rotPos;
+    }
+
+    private void moveRotatorTarget(Vector3 target)
+    {
+        rotatorTargetPos.x = target.x;
+        rotatorTargetPos.z = target.z;
     }
 
     private bool IsRotatorEqual(Quaternion Tracker)

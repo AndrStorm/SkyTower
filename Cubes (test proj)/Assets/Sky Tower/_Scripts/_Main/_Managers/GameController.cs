@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
 using TMPro;
@@ -12,19 +11,34 @@ public class GameController : Singleton<GameController>
     public static event Action<int> OnDifficultyChanged;
     public static event Action<int> OnScoreIncrised;
 
-    [Header("Game property")]
-    public float camMovSpeed = 2f;
-    public float cameraMoveCoefficient =1.7f;
-    public int cameraMoveThreshold = 2;
+    public static bool gamePause;
+
+    [Header("Cinematic Game property")]
+    [SerializeField]private float camMovSpeed = 2f;
+    [SerializeField]private float cameraMoveBackMul =1.7f;
+    [SerializeField]private int cameraMoveThreshold = 2;
+    [SerializeField]private float slowMotionScale = 0.55f, slowMotionDuration=1.5f;
+    [SerializeField]private float loseCamYMul =1.5f, loseCamZMul =2f, loseCamMovSpeedMul=2f;
+
+    [Header("Spawn Game property")] 
+    [SerializeField]private float spawnGamePauseDuration = 0.01f;
+    [SerializeField]private float spawnPauseDuration = 0.1f;
+    [SerializeField]private float spawnShakeAmount = 0.01f;
+    [SerializeField]private float spawnShakeDur = 0.05f;
+    
+    [Header("Game property")] 
     public float ambColorIntensity;
     public int colorScoreStep = 10;
     public Color[] bgColors;
+    
     public float[] timeToAutoPlace, timeToPlace;
     public int[] difLevelsThresholds;
+    
     public Color[] phaseColors;
     public Vector3 phaseLightIntensity;
     public Vector3 phaseSpawnerFlicker;
 
+    
     private int curLevel = 0;
 
 
@@ -36,18 +50,23 @@ public class GameController : Singleton<GameController>
     public CubeScriptable cubeToCreate;
     public GameObject[] canvasMenu;
 
+    
+    
     private List<CubeInfo> cubeInfos = new List<CubeInfo>();
     private List<CubeScriptable> cubesToCreate;
     private Rigidbody allCubesRB;
 
-
-
+    
     
     private CubePos lastCube = new CubePos(0, 1, 0);
     private Color targetBGColor;
-    private Vector3 cameraTargetPos,cameraStartPos, lastSpawnerVector = Vector3.up;
-    private float maxZX, timerAutoPlace;
-    private bool gameLost,gameStart,achievmentsOpened;
+    private Vector3 cameraTargetPos,cameraStartPos;
+    private Vector3 lastSpawnerVector = Vector3.up;
+    private float timerAutoPlace;
+    private float maxZX;
+    private bool gameLost,gameStart;
+    private bool achievmentsOpened;
+    private bool spawnPause;
     
     List<Vector3> cubesPositions = new List<Vector3>
     {
@@ -81,8 +100,12 @@ public class GameController : Singleton<GameController>
 
     private void Start()
     {
+        spawnPause = false; //just in case
+        
+#if UNITY_EDITOR
         if (timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length)
-            Debug.LogError("Warning arrays(haven't make custom class yet): timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length");
+                   Debug.LogError("Warning arrays(haven't make custom class yet): timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length"); 
+#endif
         
         
         cubesToCreate = new List<CubeScriptable>();
@@ -108,7 +131,41 @@ public class GameController : Singleton<GameController>
         showCubePlace = StartCoroutine(ShowCubePlace());  
     }
     
-    IEnumerator ShowCubePlace()
+    private void Update()
+    {
+        if(gamePause || spawnPause) return;
+        
+        if(gameLost)
+            TiltCamera();
+
+        MoveCamera();
+        ChangeBGColor();
+        ChangeAmbientLight(playerCam.backgroundColor, ambColorIntensity);
+        
+
+        bool gameContinue = !achievmentsOpened && !gameLost && allCubes != null && cubeSpawner != null;
+        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && gameContinue && !EventSystem.current.IsPointerOverGameObject())
+        {
+#if !UNITY_EDITOR
+            if (Input.GetTouch(0).phase != TouchPhase.Began)
+                return;
+#endif
+
+            if (!gameStart)
+                StartGame();
+
+            InitializeCubeCreation();
+            InitializeSpawnerMovement();
+            
+        }
+
+        if (gameStart && !gameLost && allCubesRB.velocity.magnitude >= 0.18f)
+            LoseGame();
+    }
+
+    
+    
+    private IEnumerator ShowCubePlace()
     {
         while (true)
         {
@@ -141,40 +198,43 @@ public class GameController : Singleton<GameController>
             yield return new WaitForSeconds(timeToPlace[curLevel]);
         }
     }
-
-    private void Update()
+    
+    private IEnumerator PauseGame(float t)
     {
-        if(gameLost)
-            TiltCamera();
-
-        MoveCamera();
-        ChangeBGColor();
-        ChangeAmbientLight(playerCam.backgroundColor, ambColorIntensity);
+        Time.timeScale = 0f;
+        //AudioListener.pause = true;
+        gamePause = true;
         
-
-        bool gameContinue = !achievmentsOpened && !gameLost && allCubes != null && cubeSpawner != null;
-        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && gameContinue && !EventSystem.current.IsPointerOverGameObject())
-        {
-#if !UNITY_EDITOR
-            if (Input.GetTouch(0).phase != TouchPhase.Began)
-                return;
-#endif
-
-            if (!gameStart)
-                StartGame();
-
-            InitializeCubeCreation();
-            InitializeSpawnerMovement();
-            
-        }
-
-        if (gameStart && !gameLost && allCubesRB.velocity.magnitude >= 0.18f)
-            LoseGame();
+        yield return new WaitForSecondsRealtime(t);
+        
+        Time.timeScale = 1f;
+        //AudioListener.pause = false;
+        gamePause = false;
     }
+    
+    private IEnumerator PauseSpawn(float t)
+    {
+        spawnPause = true;
+        
+        yield return new WaitForSecondsRealtime(t);
 
+        spawnPause = false;
+    }
+    
+    private IEnumerator SlowDownGame(float scale, float t)
+    {
+        Time.timeScale = scale;
+
+        yield return new WaitForSecondsRealtime(t);
+        
+        Time.timeScale = 1f;
+    }
+    
     
     
     #region Methods;
+    
+    
 
     public Vector3 GetLastCubePosition()
     {
@@ -184,6 +244,12 @@ public class GameController : Singleton<GameController>
     public List<CubeInfo> GetCubeInfos()
     {
         return cubeInfos;
+    }
+
+
+    public void SlowDownTheGame()
+    {
+        StartCoroutine(SlowDownGame(slowMotionScale, slowMotionDuration));
     }
     
     public bool IsLoose()
@@ -201,7 +267,9 @@ public class GameController : Singleton<GameController>
         Destroy(cubeSpawner.gameObject);
         StopCoroutine(showCubePlace);
         restartButton.SetActive(true);
-        cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * 1.5f, cameraTargetPos.z * 2f);     
+        cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
+        camMovSpeed *= loseCamMovSpeedMul;
+        allCubesRB.velocity *= 1.1f;
     }
 
     private void StartGame()
@@ -237,13 +305,15 @@ public class GameController : Singleton<GameController>
 
     private void InitializeCubeCreation()
     {
+        StartCoroutine(PauseGame(spawnGamePauseDuration));
+        StartCoroutine(PauseSpawn(spawnPauseDuration));
         ResetTimer(curLevel);
         
         
         Vector3 vfxDir = cubeSpawner.position - lastCube.getVector();
-        
         CreateCube(cubeSpawner.position);
 
+        
         Vector3 vfxPos = lastCube.getVector();
         vfxPos.x -= vfxDir.x/2;
         vfxPos.z -= vfxDir.z/2;
@@ -253,6 +323,7 @@ public class GameController : Singleton<GameController>
         VfxManager.Instance.PlaySpawnVfx(vfxPos, vfxRotation, cubeToCreate.cubeId);
         
         
+        CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
         SoundManager.Instance.PlayCubeSpawnSound();
         ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
@@ -351,7 +422,7 @@ public class GameController : Singleton<GameController>
                     maxZX = x > z ? x : z;
             }
         if (maxZX > 0)
-            camPos.z = cameraStartPos.z - (maxZX * cameraMoveCoefficient);
+            camPos.z = cameraStartPos.z - (maxZX * cameraMoveBackMul);
 
 
         cameraTargetPos = new Vector3(0,camPos.y,camPos.z);
@@ -426,7 +497,6 @@ public class GameController : Singleton<GameController>
     }
 
     #endregion;
-
     
     
     struct CubePos

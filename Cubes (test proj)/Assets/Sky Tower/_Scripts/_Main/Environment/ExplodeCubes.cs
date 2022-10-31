@@ -6,8 +6,10 @@ using Random = UnityEngine.Random;
 
 public class ExplodeCubes : MonoBehaviour
 {
-    public GameObject cubesTower;
+    [SerializeField] private float explosionForce = 100f;
+    [SerializeField] [Range(0, 1)] private float minExplosionsNumberMul = 0.2f , maxExplosionsNumberMul = 0.5f;
    
+    private GameObject cubesTower;
     private GameController controller;
     private List<GameController.CubeInfo> cubeInfos;
     private bool collisionDestroyed=false;
@@ -18,6 +20,7 @@ public class ExplodeCubes : MonoBehaviour
     {
         controller = GameController.Instance;
         cubeInfos = controller.GetCubeInfos();
+        cubesTower = controller.allCubes;
     }
 
     private void OnEnable()
@@ -39,7 +42,8 @@ public class ExplodeCubes : MonoBehaviour
             {
                 Transform child = cubesTower.transform.GetChild(i);
                 child.gameObject.AddComponent<Rigidbody>();
-                child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(100f, Vector3.up, 5f);
+                //child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, Vector3.up, 5f);
+                child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, child.position + new Vector3(0,0,0), 5f);
                 child.SetParent(null);
             }
             Destroy(cubesTower.gameObject);
@@ -49,7 +53,7 @@ public class ExplodeCubes : MonoBehaviour
             VfxManager.Instance.PlayExplodeVfx(collision.GetContact(0).point, quaternion.identity);
             
             
-            int vfxQuanity = Random.Range(1, Mathf.RoundToInt(cubeInfos.Count / 2));
+            int vfxQuanity = Random.Range(Mathf.RoundToInt(cubeInfos.Count * minExplosionsNumberMul), Mathf.RoundToInt(cubeInfos.Count * maxExplosionsNumberMul));
             for (int i = 0; i <= vfxQuanity-1; i++)
             {
                 int randCube = Random.Range(0, cubeInfos.Count - 1);
@@ -63,8 +67,9 @@ public class ExplodeCubes : MonoBehaviour
                 controller.LoseGame();
 
             SoundManager.Instance.PlayExplodeSound();
-            GameController.playerCam.gameObject.AddComponent<ShakeCamera>();
-            
+            //GameController.playerCam.gameObject.AddComponent<CameraShaker>();
+            CameraShaker.Instance.ShakeCamera();
+            controller.SlowDownTheGame();
             
         }
     }

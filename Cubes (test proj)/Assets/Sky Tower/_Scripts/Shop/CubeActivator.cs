@@ -1,14 +1,16 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CubeActivator : MonoBehaviour
 {
-    public GameObject shopCube;
+    
     public Material cubeLock;
-    public Material[] cubesUnlock;
+    public Material[] cubesMatUnlock;
 
-    public List<GameObject> shopCubes;
+    
+    private List<GameObject> shopCubes;
     
 
     private void OnEnable() => EventCubeActivator.activatorPressed += ActivateCube;
@@ -17,7 +19,8 @@ public class CubeActivator : MonoBehaviour
 
     private void Start()
     {
-        if (shopCubes.Count != cubesUnlock.Length)
+        shopCubes = ShopManager.Instance.shopCubes;
+        if (shopCubes.Count != cubesMatUnlock.Length)
             Debug.Log("allCubes.transform.childCount != cubesUnlock.Length");
     }
     public void ActivateCube(GameObject score)
@@ -50,19 +53,19 @@ public class CubeActivator : MonoBehaviour
             cubeNumber = 12;
 
 
-        bool unlockedByScore = (score.GetComponent<Text>().text == ShopManager.pressToSelect);
+        bool unlockedByScore = (score.GetComponent<TextMeshProUGUI>().text == ShopManager.pressToSelect);
 
         if (PlayerPrefs.GetInt($"Cube{cubeNumber}") != 0)
         {
             PlayerPrefs.SetInt($"Cube{cubeNumber}", 0);
             shopCubes[cubeNumber-1].GetComponent<MeshRenderer>().material = cubeLock;
-            score.GetComponent<Text>().text = ShopManager.pressToSelect;
+            score.GetComponent<TextMeshProUGUI>().text = ShopManager.pressToSelect;
         }
         else if (unlockedByScore)
         {
             PlayerPrefs.SetInt($"Cube{cubeNumber}", 1);
-            shopCubes[cubeNumber - 1].GetComponent<MeshRenderer>().material = cubesUnlock[cubeNumber-1];
-            score.GetComponent<Text>().text = ShopManager.alreadySelected;
+            shopCubes[cubeNumber - 1].GetComponent<MeshRenderer>().material = cubesMatUnlock[cubeNumber-1];
+            score.GetComponent<TextMeshProUGUI>().text = ShopManager.alreadySelected;
         }
 
         SoundManager.Instance?.PlayButtonSound();

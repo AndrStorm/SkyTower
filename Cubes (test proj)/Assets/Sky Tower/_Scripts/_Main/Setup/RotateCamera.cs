@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class RotateCamera : MonoBehaviour
 {
-    public float speed = 5f, trackSpeed = 2f, rotatorMoveSpeed=1f;
-    public float cinematicOffset = 140f;
+    public float speed = 12f, loseSpeedMul = 0.75f;
+    public float loseCamRotOffset = 167f, loseCamRotSpeed = 1.3f;
+    public float rotatorMoveSpeed=1.5f;
     
 
 
@@ -11,7 +12,7 @@ public class RotateCamera : MonoBehaviour
     private GameController controller;
     private Transform rotator;
     private Rigidbody allCubesRB;
-    private bool trackDownAllCubes/*, rotatorReady*/;
+    private bool trackDownTowerVelocity/*, rotatorReady*/;
     private Quaternion allCubesTracker;
 
 
@@ -26,27 +27,33 @@ public class RotateCamera : MonoBehaviour
 
     void Update()
     {
-        if (!controller.IsLoose() || controller.allCubes == null /*|| rotatorReady*/)
+        bool gameLose = controller.IsLoose();
+        bool towerExplode = controller.allCubes == null;
+        if (!gameLose || towerExplode /*|| rotatorReady*/)
         {
             rotator.rotation *= Quaternion.Euler(new Vector3(0, speed * Time.deltaTime, 0));
             
-            if (lastCubePos != (curCubePos = controller.GetLastCubePosition()))
+            if (!gameLose && lastCubePos != (curCubePos = controller.GetLastCubePosition()))
             {
                 moveRotatorTarget(curCubePos);
+                lastCubePos = curCubePos;
             }
             moveRotator();
         }
-        else if(controller.allCubes != null && trackDownAllCubes)
+        else if(!towerExplode && trackDownTowerVelocity)
         {
-            RotateToTracker(rotator, allCubesTracker, trackSpeed);
-            //if (IsRotatorEqual(allCubesTracker))
+            RotateToTracker(rotator, allCubesTracker, loseCamRotSpeed);
+            moveRotator();
+            
+            //if (IsRotatorEqual(allCubesTracker)) //continue rotator rotation after rotation in the falling direction is finished
             //    rotatorReady = true;
         }
-        else if (!trackDownAllCubes)
+        else if (!trackDownTowerVelocity)
         {
-            trackDownAllCubes = true;
-            TrackVelocity(allCubesRB.velocity, cinematicOffset, out allCubesTracker,false);
             moveRotatorTarget(rotatorStartPos);
+            TrackVelocity(allCubesRB.velocity, loseCamRotOffset, out allCubesTracker,false);
+            trackDownTowerVelocity = true;
+            speed *= loseSpeedMul;
         }
     }
 
@@ -62,6 +69,7 @@ public class RotateCamera : MonoBehaviour
         rotatorTargetPos.x = target.x;
         rotatorTargetPos.z = target.z;
     }
+    
 
     private bool IsRotatorEqual(Quaternion Tracker)
     {
@@ -94,8 +102,13 @@ public class RotateCamera : MonoBehaviour
 
         arcTan = Mathf.Atan(velocity.z / velocity.x) * Mathf.Rad2Deg;
         tracker = Quaternion.Euler(new Vector3(0, cameraRotOffset - angelOffset - arcTan + cinematicOffset, 0));
+
+        
+#if UNITY_EDITOR
         if (debug)
             Debug.Log("velocity - " + velocity.ToString() + " Atan(z/x) = " + arcTan.ToString() + " Quarter - " + quarter); 
+#endif
+        
     }
 
     

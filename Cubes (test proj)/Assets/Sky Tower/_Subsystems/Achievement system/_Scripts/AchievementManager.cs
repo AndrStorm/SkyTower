@@ -90,7 +90,6 @@ public class AchievementManager : Singleton<AchievementManager>
 #if UNITY_EDITOR
         
         Debug.Log($"{achievment.title} achieved");
-        
 #endif
         
         

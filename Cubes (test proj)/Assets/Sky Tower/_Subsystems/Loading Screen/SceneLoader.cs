@@ -1,9 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 { 
+    public static event Action OnStartLoadingScene;
+    public static event Action OnFininshedLoadingScene;
+
     public Text progressPercentage;
     public Image progressBar;
 
@@ -17,7 +21,7 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadScene (string sceneName)
     {
-        Instance.animator.SetTrigger("loadingStart");
+        LoadScene();
 
         Instance.loadingOperation = SceneManager.LoadSceneAsync(sceneName);
         Instance.loadingOperation.allowSceneActivation = false;
@@ -25,12 +29,19 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadScene(int sceneIndex)
     {
-        Instance.animator.SetTrigger("loadingStart");
+        LoadScene();
 
         Instance.loadingOperation = SceneManager.LoadSceneAsync(sceneIndex);
         Instance.loadingOperation.allowSceneActivation = false;
     }
 
+    private static void LoadScene()
+    {
+        Instance.animator.SetTrigger("loadingStart");
+        OnStartLoadingScene?.Invoke();
+    }
+    
+    
     void Start()
     {
         if (Instance == null)
@@ -46,6 +57,7 @@ public class SceneLoader : MonoBehaviour
 
         if (loadingFinished)
         {
+            OnFininshedLoadingScene?.Invoke();
             animator.SetTrigger("loadingFinished");
         }
 

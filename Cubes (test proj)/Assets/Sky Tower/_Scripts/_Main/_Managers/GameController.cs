@@ -25,8 +25,9 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float spawnPauseDuration = 0.1f;
     [SerializeField]private float spawnShakeAmount = 0.01f;
     [SerializeField]private float spawnShakeDur = 0.05f;
-    
+
     [Header("Game property")] 
+    public float actionMusicVolumeMul = 0.5f;
     public float ambColorIntensity;
     public int colorScoreStep = 10;
     public Color[] bgColors;
@@ -261,22 +262,29 @@ public class GameController : Singleton<GameController>
 
     public void LoseGame()
     {
+        SoundManager.Instance.ResetMusicVolume();
         gameLost = true;
 
         Destroy(ColorManager.Instance.gameObject);
         Destroy(cubeSpawner.gameObject);
         StopCoroutine(showCubePlace);
         restartButton.SetActive(true);
+        
         cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
+        
         allCubesRB.velocity *= 1.1f;
     }
 
     private void StartGame()
     {
+        var curMusVol = SoundManager.Instance.GetMusicVolume();
+        SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * curMusVol);
         gameStart = true;
+        
         PlayerPrefs.SetInt("lastScore", 0);
         score.text = $"Score: 0";
+        
         foreach (GameObject obj in canvasMenu)
             Destroy(obj);
     }
@@ -324,7 +332,7 @@ public class GameController : Singleton<GameController>
         
         
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
-        SoundManager.Instance.PlayCubeSpawnSound();
+        SoundManager.Instance?.PlaySound("CubeSpawn");
         ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
         

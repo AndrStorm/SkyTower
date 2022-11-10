@@ -68,7 +68,7 @@ public class CubeActivator : MonoBehaviour
             score.GetComponent<TextMeshProUGUI>().text = ShopManager.alreadySelected;
         }
 
-        SoundManager.Instance?.PlayButtonSound();
+        SoundManager.Instance?.PlaySound("ButtonClick");
 
     }
 }

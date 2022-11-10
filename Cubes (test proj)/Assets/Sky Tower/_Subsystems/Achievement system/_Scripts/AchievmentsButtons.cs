@@ -11,14 +11,14 @@ public class AchievmentsButtons : MonoBehaviour
     {
         achieveCanvas.gameObject.SetActive(true);
         gameCanvas.gameObject.SetActive(false);
-        SoundManager.Instance.PlayButtonSound();
+        SoundManager.Instance?.PlaySound("ButtonClick");
         OnAchievmentsWindowOpen?.Invoke(true);
     }
     public void CloseAchievements()
     {
         achieveCanvas.gameObject.SetActive(false);
         gameCanvas.gameObject.SetActive(true);
-        SoundManager.Instance.PlayButtonSound();
+        SoundManager.Instance?.PlaySound("ButtonClick");
         OnAchievmentsWindowOpen?.Invoke(false);
     }
 }

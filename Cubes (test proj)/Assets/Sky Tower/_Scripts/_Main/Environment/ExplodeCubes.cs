@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class ExplodeCubes : MonoBehaviour
 {
-    [SerializeField] private float explosionForce = 100f;
+    [SerializeField] private float explosionForce = 100f, explosionCubeCountStep = 50f, explosionRad=5f;
     [SerializeField] [Range(0, 1)] private float minExplosionsNumberMul = 0.2f , maxExplosionsNumberMul = 0.5f;
    
     private GameObject cubesTower;
@@ -38,19 +38,24 @@ public class ExplodeCubes : MonoBehaviour
     {
         if (collision.gameObject.tag=="Obstacle" && !collisionDestroyed)
         {
+            var impactPos = collision.GetContact(0).point;
+            explosionForce *= 1 + cubeInfos.Count/explosionCubeCountStep;
+            explosionRad *= 1 + cubeInfos.Count/explosionCubeCountStep;
+            
+            
             for (int i = cubesTower.transform.childCount-1; i >=0; i--)
             {
                 Transform child = cubesTower.transform.GetChild(i);
-                child.gameObject.AddComponent<Rigidbody>();
-                //child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, Vector3.up, 5f);
-                child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, child.position + new Vector3(0,0,0), 5f);
+                Rigidbody rb = child.gameObject.AddComponent<Rigidbody>();
+                rb.AddExplosionForce(explosionForce, impactPos, explosionRad);
+                rb.AddExplosionForce(explosionForce/2, Vector3.zero, explosionRad);
                 child.SetParent(null);
             }
             Destroy(cubesTower.gameObject);
             collisionDestroyed = true;
             
             
-            VfxManager.Instance.PlayExplodeVfx(collision.GetContact(0).point, quaternion.identity);
+            VfxManager.Instance.PlayExplodeVfx(impactPos, quaternion.identity);
             
             
             int vfxQuanity = Random.Range(Mathf.RoundToInt(cubeInfos.Count * minExplosionsNumberMul), Mathf.RoundToInt(cubeInfos.Count * maxExplosionsNumberMul));
@@ -66,8 +71,7 @@ public class ExplodeCubes : MonoBehaviour
             if(!controller.IsLoose())
                 controller.LoseGame();
 
-            SoundManager.Instance.PlayExplodeSound();
-            //GameController.playerCam.gameObject.AddComponent<CameraShaker>();
+            SoundManager.Instance?.PlaySound("Explode");
             CameraShaker.Instance.ShakeCamera();
             controller.SlowDownTheGame();
             

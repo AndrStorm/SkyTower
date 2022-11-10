@@ -9,31 +9,39 @@ public class CanvasButtons : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerPrefs.GetString("sound") == "off" && gameObject.name=="Sound")
+
+        if (PlayerPrefs.GetString("music") != "on" && gameObject.name=="Music")
+            GetComponent<Image>().sprite = soundOff;
+        else if (PlayerPrefs.GetString("music") == "on" && gameObject.name == "Music")
+            GetComponent<Image>().sprite = soundOn;
+        
+        else if (PlayerPrefs.GetString("sound") != "on" && gameObject.name=="Sound")
             GetComponent<Image>().sprite = soundOff;
         else if (PlayerPrefs.GetString("sound") == "on" && gameObject.name == "Sound")
             GetComponent<Image>().sprite = soundOn;
 
-        if (gameObject.name == "Score")
+        else if (gameObject.name == "Score")
             GetComponent<TextMeshProUGUI>().text = $"Score: {PlayerPrefs.GetInt("lastScore")}";
-        if (gameObject.name == "Best Score")
+        else if (gameObject.name == "Best Score")
             GetComponent<TextMeshProUGUI>().text = $"Best Score: {PlayerPrefs.GetInt("bestScore")}";
     }
 
     public void Shop()
     {
-        SoundManager.Instance?.PlayButtonSound();
+        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.ShopTheme);
+        SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Shop");
     }
     public void ReturnToMain()
     {
-        SoundManager.Instance?.PlayButtonSound();
+        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.MainTheme);
+        SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Main Scene");
     }
 
     public void RestartGame()
     {
-        SoundManager.Instance?.PlayButtonSound();
+        SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -43,13 +51,37 @@ public class CanvasButtons : MonoBehaviour
         {
             PlayerPrefs.SetString("sound", "on");
             GetComponent<Image>().sprite = soundOn;
-            SoundManager.Instance?.PlayButtonSound();
+            SoundManager.Instance?.PlaySound("ButtonClick");
+            SoundManager.Instance?.ResetMusicVolume();
         }
         else
         {
             PlayerPrefs.SetString("sound", "off");
             GetComponent<Image>().sprite = soundOff;
+            SoundManager.Instance?.SetMusicVolume(0f,0.5f);
         }
+
+    }
+    
+    public void MusicSwitch()
+    {
+        Image btnImage = GetComponent<Image>();
+        if (PlayerPrefs.GetString("music") != "on")
+        {
+            PlayerPrefs.SetString("music", "on");
+            btnImage.sprite = soundOn;
+            SoundManager.Instance?.StartMusic();
+        }
+        else
+        {
+            PlayerPrefs.SetString("music", "off");
+            btnImage.sprite = soundOff;
+            SoundManager.Instance?.StopMusic();
+        }
+
+        if (PlayerPrefs.GetString("sound") != "on") return;
+        
+        SoundManager.Instance?.PlaySound("ButtonClick");
 
     }
 

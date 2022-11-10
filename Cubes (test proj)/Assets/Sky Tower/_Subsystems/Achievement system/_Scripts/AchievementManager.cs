@@ -13,8 +13,8 @@ public class AchievementManager : Singleton<AchievementManager>
     public List<AchievmentScriptable> achievments;
 
 
-    AchievmentScriptable raisingthestakes;
-    AchievmentScriptable youarestartingimpress;
+    AchievmentScriptable raisingTheStakes;
+    AchievmentScriptable youAreStartingImpress;
     AchievmentScriptable chiefEngineer;
     AchievmentScriptable skyscraper;
     AchievmentScriptable allInclusive;
@@ -42,9 +42,9 @@ public class AchievementManager : Singleton<AchievementManager>
 
 
             if (achievments[i].title == "Raising the stakes")
-                raisingthestakes = achievments[i];
+                raisingTheStakes = achievments[i];
             if (achievments[i].title == "You are starting impress!")
-                youarestartingimpress = achievments[i];
+                youAreStartingImpress = achievments[i];
             if (achievments[i].title == "Chief Engineer")
                 chiefEngineer = achievments[i];
             if (achievments[i].title == "Skyscraper")
@@ -65,13 +65,13 @@ public class AchievementManager : Singleton<AchievementManager>
 
     private void AchieveByDifficulty(int difficulty)
     {
-        if (difficulty >= 1 && !raisingthestakes.GetAchived())
+        if (difficulty >= 1 && !raisingTheStakes.GetAchived())
         {
-            Achieve(raisingthestakes);
+            Achieve(raisingTheStakes);
         }
-        if (difficulty >= 2 && !youarestartingimpress.GetAchived())
+        if (difficulty >= 2 && !youAreStartingImpress.GetAchived())
         {
-            Achieve(youarestartingimpress);
+            Achieve(youAreStartingImpress);
         }
         if (difficulty >= 3 && !chiefEngineer.GetAchived())
         {
@@ -136,7 +136,7 @@ public class AchievementManager : Singleton<AchievementManager>
     }
 
 
-    [MenuItem("Developer/AchievmentsClear")]
+    [MenuItem("Developer/AchievmentsClear #r")]
     public static void ClearAchievmentsSave()
     {
         if (Instance == null) return;

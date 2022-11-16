@@ -1,16 +1,22 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CameraShaker : Singleton<CameraShaker>
 {
     [Header("Base shake property")] 
-    public float shakeDurationMul = 1.2f;
-    public float shakeAmountMul=0.05f;
-    public Vector2 shakeSphereMinMax = new Vector2(0.3f,1f);
+    [SerializeField]private float shakeDurationMul = 1.2f;
+    [SerializeField]private float shakeAmountMul=0.05f;
+    [SerializeField]private Vector2 shakeSphereMinMax = new Vector2(0.3f,1f);
+    
     [Header("Tower height influence property")] 
-    public AnimationCurve towerHeightCurve;
-    public float towerHeightMul=3f;
-    public int towerMaxHeightAffect = 100;
+    [SerializeField]private AnimationCurve towerHeightCurve;
+    [SerializeField]private float towerHeightMul=3f;
+    [SerializeField]private int towerMaxHeightAffect = 100;
 
+
+    public static bool isShakerOn = true;
+    
     
     private float startYPos = 7f;
     private Transform camTransform;
@@ -27,7 +33,7 @@ public class CameraShaker : Singleton<CameraShaker>
 
     private void Update()
     {
-        if (GameController.gamePause) return;
+        if (GameController.isGamePause || !isShakerOn) return;
         
 
         if(shakeDur == 0f) return;

@@ -68,7 +68,7 @@ public class ExplodeCubes : MonoBehaviour
             
             
             
-            if(!controller.IsLoose())
+            if(!controller.IsGameLost())
                 controller.LoseGame();
 
             SoundManager.Instance?.PlaySound("Explode");

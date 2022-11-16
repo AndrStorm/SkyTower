@@ -55,7 +55,7 @@ public class AchievementManager : Singleton<AchievementManager>
         }     
     }
 
-    public void AchieveByScore(int score)
+    private void AchieveByScore(int score)
     {
         if (score >= 300 && !allInclusive.GetAchived())
         {
@@ -86,6 +86,7 @@ public class AchievementManager : Singleton<AchievementManager>
 
     private void Achieve(AchievmentScriptable achievment)
     {
+        SoundManager.Instance.PlaySound("Achievment");
 
 #if UNITY_EDITOR
         

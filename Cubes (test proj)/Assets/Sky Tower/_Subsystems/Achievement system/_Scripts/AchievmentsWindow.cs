@@ -45,7 +45,7 @@ public class AchievmentsWindow : MonoBehaviour
     }
     private void OnEnable()
     {
-        StartCoroutine(resetScrollValue());
+        StartCoroutine(ResetScrollValue());
         
 
         for (int i = 0; i < achievments.Count; i++)
@@ -68,7 +68,7 @@ public class AchievmentsWindow : MonoBehaviour
         }
     }
 
-    IEnumerator resetScrollValue()
+    private IEnumerator ResetScrollValue()
     {
         yield return null;
         scrollbar.value = 1f;

@@ -1,24 +1,21 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : PersistentSingleton<SoundManager>
 {
+    
+    public AudioClip mainTheme, shopTheme;
+    
+    
+    [SerializeField] private List<Sound> sounds;
 
-    public List<Sound> sounds;
-    public AudioClip MainTheme, ShopTheme;
 
-    /*[Range(0f, 1f)] 
-    public float mainVolume = 1f;*/
+    private bool isSceneLoaded;
+    private float musicVolume, adjustedMusicVolume;
+    private AudioSource musicAudioSource;
 
-
-    private bool sceneLoaded;
-    private float musicVolume, musicAdjustedVolume;
-
-    private WaitForSeconds waiter;
-    private AudioSource audioSource;
-
+    
     private void OnEnable()
     {
        SceneLoader.OnFininshedLoadingScene += OnSceneLoaded;
@@ -33,12 +30,13 @@ public class SoundManager : PersistentSingleton<SoundManager>
     protected override void Awake()
     {
         base.Awake();
-        audioSource = GetComponent<AudioSource>();
+        musicAudioSource = GetComponent<AudioSource>();
 
         foreach (var sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();
 
+            sound.source.outputAudioMixerGroup = sound.audioMixerGroup;
             sound.source.clip = sound.clip;
             sound.source.volume = sound.volume;
             sound.source.pitch = sound.pitch;
@@ -46,8 +44,8 @@ public class SoundManager : PersistentSingleton<SoundManager>
             
         }
         
-        musicAdjustedVolume = audioSource.volume;
-        musicVolume = musicAdjustedVolume;
+        adjustedMusicVolume = musicAudioSource.volume;
+        musicVolume = adjustedMusicVolume;
     }
 
     
@@ -55,14 +53,16 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
         if (PlayerPrefs.GetString("sound") != "on")
         {
-            audioSource.volume = 0f;
+            musicAudioSource.volume = 0f;
         }
-        PlayMusic(MainTheme);
+        PlayMusic(mainTheme);
+        //PlaySound("Wind");
+        //PlaySound("Achievment");
     }
 
     private void OnSceneLoaded()
     {
-        sceneLoaded = true;
+        isSceneLoaded = true;
     }
     
     
@@ -71,13 +71,13 @@ public class SoundManager : PersistentSingleton<SoundManager>
         if (Mathf.Approximately(time,0f)) time = 0.01f;
         
         const float step = 0.05f;
-        float volDif = Mathf.Abs(audioSource.volume - musicVolume);
+        float volDif = Mathf.Abs(musicAudioSource.volume - musicVolume);
         float delta = volDif / (time / step); 
         
-        waiter = new WaitForSeconds(step);
-        while (!Mathf.Approximately(audioSource.volume,musicVolume))
+        
+        while (!Mathf.Approximately(musicAudioSource.volume,musicVolume))
         {
-            audioSource.volume = Mathf.MoveTowards(audioSource.volume, musicVolume, delta);
+            musicAudioSource.volume = Mathf.MoveTowards(musicAudioSource.volume, musicVolume, delta);
             yield return Helper.GetWait(step);
         }
     }
@@ -87,8 +87,8 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
         SetMusicVolume(0f,0.7f);
         
-        sceneLoaded = false;
-        while (!sceneLoaded)
+        isSceneLoaded = false;
+        while (!isSceneLoaded)
         {
             yield return Helper.GetWait(0.05f);
         }
@@ -113,10 +113,10 @@ public class SoundManager : PersistentSingleton<SoundManager>
     
     public void PlayMusic(AudioClip mus)
     {
-        audioSource.clip = mus;
+        musicAudioSource.clip = mus;
         
         if (PlayerPrefs.GetString("music") != "on") return;
-        audioSource.Play();
+        musicAudioSource.Play();
     }
     
     
@@ -134,29 +134,35 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
         if (PlayerPrefs.GetString("sound") != "on") return;
 
-        musicVolume = musicAdjustedVolume;
+        musicVolume = adjustedMusicVolume;
         StartCoroutine(ChangeVolume(time));
     }
 
     
     public void StopMusic()
     {
-        audioSource.Stop();
+        musicAudioSource.Stop();
     }
     
     
     public void StartMusic()
     {
-        audioSource.Play();
+        musicAudioSource.Play();
     }
 
+
+    public AudioSource GetSoundSource(string soundName)
+    {
+        Sound sound = sounds.Find(sound => sound.soundName == soundName);
+        return sound.source;
+    }
     
     public void PlaySound(string soundName)
     {
         if (PlayerPrefs.GetString("sound") != "on") return;
         
-        var s = sounds.Find(sound => sound.soundName == soundName);
-        s?.source.Play();
+        Sound sound = sounds.Find(sound => sound.soundName == soundName);
+        sound?.source.Play();
     }
     
 }

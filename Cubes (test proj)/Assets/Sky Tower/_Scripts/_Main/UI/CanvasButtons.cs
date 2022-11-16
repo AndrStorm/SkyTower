@@ -28,13 +28,13 @@ public class CanvasButtons : MonoBehaviour
 
     public void Shop()
     {
-        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.ShopTheme);
+        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.shopTheme);
         SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Shop");
     }
     public void ReturnToMain()
     {
-        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.MainTheme);
+        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.mainTheme);
         SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Main Scene");
     }

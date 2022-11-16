@@ -11,10 +11,11 @@ public class GameController : Singleton<GameController>
     public static event Action<int> OnDifficultyChanged;
     public static event Action<int> OnScoreIncrised;
 
-    public static bool gamePause;
+    public static bool isGamePause;
 
     [Header("Cinematic Game property")]
     [SerializeField]private float camMovSpeed = 2f;
+    [Tooltip("How far will the camera move backward when the tower will become wider")]
     [SerializeField]private float cameraMoveBackMul =1.7f;
     [SerializeField]private int cameraMoveThreshold = 2;
     [SerializeField]private float slowMotionScale = 0.55f, slowMotionDuration=1.5f;
@@ -26,61 +27,67 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float spawnShakeAmount = 0.01f;
     [SerializeField]private float spawnShakeDur = 0.05f;
 
-    [Header("Game property")] 
-    public float actionMusicVolumeMul = 0.5f;
-    public float ambColorIntensity;
-    public int colorScoreStep = 10;
-    public Color[] bgColors;
+    [Header("Sound Game property")]
+    [SerializeField]private float actionMusicVolumeMul = 0.5f;
+    [SerializeField]private int maxWindTowerHeight = 100;
+    [Range(0f,1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
+    [SerializeField]private float minWindFactor=0.25f;
+    [SerializeField]private float windVolumeMul=0.5f, windFadingSpeed=0.7f;
+    [SerializeField]private float ambColorIntensity = 0.65f;
     
-    public float[] timeToAutoPlace, timeToPlace;
-    public int[] difLevelsThresholds;
+    [Header("Game property")]
+    [SerializeField]private int colorScoreStep = 5;
+    [SerializeField]private Color[] bgColors;
     
-    public Color[] phaseColors;
-    public Vector3 phaseLightIntensity;
-    public Vector3 phaseSpawnerFlicker;
+    [SerializeField]private float[] timeToAutoPlace, timeToPlace;
+    [SerializeField]private int[] difLevelsThresholds;
+    
+    [SerializeField]private Color[] phaseColors;
+    [SerializeField]private Vector3 phaseLightIntensity;
+    [SerializeField]private Vector3 phaseSpawnerFlicker;
 
     
     private int curLevel = 0;
 
 
     [Header("References")]
-    public TextMeshProUGUI score;
-    public Transform cubeSpawner;
-    public Transform cameraViewDirection;
-    public GameObject allCubes, restartButton;
-    public CubeScriptable cubeToCreate;
-    public GameObject[] canvasMenu;
+    public GameObject allCubes;
+    [SerializeField]private TextMeshProUGUI scoreText;
+    [SerializeField]private Transform cubeSpawner;
+    [SerializeField]private Transform cameraViewDirection;
+    [SerializeField]private GameObject restartButton;
+    [SerializeField]private CubeScriptable cubeToCreate;
+    [SerializeField]private GameObject[] canvasMenu;
 
-    
-    
+    private AudioSource windSource;
+
     private List<CubeInfo> cubeInfos = new List<CubeInfo>();
     private List<CubeScriptable> cubesToCreate;
-    private Rigidbody allCubesRB;
-
+    private Rigidbody allCubesRb;
     
     
     private CubePos lastCube = new CubePos(0, 1, 0);
-    private Color targetBGColor;
+    private Color targetBgColor;
     private Vector3 cameraTargetPos,cameraStartPos;
     private Vector3 lastSpawnerVector = Vector3.up;
     private float timerAutoPlace;
-    private float maxZX;
-    private bool gameLost,gameStart;
+    private float maxZx;
+    private bool isGameLost,isGameStart;
     private bool achievmentsOpened;
-    private bool spawnPause;
+    private bool isSpawnPause;
     
-    List<Vector3> cubesPositions = new List<Vector3>
+    private List<Vector3> cubesPositions = new List<Vector3>
     {
         new Vector3(0, 1, 0)
     };
     
     
     private Coroutine showCubePlace;
-    public static Camera playerCam;
+    private static Camera _playerCam;
     
     
-    string lastScore = "lastScore";
-    string bestScore = "bestScore";
+    private const string LastScore = "lastScore";
+    private const string BestScore = "bestScore";
     
     
     
@@ -96,12 +103,14 @@ public class GameController : Singleton<GameController>
     protected override void Awake()
     {
         base.Awake();
-        playerCam = Camera.main;
+        _playerCam = Camera.main;
     }
 
     private void Start()
     {
-        spawnPause = false; //just in case
+        windSource = SoundManager.Instance.GetSoundSource("Wind");
+        allCubesRb = allCubes.GetComponent<Rigidbody>();
+        
         
 #if UNITY_EDITOR
         if (timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length)
@@ -119,40 +128,39 @@ public class GameController : Singleton<GameController>
         }
 
         
-        ResetTimer(curLevel);
+        ResetAutoPlaceTimer(curLevel);
 
-        targetBGColor = playerCam.backgroundColor;
-        cameraStartPos = playerCam.transform.localPosition;
+        targetBgColor = _playerCam.backgroundColor;
+        cameraStartPos = _playerCam.transform.localPosition;
         cameraTargetPos = cameraStartPos;
-
-        allCubesRB = allCubes.GetComponent<Rigidbody>();
-
-
+        
+        
         CreateCube(new Vector3(0, 1, 0));
         showCubePlace = StartCoroutine(ShowCubePlace());  
     }
     
     private void Update()
     {
-        if(gamePause || spawnPause) return;
+        if(isGamePause || isSpawnPause) return;
         
-        if(gameLost)
+        if(isGameLost)
             TiltCamera();
 
         MoveCamera();
-        ChangeBGColor();
-        ChangeAmbientLight(playerCam.backgroundColor, ambColorIntensity);
-        
+        ChangeBgColor();
+        ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity);
 
-        bool gameContinue = !achievmentsOpened && !gameLost && allCubes != null && cubeSpawner != null;
-        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && gameContinue && !EventSystem.current.IsPointerOverGameObject())
+
+        bool isTowerDestroyed = allCubes == null;
+        bool isGameContinue = !achievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
+        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && isGameContinue && !EventSystem.current.IsPointerOverGameObject())
         {
 #if !UNITY_EDITOR
             if (Input.GetTouch(0).phase != TouchPhase.Began)
                 return;
 #endif
 
-            if (!gameStart)
+            if (!isGameStart)
                 StartGame();
 
             InitializeCubeCreation();
@@ -160,8 +168,26 @@ public class GameController : Singleton<GameController>
             
         }
 
-        if (gameStart && !gameLost && allCubesRB.velocity.magnitude >= 0.18f)
+
+        
+        if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= 0.18f)
             LoseGame();
+
+
+        if (!isTowerDestroyed && isGameLost)
+        {
+            //
+            float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.velocity.normalized);
+            float windFactor = Mathf.Clamp01(dotProduct + minWindFactor);
+            float towerHeightMul = Mathf.Clamp01(minWindFactor + (float) lastCube.y / maxWindTowerHeight);
+            windSource.volume = windFactor * windVolumeMul * towerHeightMul;
+            windSource.pitch = 0.75f + dotProduct;
+        }
+        else if(isTowerDestroyed)
+        {
+            //
+            windSource.volume = Mathf.MoveTowards(windSource.volume, 0f, windFadingSpeed * Time.deltaTime);
+        }
     }
 
     
@@ -170,7 +196,7 @@ public class GameController : Singleton<GameController>
     {
         while (true)
         {
-            if (gameStart)
+            if (isGameStart)
             {
                 if(timerAutoPlace <= 0f)
                 {
@@ -182,15 +208,15 @@ public class GameController : Singleton<GameController>
 
                     if (timerAutoPlace < 2f * timeToPlace[curLevel])
                     {
-                        ColorManager.Instance.ChangeLampColor(phaseColors[2], phaseLightIntensity.z,phaseSpawnerFlicker.z);
+                        LampColorManager.Instance.ChangeLampColor(phaseColors[2], phaseLightIntensity.z,phaseSpawnerFlicker.z);
                     }
                     else if (timerAutoPlace < 4f * timeToPlace[curLevel])
                     {
-                        ColorManager.Instance.ChangeLampColor(phaseColors[1], phaseLightIntensity.y, phaseSpawnerFlicker.y);
+                        LampColorManager.Instance.ChangeLampColor(phaseColors[1], phaseLightIntensity.y, phaseSpawnerFlicker.y);
                     }
                     else
                     {
-                        ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
+                        LampColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
                     }
                 }
             }
@@ -204,22 +230,22 @@ public class GameController : Singleton<GameController>
     {
         Time.timeScale = 0f;
         //AudioListener.pause = true;
-        gamePause = true;
+        isGamePause = true;
         
         yield return new WaitForSecondsRealtime(t);
         
         Time.timeScale = 1f;
         //AudioListener.pause = false;
-        gamePause = false;
+        isGamePause = false;
     }
     
     private IEnumerator PauseSpawn(float t)
     {
-        spawnPause = true;
+        isSpawnPause = true;
         
         yield return new WaitForSecondsRealtime(t);
 
-        spawnPause = false;
+        isSpawnPause = false;
     }
     
     private IEnumerator SlowDownGame(float scale, float t)
@@ -246,26 +272,27 @@ public class GameController : Singleton<GameController>
     {
         return cubeInfos;
     }
-
-
+    
     public void SlowDownTheGame()
     {
         StartCoroutine(SlowDownGame(slowMotionScale, slowMotionDuration));
     }
     
-    public bool IsLoose()
+    public bool IsGameLost()
     {
-        if (gameLost)
+        if (isGameLost)
             return true;
         return false;
     }
 
     public void LoseGame()
     {
+        SoundManager.Instance.PlaySound("Wind");
         SoundManager.Instance.ResetMusicVolume();
-        gameLost = true;
+        
+        isGameLost = true;
 
-        Destroy(ColorManager.Instance.gameObject);
+        Destroy(LampColorManager.Instance.gameObject);
         Destroy(cubeSpawner.gameObject);
         StopCoroutine(showCubePlace);
         restartButton.SetActive(true);
@@ -273,17 +300,17 @@ public class GameController : Singleton<GameController>
         cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         
-        allCubesRB.velocity *= 1.1f;
+        allCubesRb.velocity *= 1.1f;
     }
 
     private void StartGame()
     {
         var curMusVol = SoundManager.Instance.GetMusicVolume();
         SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * curMusVol);
-        gameStart = true;
+        isGameStart = true;
         
         PlayerPrefs.SetInt("lastScore", 0);
-        score.text = $"Score: 0";
+        scoreText.text = $"Score: 0";
         
         foreach (GameObject obj in canvasMenu)
             Destroy(obj);
@@ -294,7 +321,7 @@ public class GameController : Singleton<GameController>
         achievmentsOpened = windowState;
     }
 
-    private void ResetTimer(int curLevel)
+    private void ResetAutoPlaceTimer(int curLevel)
     {
         timerAutoPlace = timeToAutoPlace[curLevel];
     }
@@ -308,17 +335,18 @@ public class GameController : Singleton<GameController>
     private void InitializeSpawnerMovement()
     {
         MoveSpawner();
-        ColorManager.Instance.gameObject.transform.position = new Vector3(cubeSpawner.transform.position.x, cubeSpawner.transform.position.y + 2, cubeSpawner.transform.position.z);
+        LampColorManager.Instance.gameObject.transform.position = new Vector3(cubeSpawner.transform.position.x, cubeSpawner.transform.position.y + 2, cubeSpawner.transform.position.z);
     }
 
     private void InitializeCubeCreation()
     {
         StartCoroutine(PauseGame(spawnGamePauseDuration));
         StartCoroutine(PauseSpawn(spawnPauseDuration));
-        ResetTimer(curLevel);
+        ResetAutoPlaceTimer(curLevel);
         
         
         Vector3 vfxDir = cubeSpawner.position - lastCube.getVector();
+        
         CreateCube(cubeSpawner.position);
 
         
@@ -331,13 +359,14 @@ public class GameController : Singleton<GameController>
         VfxManager.Instance.PlaySpawnVfx(vfxPos, vfxRotation, cubeToCreate.cubeId);
         
         
+        
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
         SoundManager.Instance?.PlaySound("CubeSpawn");
-        ColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
+        LampColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
         
         ChangeScore();
-        ChangeTargetBGColor();
+        ChangeTargetBgColor();
         MoveCameraTargetPos();
         MoveCameraTiltDirection();
         IncriseDifficulty();
@@ -374,8 +403,8 @@ public class GameController : Singleton<GameController>
         lastCube.setVector(newCube.transform.position);
         cubesPositions.Add(lastCube.getVector());
 
-        allCubesRB.isKinematic = true;
-        allCubesRB.isKinematic = false;
+        allCubesRb.isKinematic = true;
+        allCubesRb.isKinematic = false;
         
 
         CubeInfo cubeInfo = new CubeInfo(newCube.transform, cubeToCreate.cubeId);
@@ -385,37 +414,37 @@ public class GameController : Singleton<GameController>
 
     private void ChangeScore()
     {
-        int currentScore = PlayerPrefs.GetInt(lastScore);
-        int totalScore = PlayerPrefs.GetInt(bestScore);
+        int currentScore = PlayerPrefs.GetInt(LastScore);
+        int totalScore = PlayerPrefs.GetInt(BestScore);
         int currentPos = lastCube.y - 1;
 
         if (currentScore < currentPos)
         {
-            PlayerPrefs.SetInt(lastScore, currentPos);
+            PlayerPrefs.SetInt(LastScore, currentPos);
             OnScoreIncrised.Invoke(currentPos);
         }    
             
 
         if (totalScore < currentPos)
-            PlayerPrefs.SetInt(bestScore, currentPos);
+            PlayerPrefs.SetInt(BestScore, currentPos);
 
-        score.text = $"Score: {PlayerPrefs.GetInt(lastScore)}";
+        scoreText.text = $"Score: {PlayerPrefs.GetInt(LastScore)}";
     }
 
-    private void ChangeTargetBGColor()
+    private void ChangeTargetBgColor()
     {
-            targetBGColor = bgColors[Mathf.Clamp((lastCube.y - 1) / colorScoreStep, 0, bgColors.Length - 1)];
+            targetBgColor = bgColors[Mathf.Clamp((lastCube.y - 1) / colorScoreStep, 0, bgColors.Length - 1)];
     }
 
-    private void ChangeBGColor()
+    private void ChangeBgColor()
     {
-        playerCam.backgroundColor = Color.Lerp(playerCam.backgroundColor, targetBGColor, Time.deltaTime / 2f);
+        _playerCam.backgroundColor = Color.Lerp(_playerCam.backgroundColor, targetBgColor, Time.deltaTime / 2f);
     }
 
     private void MoveCameraTargetPos()
     {
         float x, z;
-        Vector3 camPos = playerCam.transform.localPosition;
+        Vector3 camPos = _playerCam.transform.localPosition;
 
         camPos.y = cameraStartPos.y + lastCube.y - 1f;
         
@@ -426,11 +455,11 @@ public class GameController : Singleton<GameController>
             {
                 x = Mathf.Abs(pos.x);
                 z = Mathf.Abs(pos.z);
-                if(maxZX < x || maxZX < z)
-                    maxZX = x > z ? x : z;
+                if(maxZx < x || maxZx < z)
+                    maxZx = x > z ? x : z;
             }
-        if (maxZX > 0)
-            camPos.z = cameraStartPos.z - (maxZX * cameraMoveBackMul);
+        if (maxZx > 0)
+            camPos.z = cameraStartPos.z - (maxZx * cameraMoveBackMul);
 
 
         cameraTargetPos = new Vector3(0,camPos.y,camPos.z);
@@ -438,9 +467,9 @@ public class GameController : Singleton<GameController>
 
     private void MoveCamera()
     {
-        Vector3 camPos = playerCam.transform.localPosition;
+        Vector3 camPos = _playerCam.transform.localPosition;
         camPos = Vector3.MoveTowards(camPos, cameraTargetPos, Time.deltaTime * camMovSpeed);
-        playerCam.transform.localPosition = camPos;
+        _playerCam.transform.localPosition = camPos;
     }
 
     private void MoveCameraTiltDirection()
@@ -450,8 +479,8 @@ public class GameController : Singleton<GameController>
 
     private void TiltCamera()
     {
-        Vector3 viewDirrection = cameraViewDirection.position - playerCam.transform.position;
-        playerCam.transform.rotation = Quaternion.Lerp(playerCam.transform.rotation, Quaternion.LookRotation(viewDirrection, Vector3.up), Time.deltaTime / 3f);
+        Vector3 viewDirrection = cameraViewDirection.position - _playerCam.transform.position;
+        _playerCam.transform.rotation = Quaternion.Lerp(_playerCam.transform.rotation, Quaternion.LookRotation(viewDirrection, Vector3.up), Time.deltaTime / 3f);
     }
 
     private void MoveSpawner()

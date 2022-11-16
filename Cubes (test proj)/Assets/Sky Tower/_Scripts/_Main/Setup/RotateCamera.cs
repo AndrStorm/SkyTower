@@ -27,7 +27,7 @@ public class RotateCamera : MonoBehaviour
 
     void Update()
     {
-        bool gameLose = controller.IsLoose();
+        bool gameLose = controller.IsGameLost();
         bool towerExplode = controller.allCubes == null;
         if (!gameLose || towerExplode /*|| rotatorReady*/)
         {

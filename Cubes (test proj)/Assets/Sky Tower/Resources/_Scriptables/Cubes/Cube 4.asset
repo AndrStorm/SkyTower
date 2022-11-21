@@ -15,3 +15,5 @@ MonoBehaviour:
   cubeId: 4
   cube: {fileID: 2823120304225344146, guid: 5523fdcfd4c50f3429476703208e1b48, type: 3}
   vfx: {fileID: 972420559682001289, guid: f8558552ee7381a4f81f4027fc775786, type: 3}
+  vfxImpulse: {fileID: 2364756182673936728, guid: 81017b0a774adc648a24642314c41492, type: 3}
+  active: 0

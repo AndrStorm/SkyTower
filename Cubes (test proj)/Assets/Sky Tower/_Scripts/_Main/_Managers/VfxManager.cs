@@ -3,22 +3,24 @@ using UnityEngine.VFX;
 
 public class VfxManager : Singleton<VfxManager>
 {
-    
+
     [SerializeField] private GameObject[] onSpawnVfx;
     [SerializeField] private GameObject[] onExplodeVfx;
     [SerializeField] private float timeToDestroy = 3f;
 
-    
-    private GameObject[] cubesVfx;
-    
-    
+
+    private GameObject[,] cubesVfx;
+
+
     private void Start()
     {
-        cubesVfx = new GameObject[CubesManager.Instance.cubesDict.Count];
+        cubesVfx = new GameObject[CubesManager.Instance.cubesDict.Count, 2];
         foreach (var cube in CubesManager.Instance.cubesDict)
         {
-            cubesVfx[cube.Key - 1] = cube.Value.vfx;
+            cubesVfx[cube.Key - 1, 0] = cube.Value.vfx;
+            cubesVfx[cube.Key - 1, 1] = cube.Value.vfxImpulse;
         }
+        
     }
 
     
@@ -33,13 +35,14 @@ public class VfxManager : Singleton<VfxManager>
     
     public void PlayCubeVfx(Vector3 pos, Quaternion rot, int cubeId)
     {
-        PlayVFX(cubesVfx[cubeId - 1], pos, rot, timeToDestroy);
+        PlayVFX(cubesVfx[cubeId - 1, 0], pos, rot, timeToDestroy);
     }
     
 
     public void PlaySpawnVfx(Vector3 pos, Quaternion rot, int cubeId)
     {
-        PlayVFX(cubesVfx[cubeId-1],pos, rot, timeToDestroy);
+        PlayVFX(cubesVfx[cubeId-1, 0],pos, rot, timeToDestroy);
+        PlayVFX(cubesVfx[cubeId-1, 1],pos, rot, timeToDestroy);
         
         foreach (var vfx in onSpawnVfx)
         {

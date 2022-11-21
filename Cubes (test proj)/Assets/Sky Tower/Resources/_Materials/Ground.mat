@@ -46,6 +46,7 @@ Material:
     - _WaveAmplitude: 1
     - _WaveFrequency: 0.011
     - _WaveOffset: 0.16
+    - _WaveSpeed: 12
     - _amplitude: 0.91
     - _frequency: 0.85
     - _intnsity: 1

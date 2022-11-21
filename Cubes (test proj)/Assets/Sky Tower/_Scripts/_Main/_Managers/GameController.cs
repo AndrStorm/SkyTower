@@ -50,6 +50,7 @@ public class GameController : Singleton<GameController>
     private int curLevel = 0;
 
 
+    
     [Header("References")]
     public GameObject allCubes;
     [SerializeField]private TextMeshProUGUI scoreText;
@@ -59,14 +60,17 @@ public class GameController : Singleton<GameController>
     [SerializeField]private CubeScriptable cubeToCreate;
     [SerializeField]private GameObject[] canvasMenu;
 
+    
     private AudioSource windSource;
-
-    private List<CubeInfo> cubeInfos = new List<CubeInfo>();
-    private List<CubeScriptable> cubesToCreate;
     private Rigidbody allCubesRb;
+
     
+    private readonly List<CubeInfo> cubeInfos = new List<CubeInfo>();
+    private List<CubeScriptable> cubesToCreate;
     
+
     private CubePos lastCube = new CubePos(0, 1, 0);
+
     private Color targetBgColor;
     private Vector3 cameraTargetPos,cameraStartPos;
     private Vector3 lastSpawnerVector = Vector3.up;

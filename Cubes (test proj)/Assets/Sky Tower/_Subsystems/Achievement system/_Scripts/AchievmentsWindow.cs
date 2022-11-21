@@ -2,19 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using System;
 
 public class AchievmentsWindow : MonoBehaviour
 {
-    public GameObject achievmentPrefab;
-    public RectTransform gridWindow;
-    public Scrollbar scrollbar;
+    public static event Action<bool> OnAchievmentsWindowOpen; 
+    
+    
+    [SerializeField] private Transform gameCanvas, achievmentCanvas;
+    
+    [SerializeField] private GameObject achievmentPrefab;
+    [SerializeField] private RectTransform gridWindow;
+    [SerializeField] private Scrollbar scrollbar;
 
     private List<AchievmentScriptable> achievments;
+    
+    private bool isOpen;
+    private Animator achievmentsAnimator;
+    private static readonly int AnimationOpen = Animator.StringToHash("OpenAchievments");
+    private static readonly int AnimationClose = Animator.StringToHash("CloseAchievments");
 
 
     void Awake()
     {
+        achievmentsAnimator = gameObject.GetComponent<Animator>();
         achievments = AchievementManager.Instance.achievments;
 
         for (int i = 0; i < achievments.Count; i++)
@@ -72,6 +83,32 @@ public class AchievmentsWindow : MonoBehaviour
     {
         yield return null;
         scrollbar.value = 1f;
+    }
+    
+    public void OpenAchievements()
+    {
+        gameCanvas.gameObject.SetActive(false);
+        achievmentCanvas.gameObject.SetActive(true);
+        //achievmentsAnimator.SetTrigger(AnimationOpen);
+        
+        SoundManager.Instance?.PlaySound("ButtonClick");
+        OnAchievmentsWindowOpen?.Invoke(true);
+        
+        
+    }
+    public void CloseAchievements()
+    {
+        gameCanvas.gameObject.SetActive(true);
+        achievmentCanvas.gameObject.SetActive(false);
+        //achievmentsAnimator.SetTrigger(AnimationClose);
+        
+        SoundManager.Instance?.PlaySound("ButtonClick");
+        OnAchievmentsWindowOpen?.Invoke(false);
+    }
+
+    public void OnAchievmentsClosed()
+    {
+        achievmentCanvas.gameObject.SetActive(false);
     }
 
 }

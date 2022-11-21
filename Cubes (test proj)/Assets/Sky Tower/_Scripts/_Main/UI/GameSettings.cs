@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class SettingsButtons : MonoBehaviour
+public class GameSettings : MonoBehaviour
 {
 
     [SerializeField] private AudioMixer mixer;
@@ -12,12 +10,20 @@ public class SettingsButtons : MonoBehaviour
     [SerializeField] private Slider musicSldier;
     [SerializeField] private Toggle shakerToggle;
 
+    
     private float masterVolume;
     private float musicVolume;
-    
+
+    private bool isOpen;
+    private Animator settingsAnimator;
+    private static readonly int AnimationOpen = Animator.StringToHash("OpenSettings");
+    private static readonly int AnimationClose = Animator.StringToHash("CloseSettings");
+
 
     private void Start()
     {
+        settingsAnimator = gameObject.GetComponent<Animator>();
+        
         masterVolume = PlayerPrefs.GetFloat("MasterVolume");
         musicVolume = PlayerPrefs.GetFloat("MusicVolume");
         CameraShaker.isShakerOn = PlayerPrefs.GetInt("IsShakerOn") != 0 ? true : false;
@@ -57,13 +63,21 @@ public class SettingsButtons : MonoBehaviour
 
     public void OpenSettings()
     {
+        isOpen = !isOpen;
+        if (!isOpen)
+        {
+            CloseSettings();
+            return;
+        }
+        
         SoundManager.Instance.PlaySound("ButtonClick");
-        transform.GetChild(0).gameObject.SetActive(true);
+        settingsAnimator.SetTrigger(AnimationOpen);
     }
     public void CloseSettings()
     {
+        isOpen = false;
         SoundManager.Instance.PlaySound("ButtonClick");
-        transform.GetChild(0).gameObject.SetActive(false);
+        settingsAnimator.SetTrigger(AnimationClose);
     }
 
     private float GetEaseOutQuint(float value)

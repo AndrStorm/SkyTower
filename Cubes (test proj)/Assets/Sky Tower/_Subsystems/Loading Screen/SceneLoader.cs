@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -78,7 +79,14 @@ public class SceneLoader : MonoBehaviour
     {
         loadingFinished = true;
         loadingOperation.allowSceneActivation = true;
+        //FinishLoad();
     }
+
+    /*private async void FinishLoad()
+    {
+        await Task.Delay(2000);
+        loadingOperation.allowSceneActivation = true;
+    }*/
     
 
 }

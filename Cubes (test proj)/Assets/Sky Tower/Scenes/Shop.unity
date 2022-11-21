@@ -1562,6 +1562,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1374273226}
     m_Modifications:
+    - target: {fileID: 3870052741403759284, guid: 81c247fd0c9cc6449b6a81b28f79225b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3870052741561730017, guid: 81c247fd0c9cc6449b6a81b28f79225b, type: 3}
       propertyPath: m_Name
       value: Loading Screen

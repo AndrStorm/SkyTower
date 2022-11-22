@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DifficultyManager : Singleton<DifficultyManager>
 {
-    public float maxDifficultyHeight;
+    public int maxDifficultyScore = 100;
     [SerializeField] private AnimationCurve difficultyCurve;
     [SerializeField] private DifficultySettings minDifficulty;
     [SerializeField] private DifficultySettings maxDifficulty;

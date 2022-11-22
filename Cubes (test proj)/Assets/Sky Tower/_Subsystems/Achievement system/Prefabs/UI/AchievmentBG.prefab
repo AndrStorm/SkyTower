@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 911273055}
   - component: {fileID: 911273054}
   - component: {fileID: 911273053}
-  - component: {fileID: 911273056}
   m_Layer: 5
   m_Name: Close
   m_TagString: Untagged
@@ -36,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.87500006}
   m_AnchorMax: {x: 0.5, y: 0.87500006}
-  m_AnchoredPosition: {x: 171.57027, y: 22.25928}
+  m_AnchoredPosition: {x: 171.57027, y: 22.259277}
   m_SizeDelta: {x: 50.299988, y: 47.71936}
   m_Pivot: {x: 0.49999994, y: 0.50000006}
 --- !u!222 &911273055
@@ -121,8 +120,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 911273056}
-        m_TargetAssemblyTypeName: AchievmentsButtons, Assembly-CSharp
+      - m_Target: {fileID: 8477330742542142831}
+        m_TargetAssemblyTypeName: AchievmentsWindow, Assembly-CSharp
         m_MethodName: CloseAchievements
         m_Mode: 1
         m_Arguments:
@@ -133,20 +132,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &911273056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911273051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96512d65585a9b042bbea77ca3fe30ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameCanvas: {fileID: 0}
-  achieveCanvas: {fileID: 0}
 --- !u!1 &8477330741957581546
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.34824392, y: 0}
   m_AnchorMax: {x: 0.648561, y: 1}
-  m_AnchoredPosition: {x: 0.6570593, y: -0.00012207031}
+  m_AnchoredPosition: {x: 0.6570587, y: -0.00012207031}
   m_SizeDelta: {x: 235.70001, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8477330741957581550
@@ -467,6 +452,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d84342878914742aeb29d77ff0e4da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameCanvas: {fileID: 0}
+  achievmentCanvas: {fileID: 0}
   achievmentPrefab: {fileID: 4349754816130285676, guid: 32e5d2639e6cc2c46ba4c768e273900c, type: 3}
   gridWindow: {fileID: 8477330741957581545}
   scrollbar: {fileID: 8477330743123220740}

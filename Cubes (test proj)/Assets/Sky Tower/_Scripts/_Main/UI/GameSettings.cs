@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class GameSettings : MonoBehaviour
 {
+
+    public static event Action<bool> OnSettingsWindowOpen;
 
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private Slider masterSldier;
@@ -72,12 +75,17 @@ public class GameSettings : MonoBehaviour
         
         SoundManager.Instance.PlaySound("ButtonClick");
         settingsAnimator.SetTrigger(AnimationOpen);
+        
+        OnSettingsWindowOpen?.Invoke(true);
     }
     public void CloseSettings()
     {
         isOpen = false;
+        
         SoundManager.Instance.PlaySound("ButtonClick");
         settingsAnimator.SetTrigger(AnimationClose);
+        
+        OnSettingsWindowOpen?.Invoke(false);
     }
 
     private float GetEaseOutQuint(float value)

@@ -605,7 +605,6 @@ GameObject:
   - component: {fileID: 361503712}
   - component: {fileID: 361503711}
   - component: {fileID: 361503710}
-  - component: {fileID: 361503709}
   m_Layer: 5
   m_Name: Records
   m_TagString: Untagged
@@ -632,20 +631,6 @@ RectTransform:
   m_AnchoredPosition: {x: -2, y: 31.5}
   m_SizeDelta: {x: 42, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &361503709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 361503707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96512d65585a9b042bbea77ca3fe30ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameCanvas: {fileID: 1374273226}
-  achieveCanvas: {fileID: 1107041266}
 --- !u!114 &361503710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,8 +675,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 361503709}
-        m_TargetAssemblyTypeName: AchievmentsButtons, Assembly-CSharp
+      - m_Target: {fileID: 1040537127}
+        m_TargetAssemblyTypeName: AchievmentsWindow, Assembly-CSharp
         m_MethodName: OpenAchievements
         m_Mode: 1
         m_Arguments:
@@ -1923,7 +1908,7 @@ MonoBehaviour:
   slowMotionDuration: 3.5
   loseCamYMul: 0.9
   loseCamZMul: 1.2
-  loseCamMovSpeedMul: 1.35
+  loseCamMovSpeedMul: 5.35
   spawnGamePauseDuration: 0.012
   spawnPauseDuration: 0.23
   spawnShakeAmount: 0.01
@@ -1934,19 +1919,64 @@ MonoBehaviour:
   windVolumeMul: 0.8
   windFadingSpeed: 0.7
   ambColorIntensity: 0.65
-  colorScoreStep: 5
-  bgColors:
-  - {r: 0.7921569, g: 0.8039216, b: 0.81960785, a: 0}
-  - {r: 0.38431373, g: 0.81960785, b: 0.81960785, a: 0}
-  - {r: 0.23268957, g: 0.7830189, b: 0.5309236, a: 0}
-  - {r: 0.5176471, g: 0.67058825, b: 0.2509804, a: 0}
-  - {r: 0.7372549, g: 0.6901961, b: 0.23921569, a: 0}
-  - {r: 0.67058825, g: 0.42461655, b: 0.1882353, a: 0}
-  - {r: 0.6313726, g: 0.18039216, b: 0.26666668, a: 0}
-  - {r: 0.42501447, g: 0.24252403, b: 0.4716981, a: 0}
-  - {r: 0.21568628, g: 0.09803922, b: 0.39215687, a: 0}
-  - {r: 0.09803922, g: 0.09803922, b: 0.39215687, a: 0}
-  - {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 0}
+  backGroundGradients:
+  - serializedVersion: 2
+    key0: {r: 0.7921569, g: 0.8039216, b: 0.81960785, a: 1}
+    key1: {r: 0.3372549, g: 0.6039216, b: 0.90588236, a: 1}
+    key2: {r: 0.33748665, g: 0.6048625, b: 0.9056604, a: 0}
+    key3: {r: 0.3724635, g: 0.8490566, b: 0.8490566, a: 0}
+    key4: {r: 0.35617658, g: 0.8679245, b: 0.6507078, a: 0}
+    key5: {r: 0.4000979, g: 0.764151, b: 0.4662894, a: 0}
+    key6: {r: 0.8679245, g: 0.8412856, b: 0.47899607, a: 0}
+    key7: {r: 0.8867924, g: 0.65210503, b: 0.3722855, a: 0}
+    ctime0: 3277
+    ctime1: 13107
+    ctime2: 19661
+    ctime3: 29491
+    ctime4: 36044
+    ctime5: 45875
+    ctime6: 55705
+    ctime7: 62273
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 8
+    m_NumAlphaKeys: 2
+  - serializedVersion: 2
+    key0: {r: 0.8862745, g: 0.6509804, b: 0.37254903, a: 1}
+    key1: {r: 0.8396226, g: 0.49211842, b: 0.4000089, a: 1}
+    key2: {r: 0.43297464, g: 0.28368637, b: 0.4811321, a: 0}
+    key3: {r: 0.38065138, g: 0.14012992, b: 0.4433962, a: 0}
+    key4: {r: 0.2985228, g: 0.15801886, b: 0.5, a: 0}
+    key5: {r: 0.16291939, g: 0.13363294, b: 0.3679245, a: 0}
+    key6: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 0}
+    key7: {r: 0.8867924, g: 0.65210503, b: 0.3722855, a: 0}
+    ctime0: 3277
+    ctime1: 9830
+    ctime2: 19661
+    ctime3: 29491
+    ctime4: 45875
+    ctime5: 55705
+    ctime6: 62258
+    ctime7: 62273
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 7
+    m_NumAlphaKeys: 2
+  lastColorScore: 120
   phaseColors:
   - {r: 0.6117647, g: 0.52156866, b: 0.11372549, a: 1}
   - {r: 0.6784314, g: 0.3137255, b: 0.1254902, a: 1}
@@ -2622,7 +2652,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.7936543, g: 0.8041934, b: 0.8207547, a: 0}
+  m_BackGroundColor: {r: 0.7921569, g: 0.8039216, b: 0.81960785, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4269,7 +4299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da097becf8add2e47920ba4a22247ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDifficultyHeight: 100
+  maxDifficultyScore: 100
   difficultyCurve:
     serializedVersion: 2
     m_Curve:
@@ -5237,11 +5267,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8035375700813876576, guid: b1d7f89ad074372448e976069bcbac42, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8035375700813876576, guid: b1d7f89ad074372448e976069bcbac42, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1d7f89ad074372448e976069bcbac42, type: 3}
@@ -5252,37 +5282,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1107041266}
     m_Modifications:
-    - target: {fileID: 911273052, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 22.259277
-      objectReference: {fileID: 0}
-    - target: {fileID: 911273053, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1040537127}
-    - target: {fileID: 911273053, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseAchievements
-      objectReference: {fileID: 0}
-    - target: {fileID: 911273053, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AchievmentsWindow, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 911273056, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: gameCanvas
-      value: 
-      objectReference: {fileID: 1374273226}
-    - target: {fileID: 911273056, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: achieveCanvas
-      value: 
-      objectReference: {fileID: 1107041266}
     - target: {fileID: 8477330741957581545, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -677.8679
-      objectReference: {fileID: 0}
-    - target: {fileID: 8477330741957581545, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.6570587
+      value: -678.0597
       objectReference: {fileID: 0}
     - target: {fileID: 8477330742226506882, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5291,10 +5293,6 @@ PrefabInstance:
     - target: {fileID: 8477330742226506882, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8477330742226506882, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8477330742542142826, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
       propertyPath: m_Pivot.x
@@ -5384,10 +5382,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AchievmentBG
       objectReference: {fileID: 0}
-    - target: {fileID: 8477330742542142827, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8477330742542142831, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
       propertyPath: gameCanvas
       value: 
@@ -5396,8 +5390,7 @@ PrefabInstance:
       propertyPath: achievmentCanvas
       value: 
       objectReference: {fileID: 1107041266}
-    m_RemovedComponents:
-    - {fileID: 911273056, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5914ce993db4a9443b2c16c83767b027, type: 3}
 --- !u!1001 &8802923898026015673
 PrefabInstance:

@@ -30,13 +30,13 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float actionMusicVolumeMul = 0.5f;
     [SerializeField]private int maxWindTowerHeight = 100;
     [Range(0f,1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
-    [SerializeField]private float minWindFactor=0.25f;
+    [SerializeField]private float minWindFactor=0.05f;
     [SerializeField]private float windVolumeMul=0.5f, windFadingSpeed=0.7f;
     [SerializeField]private float ambColorIntensity = 0.65f;
-    
+
     [Header("Game property")]
-    [SerializeField]private int colorScoreStep = 5;
-    [SerializeField]private Color[] bgColors;
+    [SerializeField]private Gradient[] backGroundGradients;
+    [SerializeField]private int lastColorScore = 100;
 
     [SerializeField]private Color[] phaseColors;
     [SerializeField]private Vector3 phaseLightIntensity;
@@ -91,11 +91,13 @@ public class GameController : Singleton<GameController>
     
     private void OnEnable()
     {
-        AchievmentsButtons.OnAchievmentsWindowOpen += SetAchievmentsOpened;  
+        AchievmentsWindow.OnAchievmentsWindowOpen += SetAchievmentsOpened;
+        GameSettings.OnSettingsWindowOpen += PauseInGameSettings;
     }
     private void OnDisable()
     {
-        AchievmentsButtons.OnAchievmentsWindowOpen -= SetAchievmentsOpened;
+        AchievmentsWindow.OnAchievmentsWindowOpen -= SetAchievmentsOpened;
+        GameSettings.OnSettingsWindowOpen -= PauseInGameSettings;
     }
 
     
@@ -185,7 +187,7 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    
+    #region IE;
     
     private IEnumerator MoveCubeSpawner()
     {
@@ -248,6 +250,23 @@ public class GameController : Singleton<GameController>
         isGamePause = false;
     }
     
+    private IEnumerator PauseGameSwitch(float delay)
+    {
+        yield return Helper.GetUnscaledWait(delay);
+        
+        Time.timeScale = 0f;
+        //AudioListener.pause = true;
+        isGamePause = true;
+
+        while (isGamePause)
+        {
+            yield return Helper.GetUnscaledWait(0.1f);
+        }
+        
+        Time.timeScale = 1f;
+        //AudioListener.pause = false;
+    }
+    
     private IEnumerator PauseSpawn(float t)
     {
         isSpawnPause = true;
@@ -266,10 +285,11 @@ public class GameController : Singleton<GameController>
         Time.timeScale = 1f;
     }
     
-    
+    #endregion
     
     #region Methods;
-    
+
+
     
 
     public Vector3 GetLastCubePosition()
@@ -311,6 +331,9 @@ public class GameController : Singleton<GameController>
         
         allCubesRb.velocity *= 2.2f;
     }
+    
+    
+    
 
     private void StartGame()
     {
@@ -323,6 +346,23 @@ public class GameController : Singleton<GameController>
         
         foreach (GameObject obj in canvasMenu)
             Destroy(obj);
+    }
+    
+    private void PauseInGameSettings(bool val)
+    {
+        if (!isGameStart)
+        {
+            return;
+        }
+        if (val)
+        {
+            StartCoroutine(PauseGameSwitch(1.2f));
+        }
+        else
+        { 
+            isGamePause = false;
+        }
+        
     }
 
     private void SetAchievmentsOpened(bool windowState)
@@ -383,7 +423,7 @@ public class GameController : Singleton<GameController>
 
     private void IncriseDifficulty()
     {
-        currentDifficulty = DifficultyManager.Instance.GetDifficulty(lastCube.y / DifficultyManager.Instance.maxDifficultyHeight);
+        currentDifficulty = DifficultyManager.Instance.GetDifficulty((float)lastCube.y / DifficultyManager.Instance.maxDifficultyScore);
     }
 
     private void CreateCube(Vector3 position)
@@ -433,7 +473,17 @@ public class GameController : Singleton<GameController>
 
     private void ChangeTargetBgColor()
     {
-            targetBgColor = bgColors[Mathf.Clamp((lastCube.y - 1) / colorScoreStep, 0, bgColors.Length - 1)];
+        float score = lastCube.y - 1f;
+        
+        float t = Mathf.Clamp01(score / lastColorScore);
+        
+        t *= backGroundGradients.Length;
+        
+        int i = Mathf.Clamp(Mathf.FloorToInt(t), 0, backGroundGradients.Length - 1);
+        
+        t -= i;
+        
+        targetBgColor = backGroundGradients[i].Evaluate(t);
     }
 
     private void ChangeBgColor()
@@ -533,6 +583,8 @@ public class GameController : Singleton<GameController>
         return true;
     }
 
+    
+    
     #endregion;
     
     

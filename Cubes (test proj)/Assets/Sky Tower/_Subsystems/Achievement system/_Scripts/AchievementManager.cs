@@ -8,8 +8,9 @@ using TMPro;
 
 public class AchievementManager : Singleton<AchievementManager>
 {
-    public float popupWindowDelay = 3f;
-    public Transform popupWindow;
+    [SerializeField] private float popupWindowDelay = 3f;
+    [SerializeField] private Transform popupWindow;
+    
     public List<AchievmentScriptable> achievments;
 
 
@@ -21,13 +22,11 @@ public class AchievementManager : Singleton<AchievementManager>
 
     private void OnEnable()
     {
-        GameController.OnDifficultyChanged += AchieveByDifficulty;
         GameController.OnScoreIncrised += AchieveByScore;
     }
 
     private void OnDisable()
     {
-        GameController.OnDifficultyChanged -= AchieveByDifficulty;
         GameController.OnScoreIncrised -= AchieveByScore;
     }
 
@@ -57,31 +56,26 @@ public class AchievementManager : Singleton<AchievementManager>
 
     private void AchieveByScore(int score)
     {
-        if (score >= 300 && !allInclusive.GetAchived())
+        if (score >= allInclusive.scoreСondition && !allInclusive.GetAchived())
         {
             Achieve(allInclusive);
         }
-    }
-
-    private void AchieveByDifficulty(int difficulty)
-    {
-        if (difficulty >= 1 && !raisingTheStakes.GetAchived())
-        {
-            Achieve(raisingTheStakes);
-        }
-        if (difficulty >= 2 && !youAreStartingImpress.GetAchived())
-        {
-            Achieve(youAreStartingImpress);
-        }
-        if (difficulty >= 3 && !chiefEngineer.GetAchived())
-        {
-            Achieve(chiefEngineer);
-        }
-        if (difficulty >= 4 && !skyscraper.GetAchived())
+        else if (score >= skyscraper.scoreСondition && !skyscraper.GetAchived())
         {
             Achieve(skyscraper);
         }
-
+        else if (score >= chiefEngineer.scoreСondition && !chiefEngineer.GetAchived())
+        {
+            Achieve(chiefEngineer);
+        }
+        else if (score >= youAreStartingImpress.scoreСondition && !youAreStartingImpress.GetAchived())
+        {
+            Achieve(youAreStartingImpress);
+        }
+        else if (score >= raisingTheStakes.scoreСondition && !raisingTheStakes.GetAchived())
+        {
+            Achieve(raisingTheStakes);
+        }
     }
 
     private void Achieve(AchievmentScriptable achievment)
@@ -119,7 +113,7 @@ public class AchievementManager : Singleton<AchievementManager>
     IEnumerator PopUpWindowEnable()
     {
         popupWindow.gameObject.SetActive(true);
-        yield return new WaitForSeconds(popupWindowDelay);
+        yield return Helper.GetWait(popupWindowDelay);
         popupWindow.gameObject.SetActive(false);
     }
     

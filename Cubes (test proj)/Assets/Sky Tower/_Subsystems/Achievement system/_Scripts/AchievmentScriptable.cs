@@ -5,6 +5,7 @@ public class AchievmentScriptable : ScriptableObject
 {
     public string title, description;
     public Sprite image;
+    public int scoreСondition;
 
     bool achieved;
  

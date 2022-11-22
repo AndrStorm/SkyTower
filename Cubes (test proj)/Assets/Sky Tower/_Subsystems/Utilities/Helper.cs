@@ -21,6 +21,9 @@ public static class Helper
         RectTransformUtility.ScreenPointToWorldPointInRectangle(element, element.position, MainCamera, out var pos);
         return pos;
     }
+    
+    
+    
 
     private static readonly Dictionary<float, WaitForSeconds> WaitDictionary = new Dictionary<float, WaitForSeconds>();
 
@@ -30,5 +33,16 @@ public static class Helper
         
         WaitDictionary[time] = new WaitForSeconds(time);
         return WaitDictionary[time];
+    }
+    
+    
+    
+    private static readonly Dictionary<float, WaitForSecondsRealtime> UnscaledWaitDictionary = new Dictionary<float, WaitForSecondsRealtime>();
+    public static WaitForSecondsRealtime GetUnscaledWait(float time)
+    {
+        if (UnscaledWaitDictionary.TryGetValue(time, out var wait)) return wait;
+        
+        UnscaledWaitDictionary[time] = new WaitForSecondsRealtime(time);
+        return UnscaledWaitDictionary[time];
     }
 }

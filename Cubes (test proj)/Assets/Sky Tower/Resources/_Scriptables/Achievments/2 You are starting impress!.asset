@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c25582bbdc264e4d84168807a6fc7cb, type: 3}
-  m_Name: Skyscraper
+  m_Name: 2 You are starting impress!
   m_EditorClassIdentifier: 
-  title: Skyscraper
-  description: Build a tower over 100 meters high.
-  image: {fileID: 21300000, guid: d38d8f4321e01484dab3ff3b7e9a03a4, type: 3}
+  title: You are starting impress!
+  description: Reach a high score of 20.
+  image: {fileID: 21300000, guid: eccd63f9c32f6c246b34c82597fef6e5, type: 3}
+  "score\u0421ondition": 20

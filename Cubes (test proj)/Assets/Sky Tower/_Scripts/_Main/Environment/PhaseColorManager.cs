@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LampColorManager : Singleton<LampColorManager>
+public class PhaseColorManager : Singleton<PhaseColorManager>
 {
     //public static LampManager Instance { get; private set; }
 

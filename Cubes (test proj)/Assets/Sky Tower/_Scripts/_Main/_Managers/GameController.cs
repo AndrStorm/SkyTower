@@ -8,7 +8,6 @@ using TMPro;
 
 public class GameController : Singleton<GameController>
 {
-    public static event Action<int> OnDifficultyChanged;
     public static event Action<int> OnScoreIncrised;
 
     public static bool isGamePause;
@@ -38,18 +37,11 @@ public class GameController : Singleton<GameController>
     [Header("Game property")]
     [SerializeField]private int colorScoreStep = 5;
     [SerializeField]private Color[] bgColors;
-    
-    [SerializeField]private float[] timeToAutoPlace, timeToPlace;
-    [SerializeField]private int[] difLevelsThresholds;
-    
+
     [SerializeField]private Color[] phaseColors;
     [SerializeField]private Vector3 phaseLightIntensity;
     [SerializeField]private Vector3 phaseSpawnerFlicker;
-
     
-    private int curLevel = 0;
-
-
     
     [Header("References")]
     public GameObject allCubes;
@@ -67,8 +59,9 @@ public class GameController : Singleton<GameController>
     
     private readonly List<CubeInfo> cubeInfos = new List<CubeInfo>();
     private List<CubeScriptable> cubesToCreate;
-    
 
+
+    private DifficultySettings currentDifficulty;
     private CubePos lastCube = new CubePos(0, 1, 0);
 
     private Color targetBgColor;
@@ -77,8 +70,9 @@ public class GameController : Singleton<GameController>
     private float timerAutoPlace;
     private float maxZx;
     private bool isGameLost,isGameStart;
-    private bool achievmentsOpened;
+    private bool isAchievmentsOpened;
     private bool isSpawnPause;
+    
     
     private List<Vector3> cubesPositions = new List<Vector3>
     {
@@ -86,7 +80,7 @@ public class GameController : Singleton<GameController>
     };
     
     
-    private Coroutine showCubePlace;
+    private Coroutine moveCubeSpawner;
     private static Camera _playerCam;
     
     
@@ -104,24 +98,21 @@ public class GameController : Singleton<GameController>
         AchievmentsButtons.OnAchievmentsWindowOpen -= SetAchievmentsOpened;
     }
 
+    
+    
     protected override void Awake()
     {
         base.Awake();
-        _playerCam = Camera.main;
+        _playerCam = Helper.MainCamera;
+        
+        allCubesRb = allCubes.GetComponent<Rigidbody>();
     }
-
     private void Start()
     {
+        currentDifficulty = DifficultyManager.Instance.GetDifficulty(0f);
+        
         windSource = SoundManager.Instance.GetSoundSource("Wind");
-        allCubesRb = allCubes.GetComponent<Rigidbody>();
-        
-        
-#if UNITY_EDITOR
-        if (timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length)
-                   Debug.LogError("Warning arrays(haven't make custom class yet): timeToAutoPlace.Length != timeToPlace.Length || timeToAutoPlace.Length != difLevelsThresholds.Length"); 
-#endif
-        
-        
+
         cubesToCreate = new List<CubeScriptable>();
         foreach (var cube in CubesManager.Instance.cubesDict)
         {
@@ -132,16 +123,17 @@ public class GameController : Singleton<GameController>
         }
 
         
-        ResetAutoPlaceTimer(curLevel);
-
+        ResetAutoPlaceTimer();
         targetBgColor = _playerCam.backgroundColor;
         cameraStartPos = _playerCam.transform.localPosition;
         cameraTargetPos = cameraStartPos;
         
         
         CreateCube(new Vector3(0, 1, 0));
-        showCubePlace = StartCoroutine(ShowCubePlace());  
+        moveCubeSpawner = StartCoroutine(MoveCubeSpawner());
     }
+    
+    
     
     private void Update()
     {
@@ -156,7 +148,7 @@ public class GameController : Singleton<GameController>
 
 
         bool isTowerDestroyed = allCubes == null;
-        bool isGameContinue = !achievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
+        bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
         if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && isGameContinue && !EventSystem.current.IsPointerOverGameObject())
         {
 #if !UNITY_EDITOR
@@ -173,14 +165,13 @@ public class GameController : Singleton<GameController>
         }
 
 
-        
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= 0.18f)
             LoseGame();
 
 
         if (!isTowerDestroyed && isGameLost)
         {
-            //
+            //StartWindSound();
             float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.velocity.normalized);
             float windFactor = Mathf.Clamp01(dotProduct + minWindFactor);
             float towerHeightMul = Mathf.Clamp01(minWindFactor + (float) lastCube.y / maxWindTowerHeight);
@@ -189,54 +180,68 @@ public class GameController : Singleton<GameController>
         }
         else if(isTowerDestroyed)
         {
-            //
+            //FadeWindSound();
             windSource.volume = Mathf.MoveTowards(windSource.volume, 0f, windFadingSpeed * Time.deltaTime);
         }
     }
 
     
     
-    private IEnumerator ShowCubePlace()
+    private IEnumerator MoveCubeSpawner()
     {
+        float spawnerTime = 0f;
         while (true)
         {
             if (isGameStart)
             {
-                if(timerAutoPlace <= 0f)
+                if (timerAutoPlace <= 0f)
                 {
                     InitializeCubeCreation();
+                    InitializeSpawnerMovement();
+                    spawnerTime = 0f;
                 }
-                else if (timerAutoPlace > 0f)
+                else
                 {
-                    timerAutoPlace -= timeToPlace[curLevel];
+                    timerAutoPlace -= 0.05f;
 
-                    if (timerAutoPlace < 2f * timeToPlace[curLevel])
+                    if (timerAutoPlace < 0.75f)
                     {
-                        LampColorManager.Instance.ChangeLampColor(phaseColors[2], phaseLightIntensity.z,phaseSpawnerFlicker.z);
+                        PhaseColorManager.Instance.ChangeLampColor(phaseColors[2], phaseLightIntensity.z,
+                            phaseSpawnerFlicker.z);
                     }
-                    else if (timerAutoPlace < 4f * timeToPlace[curLevel])
+                    else if (timerAutoPlace < 1.5f)
                     {
-                        LampColorManager.Instance.ChangeLampColor(phaseColors[1], phaseLightIntensity.y, phaseSpawnerFlicker.y);
+                        PhaseColorManager.Instance.ChangeLampColor(phaseColors[1], phaseLightIntensity.y,
+                            phaseSpawnerFlicker.y);
                     }
                     else
                     {
-                        LampColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
+                        PhaseColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x,
+                            phaseSpawnerFlicker.x);
                     }
                 }
             }
             
-            InitializeSpawnerMovement();
-            yield return new WaitForSeconds(timeToPlace[curLevel]);
+            yield return Helper.GetWait(0.05f);
+            spawnerTime += 0.05f;
+            
+            
+            if (spawnerTime >= currentDifficulty.timeToPlaceCube)
+            {
+                spawnerTime = 0f;
+                InitializeSpawnerMovement();
+            }
+
         }
     }
-    
+
     private IEnumerator PauseGame(float t)
     {
         Time.timeScale = 0f;
         //AudioListener.pause = true;
         isGamePause = true;
         
-        yield return new WaitForSecondsRealtime(t);
+        yield return Helper.GetUnscaledWait(t);
         
         Time.timeScale = 1f;
         //AudioListener.pause = false;
@@ -247,7 +252,7 @@ public class GameController : Singleton<GameController>
     {
         isSpawnPause = true;
         
-        yield return new WaitForSecondsRealtime(t);
+        yield return Helper.GetUnscaledWait(t);
 
         isSpawnPause = false;
     }
@@ -256,7 +261,7 @@ public class GameController : Singleton<GameController>
     {
         Time.timeScale = scale;
 
-        yield return new WaitForSecondsRealtime(t);
+        yield return Helper.GetUnscaledWait(t);
         
         Time.timeScale = 1f;
     }
@@ -296,15 +301,15 @@ public class GameController : Singleton<GameController>
         
         isGameLost = true;
 
-        Destroy(LampColorManager.Instance.gameObject);
+        Destroy(PhaseColorManager.Instance.gameObject);
         Destroy(cubeSpawner.gameObject);
-        StopCoroutine(showCubePlace);
+        StopCoroutine(moveCubeSpawner);
         restartButton.SetActive(true);
         
         cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         
-        allCubesRb.velocity *= 1.1f;
+        allCubesRb.velocity *= 2.2f;
     }
 
     private void StartGame()
@@ -322,12 +327,12 @@ public class GameController : Singleton<GameController>
 
     private void SetAchievmentsOpened(bool windowState)
     {
-        achievmentsOpened = windowState;
+        isAchievmentsOpened = windowState;
     }
 
-    private void ResetAutoPlaceTimer(int curLevel)
+    private void ResetAutoPlaceTimer()
     {
-        timerAutoPlace = timeToAutoPlace[curLevel];
+        timerAutoPlace = currentDifficulty.timeToCubeAutoPlace;
     }
 
     private void ChangeAmbientLight(Color ambientColor, float ambColorIntensity = 1f)
@@ -339,14 +344,14 @@ public class GameController : Singleton<GameController>
     private void InitializeSpawnerMovement()
     {
         MoveSpawner();
-        LampColorManager.Instance.gameObject.transform.position = new Vector3(cubeSpawner.transform.position.x, cubeSpawner.transform.position.y + 2, cubeSpawner.transform.position.z);
+        PhaseColorManager.Instance.gameObject.transform.position = new Vector3(cubeSpawner.transform.position.x, cubeSpawner.transform.position.y + 2, cubeSpawner.transform.position.z);
     }
 
     private void InitializeCubeCreation()
     {
         StartCoroutine(PauseGame(spawnGamePauseDuration));
         StartCoroutine(PauseSpawn(spawnPauseDuration));
-        ResetAutoPlaceTimer(curLevel);
+        ResetAutoPlaceTimer();
         
         
         Vector3 vfxDir = cubeSpawner.position - lastCube.getVector();
@@ -366,7 +371,7 @@ public class GameController : Singleton<GameController>
         
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
         SoundManager.Instance?.PlaySound("CubeSpawn");
-        LampColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
+        PhaseColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
         
         ChangeScore();
@@ -378,19 +383,7 @@ public class GameController : Singleton<GameController>
 
     private void IncriseDifficulty()
     {
-        for (int i = difLevelsThresholds.Length - 1; i >= 0; i--)
-        {
-            if (lastCube.y > difLevelsThresholds[i])
-            {
-                if(curLevel != i)
-                {
-                    OnDifficultyChanged?.Invoke(i);
-                    curLevel = i;
-                }
-                return;
-            }
-        }
-
+        currentDifficulty = DifficultyManager.Instance.GetDifficulty(lastCube.y / DifficultyManager.Instance.maxDifficultyHeight);
     }
 
     private void CreateCube(Vector3 position)
@@ -418,21 +411,24 @@ public class GameController : Singleton<GameController>
 
     private void ChangeScore()
     {
-        int currentScore = PlayerPrefs.GetInt(LastScore);
-        int totalScore = PlayerPrefs.GetInt(BestScore);
-        int currentPos = lastCube.y - 1;
+        int lastScore = PlayerPrefs.GetInt(LastScore);
+        int bestScore = PlayerPrefs.GetInt(BestScore);
+        int currentScore = lastCube.y - 1;
 
-        if (currentScore < currentPos)
+        if (lastScore < currentScore)
         {
-            PlayerPrefs.SetInt(LastScore, currentPos);
-            OnScoreIncrised.Invoke(currentPos);
-        }    
+            PlayerPrefs.SetInt(LastScore, currentScore);
+            OnScoreIncrised.Invoke(currentScore);
+
             
+            if (bestScore < currentScore)
+            {
+               PlayerPrefs.SetInt(BestScore, currentScore); 
+            }
 
-        if (totalScore < currentPos)
-            PlayerPrefs.SetInt(BestScore, currentPos);
+            scoreText.text = $"Score: {PlayerPrefs.GetInt(LastScore)}";
+        }
 
-        scoreText.text = $"Score: {PlayerPrefs.GetInt(LastScore)}";
     }
 
     private void ChangeTargetBgColor()

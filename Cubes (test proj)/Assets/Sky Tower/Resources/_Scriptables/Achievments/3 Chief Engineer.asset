@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c25582bbdc264e4d84168807a6fc7cb, type: 3}
-  m_Name: All inclusive
+  m_Name: 3 Chief Engineer
   m_EditorClassIdentifier: 
-  title: All Inclusive!
-  description: Unlock all cubes.
-  image: {fileID: 21300000, guid: e229ac628313b5843afcd95b2d71e078, type: 3}
+  title: Chief Engineer
+  description: Reach a high score of 50.
+  image: {fileID: 21300000, guid: 658dd025bec544b47ba4a5b39e737f67, type: 3}
+  "score\u0421ondition": 50

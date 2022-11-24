@@ -5,7 +5,7 @@ using TMPro;
 
 public class CanvasButtons : MonoBehaviour
 {
-    public Sprite soundOn, soundOff;
+    [SerializeField] private Sprite soundOn, soundOff;
 
     private void Start()
     {

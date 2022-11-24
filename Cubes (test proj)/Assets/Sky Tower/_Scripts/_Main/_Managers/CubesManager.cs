@@ -4,7 +4,7 @@ using UnityEngine;
 public class CubesManager : Singleton<CubesManager>
 {
     [SerializeField] private List<CubeScriptable> cubesScriptables;
-    public Dictionary<int, CubeScriptable> cubesDict;
+    private Dictionary<int, CubeScriptable> cubesDict;
 
     protected override void Awake()
     {
@@ -17,4 +17,11 @@ public class CubesManager : Singleton<CubesManager>
             cube.active = PlayerPrefs.GetInt($"Cube{cube.cubeId}") == 0 ? false : true;
         }
     }
+
+    public Dictionary<int, CubeScriptable> GetCubesDictionary()
+    {
+        return cubesDict;
+    }
+
+
 }

@@ -7,6 +7,7 @@ public class CubeScriptable : ScriptableObject
     public GameObject cube;
     public GameObject vfx;
     public GameObject vfxImpulse;
+    public int scoreToAchieve;
 
     public bool active;
 }

@@ -9,12 +9,12 @@ public class SceneLoader : MonoBehaviour
     public static event Action OnStartLoadingScene;
     public static event Action OnFininshedLoadingScene;
 
-    public Text progressPercentage;
-    public Image progressBar;
-
-
-    private static SceneLoader Instance;
-    private static bool loadingFinished;
+    [SerializeField] private Text progressPercentage;
+    [SerializeField] private Image progressBar;
+    
+    
+    private static SceneLoader _instance;
+    private static bool _loadingFinished;
 
     private Animator animator;
     private AsyncOperation loadingOperation;
@@ -24,30 +24,30 @@ public class SceneLoader : MonoBehaviour
     {
         LoadScene();
 
-        Instance.loadingOperation = SceneManager.LoadSceneAsync(sceneName);
-        Instance.loadingOperation.allowSceneActivation = false;
+        _instance.loadingOperation = SceneManager.LoadSceneAsync(sceneName);
+        _instance.loadingOperation.allowSceneActivation = false;
     }
 
     public static void LoadScene(int sceneIndex)
     {
         LoadScene();
 
-        Instance.loadingOperation = SceneManager.LoadSceneAsync(sceneIndex);
-        Instance.loadingOperation.allowSceneActivation = false;
+        _instance.loadingOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        _instance.loadingOperation.allowSceneActivation = false;
     }
 
     private static void LoadScene()
     {
-        Instance.animator.SetTrigger("loadingStart");
+        _instance.animator.SetTrigger("loadingStart");
         OnStartLoadingScene?.Invoke();
     }
     
     
     void Start()
     {
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
+            _instance = this;
         }
         else
         {
@@ -56,7 +56,7 @@ public class SceneLoader : MonoBehaviour
 
         animator = gameObject.GetComponent<Animator>();
 
-        if (loadingFinished)
+        if (_loadingFinished)
         {
             OnFininshedLoadingScene?.Invoke();
             animator.SetTrigger("loadingFinished");
@@ -77,7 +77,7 @@ public class SceneLoader : MonoBehaviour
 
     public void OnLoadingScreenLoad()
     {
-        loadingFinished = true;
+        _loadingFinished = true;
         loadingOperation.allowSceneActivation = true;
         //FinishLoad();
     }

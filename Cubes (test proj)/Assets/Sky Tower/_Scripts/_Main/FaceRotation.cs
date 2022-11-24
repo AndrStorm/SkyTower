@@ -3,7 +3,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class FaceRotation : MonoBehaviour
 {
-    public Transform objToFace;
+    [SerializeField]private Transform objToFace;
     
     Vector3 direction;
     

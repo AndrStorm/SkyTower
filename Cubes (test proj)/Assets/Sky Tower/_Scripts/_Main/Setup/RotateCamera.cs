@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class RotateCamera : MonoBehaviour
+public class RotateCamera : Singleton<RotateCamera>
 {
-    public float speed = 12f, loseSpeedMul = 0.75f;
-    public float loseCamRotOffset = 167f, loseCamRotSpeed = 1.3f;
-    public float rotatorMoveSpeed=1.5f;
+    public float speed = 12f;
+    [SerializeField]private float loseSpeedMul = 0.75f;
+    [SerializeField]private float loseCamRotOffset = 167f, loseCamRotSpeed = 1.3f;
+    [SerializeField]private float rotatorMoveSpeed=1.5f;
     
 
 

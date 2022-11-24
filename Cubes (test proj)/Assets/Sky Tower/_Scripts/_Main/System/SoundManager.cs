@@ -14,6 +14,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
     private bool isSceneLoaded;
     private float musicVolume, adjustedMusicVolume;
     private AudioSource musicAudioSource;
+    private AudioSource windAudioSource;
 
     
     private void OnEnable()
@@ -31,7 +32,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
         base.Awake();
         musicAudioSource = GetComponent<AudioSource>();
-
+        
         foreach (var sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();
@@ -51,22 +52,26 @@ public class SoundManager : PersistentSingleton<SoundManager>
     
     private void Start()
     {
+        windAudioSource = GetSoundSource("Wind");
+        
+        
         if (PlayerPrefs.GetString("sound") != "on")
         {
             musicAudioSource.volume = 0f;
         }
         PlayMusic(mainTheme);
-        //PlaySound("Wind");
+        PlaySound("Wind");
         //PlaySound("Achievment");
     }
 
     private void OnSceneLoaded()
     {
         isSceneLoaded = true;
+        windAudioSource.volume = 0f;
     }
     
     
-    private IEnumerator ChangeVolume(float time)
+    private IEnumerator ChangeMusicVolume(float time)
     {
         if (Mathf.Approximately(time,0f)) time = 0.01f;
         
@@ -123,7 +128,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
     public void SetMusicVolume(float vol,float time = 1f)
     {
         musicVolume = vol;
-        StartCoroutine(ChangeVolume(time));
+        StartCoroutine(ChangeMusicVolume(time));
     }
     
     
@@ -135,7 +140,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
         if (PlayerPrefs.GetString("sound") != "on") return;
 
         musicVolume = adjustedMusicVolume;
-        StartCoroutine(ChangeVolume(time));
+        StartCoroutine(ChangeMusicVolume(time));
     }
 
     

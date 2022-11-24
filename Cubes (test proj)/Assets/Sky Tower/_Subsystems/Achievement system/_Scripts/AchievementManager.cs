@@ -10,8 +10,7 @@ public class AchievementManager : Singleton<AchievementManager>
 {
     [SerializeField] private float popupWindowDelay = 3f;
     [SerializeField] private Transform popupWindow;
-    
-    public List<AchievmentScriptable> achievments;
+    [SerializeField] private List<AchievmentScriptable> achievments;
 
 
     AchievmentScriptable raisingTheStakes;
@@ -19,7 +18,7 @@ public class AchievementManager : Singleton<AchievementManager>
     AchievmentScriptable chiefEngineer;
     AchievmentScriptable skyscraper;
     AchievmentScriptable allInclusive;
-
+    
     private void OnEnable()
     {
         GameController.OnScoreIncrised += AchieveByScore;
@@ -53,6 +52,9 @@ public class AchievementManager : Singleton<AchievementManager>
 
         }     
     }
+    
+    
+    
 
     private void AchieveByScore(int score)
     {
@@ -116,7 +118,14 @@ public class AchievementManager : Singleton<AchievementManager>
         yield return Helper.GetWait(popupWindowDelay);
         popupWindow.gameObject.SetActive(false);
     }
-    
+
+
+    public List<AchievmentScriptable> GetAchievmentsList()
+    {
+        return achievments;
+    }
+
+
     public static void SetText(Transform transform, string text)
     {
         var tmpro = transform.GetComponent<TextMeshProUGUI>();

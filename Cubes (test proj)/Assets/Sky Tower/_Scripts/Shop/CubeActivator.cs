@@ -1,29 +1,43 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CubeActivator : MonoBehaviour
 {
     
-    public Material cubeLock;
-    public Material[] cubesMatUnlock;
+    [SerializeField]private Material cubeLock;
+    [SerializeField]private Material[] cubesMatUnlock;
 
     
-    private List<GameObject> shopCubes;
+    private List<MeshRenderer> shopCubesMeshRenderers;
     
 
-    private void OnEnable() => EventCubeActivator.activatorPressed += ActivateCube;
+    private void OnEnable() => EventCubeActivator.OnActivatorPressed += ActivateCube;
 
-    private void OnDisable() => EventCubeActivator.activatorPressed -= ActivateCube;
+    private void OnDisable() => EventCubeActivator.OnActivatorPressed -= ActivateCube;
 
+    
     private void Start()
     {
-        shopCubes = ShopManager.Instance.shopCubes;
+        shopCubesMeshRenderers = new List<MeshRenderer>();
+        var shopCubes = ShopManager.Instance.GetShopCubesList();
+        
+        foreach (var cube in shopCubes)
+        {
+            shopCubesMeshRenderers.Add(cube.GetComponent<MeshRenderer>());
+        }
+
+        
+#if UNITY_EDITOR
+        
         if (shopCubes.Count != cubesMatUnlock.Length)
             Debug.Log("allCubes.transform.childCount != cubesUnlock.Length");
+#endif
+        
     }
-    public void ActivateCube(GameObject score)
+    
+    
+    private void ActivateCube(GameObject score)
     {
         int cubeNumber = 1;
 
@@ -53,19 +67,19 @@ public class CubeActivator : MonoBehaviour
             cubeNumber = 12;
 
 
-        bool unlockedByScore = (score.GetComponent<TextMeshProUGUI>().text == ShopManager.pressToSelect);
+        bool unlockedByScore = (score.GetComponent<TextMeshProUGUI>().text == ShopManager.PressToSelect);
 
         if (PlayerPrefs.GetInt($"Cube{cubeNumber}") != 0)
         {
             PlayerPrefs.SetInt($"Cube{cubeNumber}", 0);
-            shopCubes[cubeNumber-1].GetComponent<MeshRenderer>().material = cubeLock;
-            score.GetComponent<TextMeshProUGUI>().text = ShopManager.pressToSelect;
+            shopCubesMeshRenderers[cubeNumber-1].material = cubeLock;
+            score.GetComponent<TextMeshProUGUI>().text = ShopManager.PressToSelect;
         }
         else if (unlockedByScore)
         {
             PlayerPrefs.SetInt($"Cube{cubeNumber}", 1);
-            shopCubes[cubeNumber - 1].GetComponent<MeshRenderer>().material = cubesMatUnlock[cubeNumber-1];
-            score.GetComponent<TextMeshProUGUI>().text = ShopManager.alreadySelected;
+            shopCubesMeshRenderers[cubeNumber - 1].material = cubesMatUnlock[cubeNumber-1];
+            score.GetComponent<TextMeshProUGUI>().text = ShopManager.AlreadySelected;
         }
 
         SoundManager.Instance?.PlaySound("ButtonClick");

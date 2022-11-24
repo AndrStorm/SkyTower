@@ -4,25 +4,42 @@ using UnityEngine.VFX;
 public class VfxManager : Singleton<VfxManager>
 {
 
+    [SerializeField] private Transform wind;
     [SerializeField] private GameObject[] onSpawnVfx;
     [SerializeField] private GameObject[] onExplodeVfx;
     [SerializeField] private float timeToDestroy = 3f;
 
 
     private GameObject[,] cubesVfx;
+    private VisualEffect windVfx;
 
 
     private void Start()
     {
-        cubesVfx = new GameObject[CubesManager.Instance.cubesDict.Count, 2];
-        foreach (var cube in CubesManager.Instance.cubesDict)
+        windVfx = wind.gameObject.GetComponent<VisualEffect>();
+
+
+        var cubesDict = CubesManager.Instance.GetCubesDictionary();
+        cubesVfx = new GameObject[cubesDict.Count, 2];
+        foreach (var cube in cubesDict)
         {
             cubesVfx[cube.Key - 1, 0] = cube.Value.vfx;
             cubesVfx[cube.Key - 1, 1] = cube.Value.vfxImpulse;
         }
         
     }
+    
 
+    public void EnableWind(bool val)
+    {
+        wind.gameObject.SetActive(val);
+    }
+
+    public void MoveWindVFX(Vector3 pos)
+    {
+        wind.transform.position = pos;
+    }
+    
     
     public void PlayExplodeVfx(Vector3 pos, Quaternion rot)
     {

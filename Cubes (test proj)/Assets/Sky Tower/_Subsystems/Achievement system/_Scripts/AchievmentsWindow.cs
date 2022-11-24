@@ -26,7 +26,7 @@ public class AchievmentsWindow : MonoBehaviour
     void Awake()
     {
         achievmentsAnimator = gameObject.GetComponent<Animator>();
-        achievments = AchievementManager.Instance.achievments;
+        achievments = AchievementManager.Instance.GetAchievmentsList();
 
         for (int i = 0; i < achievments.Count; i++)
         {

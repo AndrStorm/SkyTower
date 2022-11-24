@@ -16,6 +16,7 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float camMovSpeed = 2f;
     [Tooltip("How far will the camera move backward when the tower will become wider")]
     [SerializeField]private float cameraMoveBackMul =1.7f;
+    [SerializeField]private bool isCameraMoveForward;
     [SerializeField]private int cameraMoveThreshold = 2;
     [SerializeField]private float slowMotionScale = 0.55f, slowMotionDuration=1.5f;
     [SerializeField]private float loseCamYMul =1.5f, loseCamZMul =2f, loseCamMovSpeedMul=2f;
@@ -26,8 +27,10 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float spawnShakeAmount = 0.01f;
     [SerializeField]private float spawnShakeDur = 0.05f;
 
+    
     [Header("Sound Game property")]
     [SerializeField]private float actionMusicVolumeMul = 0.5f;
+    [SerializeField]private float minWindAmbientVol = 0.01f,maxWindAmbientVol=0.05f, maxWindAmbientHeight = 100;
     [SerializeField]private int maxWindTowerHeight = 100;
     [Range(0f,1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
     [SerializeField]private float minWindFactor=0.05f;
@@ -109,14 +112,18 @@ public class GameController : Singleton<GameController>
         
         allCubesRb = allCubes.GetComponent<Rigidbody>();
     }
+    
+    
     private void Start()
     {
+        isGamePause = false;
+        
         currentDifficulty = DifficultyManager.Instance.GetDifficulty(0f);
         
         windSource = SoundManager.Instance.GetSoundSource("Wind");
 
         cubesToCreate = new List<CubeScriptable>();
-        foreach (var cube in CubesManager.Instance.cubesDict)
+        foreach (var cube in CubesManager.Instance.GetCubesDictionary())
         {
             if (cube.Value.active)
             {
@@ -133,6 +140,8 @@ public class GameController : Singleton<GameController>
         
         CreateCube(new Vector3(0, 1, 0));
         moveCubeSpawner = StartCoroutine(MoveCubeSpawner());
+        
+        
     }
     
     
@@ -171,29 +180,27 @@ public class GameController : Singleton<GameController>
             LoseGame();
 
 
-        if (!isTowerDestroyed && isGameLost)
-        {
-            //StartWindSound();
-            float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.velocity.normalized);
-            float windFactor = Mathf.Clamp01(dotProduct + minWindFactor);
-            float towerHeightMul = Mathf.Clamp01(minWindFactor + (float) lastCube.y / maxWindTowerHeight);
-            windSource.volume = windFactor * windVolumeMul * towerHeightMul;
-            windSource.pitch = 0.75f + dotProduct;
-        }
-        else if(isTowerDestroyed)
-        {
-            //FadeWindSound();
-            windSource.volume = Mathf.MoveTowards(windSource.volume, 0f, windFadingSpeed * Time.deltaTime);
-        }
+        CalculateWindSound(isTowerDestroyed);
+        
     }
 
+  
+
     #region IE;
+    
+    
     
     private IEnumerator MoveCubeSpawner()
     {
         float spawnerTime = 0f;
         while (true)
         {
+            if (isGamePause)
+            {
+                yield return Helper.GetWait(0.05f);
+                continue;
+            }
+            
             if (isGameStart)
             {
                 if (timerAutoPlace <= 0f)
@@ -237,7 +244,7 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    private IEnumerator PauseGame(float t)
+    private IEnumerator PauseGameTime(float t)
     {
         Time.timeScale = 0f;
         //AudioListener.pause = true;
@@ -285,11 +292,14 @@ public class GameController : Singleton<GameController>
         Time.timeScale = 1f;
     }
     
+    
+    
     #endregion
     
+    
+    
     #region Methods;
-
-
+    
     
 
     public Vector3 GetLastCubePosition()
@@ -316,7 +326,7 @@ public class GameController : Singleton<GameController>
 
     public void LoseGame()
     {
-        SoundManager.Instance.PlaySound("Wind");
+        //SoundManager.Instance.PlaySound("Wind");
         SoundManager.Instance.ResetMusicVolume();
         
         isGameLost = true;
@@ -329,17 +339,48 @@ public class GameController : Singleton<GameController>
         cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         
-        allCubesRb.velocity *= 2.2f;
+        allCubesRb.velocity *= 2.5f;
+        
+        VfxManager.Instance.MoveWindVFX(Vector3.up);
+        VfxManager.Instance.EnableWind(false);
+        
     }
     
     
     
 
+    private void CalculateWindSound(bool isTowerDestroyed)
+    {
+        if(isTowerDestroyed)
+        {
+            //FadeWindSound();
+            windSource.volume = Mathf.MoveTowards(windSource.volume, 0f, windFadingSpeed * Time.deltaTime);
+        }
+        else if (isGameLost)
+        {
+            
+            float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.velocity.normalized);
+            float windFactor = Mathf.Clamp01(dotProduct + minWindFactor);
+            float towerHeightMul = Mathf.Clamp01(minWindFactor + (float) lastCube.y / maxWindTowerHeight);
+            windSource.volume = windFactor * windVolumeMul * towerHeightMul;
+            windSource.pitch = 0.75f + dotProduct;
+        }
+        else
+        {
+            windSource.pitch = 1f;
+            windSource.volume = Mathf.Lerp(minWindAmbientVol, maxWindAmbientVol, (lastCube.y - 1) / maxWindAmbientHeight);
+            
+        }
+        
+    }
+
     private void StartGame()
     {
-        var curMusVol = SoundManager.Instance.GetMusicVolume();
-        SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * curMusVol);
         isGameStart = true;
+
+        var musicVolume = SoundManager.Instance.GetMusicVolume();
+        SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * musicVolume);
+        
         
         PlayerPrefs.SetInt("lastScore", 0);
         scoreText.text = $"Score: 0";
@@ -354,15 +395,9 @@ public class GameController : Singleton<GameController>
         {
             return;
         }
-        if (val)
-        {
-            StartCoroutine(PauseGameSwitch(1.2f));
-        }
-        else
-        { 
-            isGamePause = false;
-        }
-        
+
+        isGamePause = false;
+
     }
 
     private void SetAchievmentsOpened(bool windowState)
@@ -389,7 +424,7 @@ public class GameController : Singleton<GameController>
 
     private void InitializeCubeCreation()
     {
-        StartCoroutine(PauseGame(spawnGamePauseDuration));
+        StartCoroutine(PauseGameTime(spawnGamePauseDuration));
         StartCoroutine(PauseSpawn(spawnPauseDuration));
         ResetAutoPlaceTimer();
         
@@ -398,7 +433,7 @@ public class GameController : Singleton<GameController>
         
         CreateCube(cubeSpawner.position);
 
-        
+        //PlayOnSpawnVFX(vfxDir,vfxPos);
         Vector3 vfxPos = lastCube.getVector();
         vfxPos.x -= vfxDir.x/2;
         vfxPos.z -= vfxDir.z/2;
@@ -406,7 +441,7 @@ public class GameController : Singleton<GameController>
  
         Quaternion vfxRotation = Quaternion.LookRotation(vfxDir, Vector3.up) * Quaternion.Euler(90, 0, 0);
         VfxManager.Instance.PlaySpawnVfx(vfxPos, vfxRotation, cubeToCreate.cubeId);
-        
+        //
         
         
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
@@ -415,10 +450,13 @@ public class GameController : Singleton<GameController>
 
         
         ChangeScore();
+        IncriseDifficulty();
+        
         ChangeTargetBgColor();
         MoveCameraTargetPos();
         MoveCameraTiltDirection();
-        IncriseDifficulty();
+        
+        VfxManager.Instance.MoveWindVFX(GetLastCubePosition());
     }
 
     private void IncriseDifficulty()
@@ -505,9 +543,11 @@ public class GameController : Singleton<GameController>
             {
                 x = Mathf.Abs(pos.x);
                 z = Mathf.Abs(pos.z);
-                if(maxZx < x || maxZx < z)
+                
+                 if(maxZx < x || maxZx < z || isCameraMoveForward)
                     maxZx = x > z ? x : z;
             }
+        
         if (maxZx > 0)
             camPos.z = cameraStartPos.z - (maxZx * cameraMoveBackMul);
 

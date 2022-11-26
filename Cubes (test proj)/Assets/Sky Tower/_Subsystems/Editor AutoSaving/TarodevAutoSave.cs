@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using System.Linq;
 using System.Threading;
@@ -5,6 +7,8 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+
+
 
 namespace Tarodev {
     /// <summary>
@@ -20,7 +24,7 @@ namespace Tarodev {
         private static AutoSaveConfig _config;
         private static CancellationTokenSource _tokenSource;
         private static Task _task;
-
+        
         [InitializeOnLoadMethod]
         private static void OnInitialize() {
             FetchConfig();
@@ -81,7 +85,7 @@ namespace Tarodev {
             var path = GetConfigPath();
             EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<AutoSaveConfig>(path).GetInstanceID());
         }
-
+        
         public override void OnInspectorGUI() {
             DrawDefaultInspector();
             EditorGUILayout.Space();
@@ -89,3 +93,5 @@ namespace Tarodev {
         }
     }
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +10,7 @@ using Object = UnityEngine.Object;
 public class InspectorLock
 {
     private static EditorWindow _mouseOverWindow;
- 
+    
     [MenuItem("Stuff/Select Inspector under mouse cursor (use hotkey) #&q")]
     static void SelectLockableInspector()
     {
@@ -21,7 +23,7 @@ public class InspectorLock
             EditorPrefs.SetInt("LockableInspectorIndex", indexOf);
         }
     }
- 
+    
     [MenuItem("Stuff/Toggle Lock #q")]
     static void ToggleInspectorLock()
     {
@@ -45,7 +47,7 @@ public class InspectorLock
             _mouseOverWindow.Repaint();
         }
     }
- 
+    
     [MenuItem("Stuff/Clear Console #&c")]
     static void ClearConsole()
     {
@@ -54,4 +56,4 @@ public class InspectorLock
     }
 }
 
- 
+#endif 

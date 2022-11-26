@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -345,7 +346,7 @@ public class GameController : Singleton<GameController>
         VfxManager.Instance.EnableWind(false);
         
     }
-    
+
     
     
 
@@ -662,5 +663,8 @@ public class GameController : Singleton<GameController>
             cubeId = id;
         }
     }
+    
 
 }
+
+

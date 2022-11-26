@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ public class GameSettings : MonoBehaviour
 
     public static event Action<bool> OnSettingsWindowOpen;
 
+    [Range(0f, 1f)] [SerializeField] private float defMasterVolume = 1f, defMusicVolume = 1f;
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private Slider masterSldier;
     [SerializeField] private Slider musicSldier;
@@ -23,10 +25,28 @@ public class GameSettings : MonoBehaviour
     private static readonly int AnimationClose = Animator.StringToHash("CloseSettings");
 
 
-    private void Start()
+    private void OnDisable()
+    {
+        PlayerPrefs.SetFloat("MasterVolume", masterVolume);
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+        PlayerPrefs.SetInt("IsShakerOn", CameraShaker.isShakerOn ? 1 : 0);
+    }
+
+    private void Awake()
     {
         settingsAnimator = gameObject.GetComponent<Animator>();
         
+        if (PlayerPrefs.GetInt("FirstStart") == 0)
+        {
+            PlayerPrefs.SetInt("FirstStart", 1);
+            SetUpGameDefaultSettings();
+        }
+
+        SetUpApplicationSettings();
+    }
+
+    private void Start()
+    {
         masterVolume = PlayerPrefs.GetFloat("MasterVolume");
         musicVolume = PlayerPrefs.GetFloat("MusicVolume");
         CameraShaker.isShakerOn = PlayerPrefs.GetInt("IsShakerOn") != 0 ? true : false;
@@ -38,15 +58,33 @@ public class GameSettings : MonoBehaviour
         SetMasterVolume(masterVolume);
         SetMusicVolume(musicVolume);
     }
-    
 
-    private void OnDisable()
+
+    private void SetUpApplicationSettings()
     {
-        PlayerPrefs.SetFloat("MasterVolume", masterVolume);
-        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
-        PlayerPrefs.SetInt("IsShakerOn", CameraShaker.isShakerOn ? 1 : 0);
+        Application.targetFrameRate = 60;
+        //Screen.SetResolution(720,1280,true);
+        //Helper.MainCamera.aspect = 9f / 16f;
+    }
+    
+    private void SetUpGameDefaultSettings()
+    {
+        PlayerPrefs.SetFloat("MasterVolume", defMasterVolume);
+        PlayerPrefs.SetFloat("MusicVolume", defMusicVolume);
+        PlayerPrefs.SetInt("IsShakerOn", 1);
+        PlayerPrefs.SetString("sound", "on");
+        PlayerPrefs.SetString("music", "on");
+    }
+    
+    private float GetEaseOutQuint(float value)
+    {
+        return 1 - Mathf.Pow(1 - value, 4);
     }
 
+    
+
+    
+    
     public void SetMasterVolume(float volume)
     {
         masterVolume = volume;
@@ -64,6 +102,7 @@ public class GameSettings : MonoBehaviour
         CameraShaker.isShakerOn = isOn;
     }
 
+    
     public void OpenSettings()
     {
         isOpen = !isOpen;
@@ -78,6 +117,7 @@ public class GameSettings : MonoBehaviour
         
         OnSettingsWindowOpen?.Invoke(true);
     }
+    
     public void CloseSettings()
     {
         isOpen = false;
@@ -88,10 +128,7 @@ public class GameSettings : MonoBehaviour
         OnSettingsWindowOpen?.Invoke(false);
     }
 
-    private float GetEaseOutQuint(float value)
-    {
-        return 1 - Mathf.Pow(1 - value, 4);
-    }
+    
     
     
 }

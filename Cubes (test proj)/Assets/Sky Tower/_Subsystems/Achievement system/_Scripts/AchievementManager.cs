@@ -140,6 +140,9 @@ public class AchievementManager : Singleton<AchievementManager>
     }
 
 
+    
+#if UNITY_EDITOR
+    
     [MenuItem("Developer/AchievmentsClear #r")]
     public static void ClearAchievmentsSave()
     {
@@ -150,4 +153,7 @@ public class AchievementManager : Singleton<AchievementManager>
             PlayerPrefs.SetInt(Instance.achievments[i].title, 0);
         }
     }
+    
+#endif
+    
 }

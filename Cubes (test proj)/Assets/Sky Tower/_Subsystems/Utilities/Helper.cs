@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public static class Helper
 {
@@ -26,7 +27,6 @@ public static class Helper
     
 
     private static readonly Dictionary<float, WaitForSeconds> WaitDictionary = new Dictionary<float, WaitForSeconds>();
-
     public static WaitForSeconds GetWait(float time)
     {
         if (WaitDictionary.TryGetValue(time, out var wait)) return wait;
@@ -44,5 +44,18 @@ public static class Helper
         
         UnscaledWaitDictionary[time] = new WaitForSecondsRealtime(time);
         return UnscaledWaitDictionary[time];
+    }
+
+    
+
+    private static PointerEventData _eventDataCurrentPosition;
+    private static List<RaycastResult> _results;
+    public static bool IsOverUI()
+    {
+        _eventDataCurrentPosition = new PointerEventData(EventSystem.current) {position = Input.mousePosition};
+        _results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(_eventDataCurrentPosition,_results);
+        return _results.Count > 0;
+
     }
 }

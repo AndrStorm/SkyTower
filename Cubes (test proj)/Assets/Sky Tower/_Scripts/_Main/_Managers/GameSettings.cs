@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -63,7 +62,8 @@ public class GameSettings : MonoBehaviour
     private void SetUpApplicationSettings()
     {
         Application.targetFrameRate = 60;
-        //Screen.SetResolution(720,1280,true);
+        Screen.SetResolution(720,1280,true);
+        //Screen.SetResolution(450,800,true);
         //Helper.MainCamera.aspect = 9f / 16f;
     }
     

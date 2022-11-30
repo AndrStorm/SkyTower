@@ -51,6 +51,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pop-up Achievment pro
       objectReference: {fileID: 0}
+    - target: {fileID: 5027127851162628640, guid: 32e5d2639e6cc2c46ba4c768e273900c, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6504042282042034390, guid: 32e5d2639e6cc2c46ba4c768e273900c, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7015240342676539532, guid: 32e5d2639e6cc2c46ba4c768e273900c, type: 3}
       propertyPath: m_IsActive
       value: 0

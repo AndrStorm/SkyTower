@@ -24,12 +24,17 @@ public class FpsDisplay : MonoBehaviour
                
                 // Display it
      
-                fps = string.Format("FPS: {0}" , Mathf.RoundToInt(frameCount / timeSpan));
+                fps = string.Format("<b>FPS: {0}</b>" , Mathf.RoundToInt(frameCount / timeSpan));
             }
         }
      
      
-        void OnGUI(){
-            GUI.Label(new Rect(Screen.width - 100,10,150,20), fps);
+        void OnGUI()
+        {
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 21;
+            style.richText = true;
+            GUI.Label(new Rect(Screen.width - 120,2,150,20), fps, style);
+            
         }
 }

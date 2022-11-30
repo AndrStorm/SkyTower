@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.UI;
 
 
 public class GameController : Singleton<GameController>
@@ -38,7 +39,9 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float windVolumeMul=0.5f, windFadingSpeed=0.7f;
     [SerializeField]private float ambColorIntensity = 0.65f;
 
-    [Header("Game property")]
+    [Header("Game property")] 
+    [SerializeField]private float restartButtonDelay = 3f;
+    [SerializeField]private float finalPushVelocityMul = 3.5f;
     [SerializeField]private Gradient[] backGroundGradients;
     [SerializeField]private int lastColorScore = 100;
 
@@ -149,6 +152,11 @@ public class GameController : Singleton<GameController>
     
     private void Update()
     {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        
         if(isGamePause || isSpawnPause) return;
         
         if(isGameLost)
@@ -161,8 +169,9 @@ public class GameController : Singleton<GameController>
 
         bool isTowerDestroyed = allCubes == null;
         bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
-        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && isGameContinue && !EventSystem.current.IsPointerOverGameObject())
+        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && isGameContinue && Input.mousePosition.y > 35f && !Helper.IsOverUI()/*&& !EventSystem.current.IsPointerOverGameObject()*/)
         {
+
 #if !UNITY_EDITOR
             if (Input.GetTouch(0).phase != TouchPhase.Began)
                 return;
@@ -292,6 +301,12 @@ public class GameController : Singleton<GameController>
         
         Time.timeScale = 1f;
     }
+
+    private IEnumerator ShowRestartButton(float delay)
+    {
+        yield return Helper.GetUnscaledWait(delay);
+        restartButton.SetActive(true);
+    }
     
     
     
@@ -327,6 +342,7 @@ public class GameController : Singleton<GameController>
 
     public void LoseGame()
     {
+        
         //SoundManager.Instance.PlaySound("Wind");
         SoundManager.Instance.ResetMusicVolume();
         
@@ -335,12 +351,13 @@ public class GameController : Singleton<GameController>
         Destroy(PhaseColorManager.Instance.gameObject);
         Destroy(cubeSpawner.gameObject);
         StopCoroutine(moveCubeSpawner);
-        restartButton.SetActive(true);
+        StartCoroutine(ShowRestartButton(restartButtonDelay));
+        //restartButton.SetActive(true);
         
         cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         
-        allCubesRb.velocity *= 2.5f;
+        allCubesRb.velocity *= finalPushVelocityMul;
         
         VfxManager.Instance.MoveWindVFX(Vector3.up);
         VfxManager.Instance.EnableWind(false);

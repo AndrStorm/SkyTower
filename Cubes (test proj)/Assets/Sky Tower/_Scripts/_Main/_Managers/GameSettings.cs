@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class GameSettings : MonoBehaviour
@@ -8,28 +9,21 @@ public class GameSettings : MonoBehaviour
 
     public static event Action<bool> OnSettingsWindowOpen;
 
-    [Range(0f, 1f)] [SerializeField] private float defMasterVolume = 1f, defMusicVolume = 1f;
+    [Range(0f, 1f)] [SerializeField] private float defaultMasterVolume = 1f, defaultMusicVolume = 1f;
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private Slider masterSldier;
     [SerializeField] private Slider musicSldier;
-    [SerializeField] private Toggle shakerToggle;
+    [SerializeField] private Toggle shakerToggle, postProcessingToggle;
 
     
-    private float masterVolume;
-    private float musicVolume;
+    private float masterVolume, musicVolume;
+    private bool isShakerOn, isPostProcessingOn;
 
     private bool isOpen;
     private Animator settingsAnimator;
     private static readonly int AnimationOpen = Animator.StringToHash("OpenSettings");
     private static readonly int AnimationClose = Animator.StringToHash("CloseSettings");
 
-
-    private void OnDisable()
-    {
-        PlayerPrefs.SetFloat("MasterVolume", masterVolume);
-        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
-        PlayerPrefs.SetInt("IsShakerOn", CameraShaker.isShakerOn ? 1 : 0);
-    }
 
     private void Awake()
     {
@@ -43,19 +37,35 @@ public class GameSettings : MonoBehaviour
 
         SetUpApplicationSettings();
     }
+    
+
+    private void OnDisable()
+    {
+        PlayerPrefs.SetFloat("MasterVolume", masterVolume);
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+        PlayerPrefs.SetInt("IsShakerOn", isShakerOn ? 1 : 0);
+        PlayerPrefs.SetInt("IsPostProcessing", isPostProcessingOn ? 1 : 0);
+    }
+    
 
     private void Start()
     {
         masterVolume = PlayerPrefs.GetFloat("MasterVolume");
         musicVolume = PlayerPrefs.GetFloat("MusicVolume");
-        CameraShaker.isShakerOn = PlayerPrefs.GetInt("IsShakerOn") != 0 ? true : false;
+        isShakerOn = PlayerPrefs.GetInt("IsShakerOn") != 0 ? true : false;
+        isPostProcessingOn = PlayerPrefs.GetInt("IsPostProcessing") != 0 ? true : false;
+        
         
         masterSldier.value = masterVolume;
         musicSldier.value = musicVolume;
-        shakerToggle.isOn = CameraShaker.isShakerOn;
+        shakerToggle.isOn = isShakerOn;
+        postProcessingToggle.isOn = isPostProcessingOn;
+        
         
         SetMasterVolume(masterVolume);
         SetMusicVolume(musicVolume);
+        SetCameraShaker(isShakerOn);
+        SetPostProcessing(isPostProcessingOn);
     }
 
 
@@ -69,9 +79,12 @@ public class GameSettings : MonoBehaviour
     
     private void SetUpGameDefaultSettings()
     {
-        PlayerPrefs.SetFloat("MasterVolume", defMasterVolume);
-        PlayerPrefs.SetFloat("MusicVolume", defMusicVolume);
+        PlayerPrefs.SetFloat("MasterVolume", defaultMasterVolume);
+        PlayerPrefs.SetFloat("MusicVolume", defaultMusicVolume);
         PlayerPrefs.SetInt("IsShakerOn", 1);
+        PlayerPrefs.SetInt("IsPostProcessing", 1);
+        
+        
         PlayerPrefs.SetString("sound", "on");
         PlayerPrefs.SetString("music", "on");
     }
@@ -97,9 +110,28 @@ public class GameSettings : MonoBehaviour
         mixer.SetFloat("MusicVolume", Mathf.Lerp(-80f, 0, GetEaseOutQuint(volume)));
     }
 
+    private void SetCameraShaker(bool isOn)
+    {
+        isShakerOn = isOn;
+        CameraShaker.isShakerOn = isOn;
+    }
+
     public void ToggleCameraShaker(bool isOn)
     {
-        CameraShaker.isShakerOn = isOn;
+        SetCameraShaker(isOn);
+        SoundManager.Instance.PlaySound("ButtonClick");
+    }
+    
+    private void SetPostProcessing(bool isOn)
+    {
+        isPostProcessingOn = isOn;
+        Helper.MainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = isOn;
+    }
+    
+    public void TogglePostProcessing(bool isOn)
+    {
+        SetPostProcessing(isOn);
+        SoundManager.Instance.PlaySound("ButtonClick");
     }
 
     

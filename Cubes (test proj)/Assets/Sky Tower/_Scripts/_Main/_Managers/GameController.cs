@@ -1,11 +1,9 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.EventSystems;
 using TMPro;
-using UnityEngine.UI;
+
 
 
 public class GameController : Singleton<GameController>
@@ -411,15 +409,9 @@ public class GameController : Singleton<GameController>
             Destroy(obj);
     }
     
-    private void PauseInGameSettings(bool val)
+    private void PauseInGameSettings(bool isOpen)
     {
-        if (!isGameStart)
-        {
-            return;
-        }
-
-        isGamePause = false;
-
+        isGamePause = isOpen;
     }
 
     private void SetAchievmentsOpened(bool windowState)

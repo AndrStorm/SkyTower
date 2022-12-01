@@ -11,13 +11,10 @@ public class VfxManager : Singleton<VfxManager>
 
 
     private GameObject[,] cubesVfx;
-    private VisualEffect windVfx;
 
 
     private void Start()
     {
-        windVfx = wind.gameObject.GetComponent<VisualEffect>();
-
 
         var cubesDict = CubesManager.Instance.GetCubesDictionary();
         cubesVfx = new GameObject[cubesDict.Count, 2];
@@ -72,13 +69,15 @@ public class VfxManager : Singleton<VfxManager>
     private void PlayVFX(GameObject vfxSample, Vector3 pos, Quaternion rot, float time)
     {
      
-        GameObject vfx = Instantiate(vfxSample, pos, rot) as GameObject;
+        GameObject vfx = Instantiate(vfxSample, pos, rot);
+        vfx.transform.SetParent(transform);
         Destroy(vfx, time);
     }
     
     private void PlayVFX(VisualEffect vfxSample, Vector3 pos, Quaternion rot, float time)
     {
-        GameObject vfx = Instantiate(new GameObject(), pos, rot) as GameObject;
+        GameObject vfx = Instantiate(new GameObject(), pos, rot);
+        vfx.transform.SetParent(transform);
         var vfxComp = vfx.AddComponent<VisualEffect>();
         vfxComp.visualEffectAsset = vfxSample.visualEffectAsset; 
         Destroy(vfx, time);

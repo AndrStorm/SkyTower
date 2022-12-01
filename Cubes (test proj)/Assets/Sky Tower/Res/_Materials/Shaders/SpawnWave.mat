@@ -40,7 +40,7 @@ Material:
     - _WaveFrequency: 2
     - _WaveOffset: 0
     - _WaveSpeed: 1
-    - _time: 0
+    - _time: 0.25
     m_Colors:
     - Color_3ffcfbda745b4c208a6262c563b25d20: {r: 0.25882354, g: 0.7058824, b: 0.9254902, a: 0}
     - _Color: {r: 0.25882357, g: 0.7065127, b: 0.9254902, a: 0}

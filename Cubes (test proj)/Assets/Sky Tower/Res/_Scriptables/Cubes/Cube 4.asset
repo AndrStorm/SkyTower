@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cubeId: 4
   cube: {fileID: 2823120304225344146, guid: 5523fdcfd4c50f3429476703208e1b48, type: 3}
-  vfx: {fileID: 972420559682001289, guid: f8558552ee7381a4f81f4027fc775786, type: 3}
-  vfxImpulse: {fileID: 2364756182673936728, guid: 81017b0a774adc648a24642314c41492, type: 3}
+  vfx: {fileID: 8656163580939392010, guid: ee5180d69eed9df42b50b53b48637dc9, type: 3}
+  vfxImpulse: {fileID: 8701125693327745384, guid: 52e0e5aa291f9b6419e36d00ea5c2850, type: 3}
   scoreToAchieve: 25
   active: 0

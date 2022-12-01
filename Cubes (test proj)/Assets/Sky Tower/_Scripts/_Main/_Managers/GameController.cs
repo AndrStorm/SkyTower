@@ -39,12 +39,17 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float windVolumeMul=0.5f, windFadingSpeed=0.7f;
     [SerializeField]private float ambColorIntensity = 0.65f;
 
-    [Header("Game property")] 
+    [Header("Game property")]
+    [SerializeField]private float bottomBlindZone = 50f;
+    [SerializeField]private float topBlindZone = 50f;
     [SerializeField]private float restartButtonDelay = 3f;
+    [SerializeField]private float towerVelocityThreshold = 0.18f;
     [SerializeField]private float finalPushVelocityMul = 3.5f;
     [SerializeField]private Gradient[] backGroundGradients;
     [SerializeField]private int lastColorScore = 100;
 
+    [SerializeField]private float timeLeftLow = 1f;
+    [SerializeField]private float timeLeftMedium = 2f;
     [SerializeField]private Color[] phaseColors;
     [SerializeField]private Vector3 phaseLightIntensity;
     [SerializeField]private Vector3 phaseSpawnerFlicker;
@@ -169,7 +174,9 @@ public class GameController : Singleton<GameController>
 
         bool isTowerDestroyed = allCubes == null;
         bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
-        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && isGameContinue && Input.mousePosition.y > 35f && !Helper.IsOverUI()/*&& !EventSystem.current.IsPointerOverGameObject()*/)
+        bool isCorectInput = (Input.GetMouseButtonDown(0) || Input.touchCount > 0) && !Helper.IsOverUI();
+        bool isBlindZone = Input.mousePosition.y < bottomBlindZone || Input.mousePosition.y > Screen.height - topBlindZone;
+        if (isGameContinue && isCorectInput && !isBlindZone)
         {
 
 #if !UNITY_EDITOR
@@ -186,7 +193,7 @@ public class GameController : Singleton<GameController>
         }
 
 
-        if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= 0.18f)
+        if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
             LoseGame();
 
 
@@ -223,12 +230,12 @@ public class GameController : Singleton<GameController>
                 {
                     timerAutoPlace -= 0.05f;
 
-                    if (timerAutoPlace < 0.75f)
+                    if (timerAutoPlace < timeLeftLow)
                     {
                         PhaseColorManager.Instance.ChangeLampColor(phaseColors[2], phaseLightIntensity.z,
                             phaseSpawnerFlicker.z);
                     }
-                    else if (timerAutoPlace < 1.5f)
+                    else if (timerAutoPlace < timeLeftMedium)
                     {
                         PhaseColorManager.Instance.ChangeLampColor(phaseColors[1], phaseLightIntensity.y,
                             phaseSpawnerFlicker.y);
@@ -342,8 +349,6 @@ public class GameController : Singleton<GameController>
 
     public void LoseGame()
     {
-        
-        //SoundManager.Instance.PlaySound("Wind");
         SoundManager.Instance.ResetMusicVolume();
         
         isGameLost = true;
@@ -352,8 +357,7 @@ public class GameController : Singleton<GameController>
         Destroy(cubeSpawner.gameObject);
         StopCoroutine(moveCubeSpawner);
         StartCoroutine(ShowRestartButton(restartButtonDelay));
-        //restartButton.SetActive(true);
-        
+
         cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         

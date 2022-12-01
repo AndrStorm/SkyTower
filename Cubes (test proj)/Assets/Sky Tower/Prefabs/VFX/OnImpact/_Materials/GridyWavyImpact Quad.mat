@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GridyWavyImpact Quad
+  m_Shader: {fileID: -6465566751694194690, guid: 5d8395b674bd255479cc04e06f74e5a0, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _FadingDelay: 1
+    - _FadingSpeed: 1
+    - _GridAmplitude: 3.15
+    - _GridFrequency: 1.1
+    - _GridOffset: 2.7
+    - _Intensity: 3
+    - _IsFadeOut: 0
+    - _IslandSize: 0.5
+    - _WaveA: 1
+    - _WaveAmplitude: 1
+    - _WaveB: 1
+    - _WaveBAmplitude: 1
+    - _WaveBFrequency: 5
+    - _WaveBOffset: -0.51
+    - _WaveBSpeed: 1.05
+    - _WaveFrequency: 1
+    - _WaveOffset: 0
+    - _WaveSpeed: 1
+    - _time: 0
+    m_Colors:
+    - _Color: {r: 9.082411, g: 1.9971794, b: 0.80838215, a: 1}
+    - _RemapSize: {r: 0, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

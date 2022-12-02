@@ -28,6 +28,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
     }
 
     
+    
     protected override void Awake()
     {
         base.Awake();
@@ -49,13 +50,12 @@ public class SoundManager : PersistentSingleton<SoundManager>
         musicVolume = adjustedMusicVolume;
     }
 
-    
     private void Start()
     {
         windAudioSource = GetSoundSource("Wind");
         
         
-        if (PlayerPrefs.GetString("sound") != "on")
+        if (PlayerPrefs.GetInt("sound") == 0)
         {
             musicAudioSource.volume = 0f;
         }
@@ -64,11 +64,16 @@ public class SoundManager : PersistentSingleton<SoundManager>
         //PlaySound("Achievment");
     }
 
+    
+    
+    
     private void OnSceneLoaded()
     {
         isSceneLoaded = true;
         windAudioSource.volume = 0f;
     }
+    
+    
     
     
     private IEnumerator ChangeMusicVolume(float time)
@@ -104,26 +109,26 @@ public class SoundManager : PersistentSingleton<SoundManager>
     }
 
 
+    
+    
+    
     public float GetMusicVolume()
     {
         return musicVolume;
     }
-    
     
     public void PlayMusicOnTransition(AudioClip mus)
     {
         StartCoroutine(ChangeMusicOnTransition(mus));
     }
     
-    
     public void PlayMusic(AudioClip mus)
     {
         musicAudioSource.clip = mus;
         
-        if (PlayerPrefs.GetString("music") != "on") return;
+        if (PlayerPrefs.GetInt("music") == 0) return;
         musicAudioSource.Play();
     }
-    
     
     public void SetMusicVolume(float vol,float time = 1f)
     {
@@ -131,31 +136,27 @@ public class SoundManager : PersistentSingleton<SoundManager>
         StartCoroutine(ChangeMusicVolume(time));
     }
     
-    
     /// <summary>
     /// Reset Music Volume if sound on
     /// </summary>
     public void ResetMusicVolume(float time = 1f)
     {
-        if (PlayerPrefs.GetString("sound") != "on") return;
+        if (PlayerPrefs.GetInt("sound") == 0) return;
 
         musicVolume = adjustedMusicVolume;
         StartCoroutine(ChangeMusicVolume(time));
     }
-
     
     public void StopMusic()
     {
         musicAudioSource.Stop();
     }
-    
-    
+
     public void StartMusic()
     {
         musicAudioSource.Play();
     }
-
-
+    
     public AudioSource GetSoundSource(string soundName)
     {
         Sound sound = sounds.Find(sound => sound.soundName == soundName);
@@ -164,10 +165,27 @@ public class SoundManager : PersistentSingleton<SoundManager>
     
     public void PlaySound(string soundName)
     {
-        if (PlayerPrefs.GetString("sound") != "on") return;
+        if (PlayerPrefs.GetInt("sound") == 0) return;
         
         Sound sound = sounds.Find(sound => sound.soundName == soundName);
+
         sound?.source.Play();
     }
+    
+    public void PlaySound(string soundName, float pitch)
+    {
+        if (PlayerPrefs.GetInt("sound") == 0) return;
+        
+        Sound sound = sounds.Find(sound => sound.soundName == soundName);
+        if (sound != null)
+        {
+            sound.source.pitch = pitch;
+            sound.source.Play();
+        }
+        
+    }
+    
+    
+    
     
 }

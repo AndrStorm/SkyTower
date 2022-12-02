@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2002333597607137165}
   - component: {fileID: 4336192959375801159}
   - component: {fileID: 6291722105452778157}
+  - component: {fileID: -5842805381206124175}
   m_Layer: 0
   m_Name: SimpleCube7
   m_TagString: Untagged
@@ -96,3 +97,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2341897110121793029, guid: f305d64aef363ae44a858042a5b40e7e, type: 3}
+--- !u!114 &-5842805381206124175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823120304225344146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cc4f5f202042e4cae73e8ff76a9e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bonk: {fileID: 8300000, guid: 10f54b2d6aa2fe243b9804c8e2f7fd3b, type: 3}

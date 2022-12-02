@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2823120304225344146, guid: 0d4c9e70908bc1543a6885f6a2bf9f98, type: 3}
       propertyPath: m_Name
-      value: SimpleCube5
+      value: SimpleCube5rb
       objectReference: {fileID: 0}
     - target: {fileID: 3199363715090284584, guid: 0d4c9e70908bc1543a6885f6a2bf9f98, type: 3}
       propertyPath: m_RootOrder
@@ -55,7 +55,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2662755989464446671, guid: 0d4c9e70908bc1543a6885f6a2bf9f98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0d4c9e70908bc1543a6885f6a2bf9f98, type: 3}
 --- !u!1 &4473803211857940819 stripped
 GameObject:

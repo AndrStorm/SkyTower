@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
-
+using Random = UnityEngine.Random;
 
 
 public class GameController : Singleton<GameController>
@@ -30,7 +30,10 @@ public class GameController : Singleton<GameController>
     
     [Header("Sound Game property")]
     [SerializeField]private float actionMusicVolumeMul = 0.5f;
-    [SerializeField]private float minWindAmbientVol = 0.01f,maxWindAmbientVol=0.05f, maxWindAmbientHeight = 100;
+
+    [SerializeField] private float minWindAmbientVol = 0.02f;
+    [SerializeField] private float maxWindAmbientVol = 0.07f;
+    [SerializeField] private float maxWindAmbientHeight = 100;
     [SerializeField]private int maxWindTowerHeight = 100;
     [Range(0f,1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
     [SerializeField]private float minWindFactor=0.05f;
@@ -371,6 +374,11 @@ public class GameController : Singleton<GameController>
 
     private void CalculateWindSound(bool isTowerDestroyed)
     {
+        if (PlayerPrefs.GetInt("sound") != 1)
+        {
+            return;
+        }
+        
         if(isTowerDestroyed)
         {
             //FadeWindSound();
@@ -459,7 +467,7 @@ public class GameController : Singleton<GameController>
         
         
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
-        SoundManager.Instance?.PlaySound("CubeSpawn");
+        SoundManager.Instance?.PlaySound("CubeSpawn", Random.Range(0.935f,1.075f));
         PhaseColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
         
@@ -487,7 +495,7 @@ public class GameController : Singleton<GameController>
                 cubeToCreate.cube,
                 position,
                 Quaternion.identity) as GameObject;
-
+        
         newCube.transform.SetParent(allCubes.transform);
         lastCube.setVector(newCube.transform.position);
         cubesPositions.Add(lastCube.getVector());

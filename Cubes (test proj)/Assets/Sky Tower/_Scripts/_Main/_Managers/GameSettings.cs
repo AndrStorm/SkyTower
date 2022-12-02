@@ -85,8 +85,8 @@ public class GameSettings : MonoBehaviour
         PlayerPrefs.SetInt("IsPostProcessing", 1);
         
         
-        PlayerPrefs.SetString("sound", "on");
-        PlayerPrefs.SetString("music", "on");
+        PlayerPrefs.SetInt("sound", 1);
+        PlayerPrefs.SetInt("music", 1);
     }
     
     private float GetEaseOutQuint(float value)

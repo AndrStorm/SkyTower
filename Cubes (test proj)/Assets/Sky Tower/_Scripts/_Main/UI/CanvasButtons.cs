@@ -10,14 +10,14 @@ public class CanvasButtons : MonoBehaviour
     private void Start()
     {
 
-        if (PlayerPrefs.GetString("music") != "on" && gameObject.name=="Music")
+        if (PlayerPrefs.GetInt("music") != 1 && gameObject.name=="Music")
             GetComponent<Image>().sprite = soundOff;
-        else if (PlayerPrefs.GetString("music") == "on" && gameObject.name == "Music")
+        else if (PlayerPrefs.GetInt("music") == 1 && gameObject.name == "Music")
             GetComponent<Image>().sprite = soundOn;
         
-        else if (PlayerPrefs.GetString("sound") != "on" && gameObject.name=="Sound")
+        else if (PlayerPrefs.GetInt("sound") != 1 && gameObject.name=="Sound")
             GetComponent<Image>().sprite = soundOff;
-        else if (PlayerPrefs.GetString("sound") == "on" && gameObject.name == "Sound")
+        else if (PlayerPrefs.GetInt("sound") == 1 && gameObject.name == "Sound")
             GetComponent<Image>().sprite = soundOn;
 
         else if (gameObject.name == "Score")
@@ -47,16 +47,16 @@ public class CanvasButtons : MonoBehaviour
 
     public void SoundSwitch()
     {
-        if (PlayerPrefs.GetString("sound") == "off")
+        if (PlayerPrefs.GetInt("sound") != 1)
         {
-            PlayerPrefs.SetString("sound", "on");
+            PlayerPrefs.SetInt("sound", 1);
             GetComponent<Image>().sprite = soundOn;
             SoundManager.Instance?.PlaySound("ButtonClick");
             SoundManager.Instance?.ResetMusicVolume();
         }
         else
         {
-            PlayerPrefs.SetString("sound", "off");
+            PlayerPrefs.SetInt("sound", 0);
             GetComponent<Image>().sprite = soundOff;
             SoundManager.Instance?.SetMusicVolume(0f,0.5f);
         }
@@ -66,21 +66,20 @@ public class CanvasButtons : MonoBehaviour
     public void MusicSwitch()
     {
         Image btnImage = GetComponent<Image>();
-        if (PlayerPrefs.GetString("music") != "on")
+        if (PlayerPrefs.GetInt("music") != 1)
         {
-            PlayerPrefs.SetString("music", "on");
+            PlayerPrefs.SetInt("music", 1);
             btnImage.sprite = soundOn;
             SoundManager.Instance?.StartMusic();
         }
         else
         {
-            PlayerPrefs.SetString("music", "off");
+            PlayerPrefs.SetInt("music", 0);
             btnImage.sprite = soundOff;
             SoundManager.Instance?.StopMusic();
         }
 
-        if (PlayerPrefs.GetString("sound") != "on") return;
-        
+        if (PlayerPrefs.GetInt("sound") != 1) return;
         SoundManager.Instance?.PlaySound("ButtonClick");
 
     }

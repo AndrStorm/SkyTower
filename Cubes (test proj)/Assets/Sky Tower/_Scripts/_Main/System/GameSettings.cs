@@ -73,6 +73,8 @@ public class GameSettings : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         Screen.SetResolution(720,1280,true);
+        // Screen.orientation = ScreenOrientation.Portrait;
+        // Screen.autorotateToPortrait = Screen.autorotateToPortraitUpsideDown = true;
         //Screen.SetResolution(450,800,true);
         //Helper.MainCamera.aspect = 9f / 16f;
     }

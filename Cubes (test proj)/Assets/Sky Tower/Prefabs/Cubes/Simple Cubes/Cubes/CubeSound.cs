@@ -5,6 +5,7 @@ public class CubeSound : MonoBehaviour
 {
 
     [SerializeField] private AudioClip bonk;
+    [SerializeField] private float volume = 1f;
     
     
     
@@ -19,7 +20,7 @@ public class CubeSound : MonoBehaviour
         {
            
             var pos = collision.transform.position;
-            AudioSource.PlayClipAtPoint(bonk,pos);
+            AudioSource.PlayClipAtPoint(bonk,pos,volume);
             
         }
         

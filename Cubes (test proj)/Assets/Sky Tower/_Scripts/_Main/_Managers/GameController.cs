@@ -158,12 +158,12 @@ public class GameController : Singleton<GameController>
     
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        /*if (Input.GetKey(KeyCode.Escape))
         {
             Application.Quit();
-        }
+        }*/
         
-        if(isGamePause || isSpawnPause) return;
+        if(isGamePause /*|| isSpawnPause*/) return;
         
         if(isGameLost)
             TiltCamera();
@@ -173,7 +173,7 @@ public class GameController : Singleton<GameController>
         ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity);
 
 
-        bool isTowerDestroyed = allCubes == null;
+        /*bool isTowerDestroyed = allCubes == null;
         bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
         bool isCorectInput = (Input.GetMouseButtonDown(0) || Input.touchCount > 0) && !Helper.IsOverUI();
         bool isBlindZone = Input.mousePosition.y < bottomBlindZone || Input.mousePosition.y > Screen.height - topBlindZone;
@@ -191,14 +191,14 @@ public class GameController : Singleton<GameController>
             InitializeCubeCreation();
             InitializeSpawnerMovement();
             
-        }
+        }*/
 
 
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
             LoseGame();
 
 
-        CalculateWindSound(isTowerDestroyed);
+        CalculateWindSound(allCubes == null);
         
     }
 
@@ -323,6 +323,24 @@ public class GameController : Singleton<GameController>
     
     
     #region Methods;
+
+
+    public void HandleInput(Vector2 screenPosition)
+    {
+        bool isTowerDestroyed = allCubes == null;
+        bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
+        bool isCorectInput = !Helper.IsOverUI() && !isSpawnPause;
+        bool isBlindZone = screenPosition.y < bottomBlindZone || screenPosition.y > Screen.height - topBlindZone;
+        if (isGameContinue && isCorectInput && !isBlindZone)
+        {
+            if (!isGameStart)
+                StartGame();
+
+            InitializeCubeCreation();
+            InitializeSpawnerMovement();
+            
+        }
+    }
     
     
 

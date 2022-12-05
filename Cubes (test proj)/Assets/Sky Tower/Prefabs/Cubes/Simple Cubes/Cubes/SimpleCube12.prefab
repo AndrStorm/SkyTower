@@ -110,3 +110,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bonk: {fileID: 8300000, guid: ca94df01a9b3e214fafa5db1625987be, type: 3}
+  volume: 0.35

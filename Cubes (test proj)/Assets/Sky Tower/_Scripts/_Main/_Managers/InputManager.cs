@@ -27,12 +27,11 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         touchPressAction.performed -= TouchPressed;
+        escapeAction.performed -= EscapePressed;
     }
 
     private void TouchPressed(InputAction.CallbackContext context)
     {
-        // var value = context.ReadValue<float>();
-        // Debug.Log(value);
         var pos = touchPositionAction.ReadValue<Vector2>();
         GameController.Instance.HandleInput(pos);
     }

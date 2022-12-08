@@ -58,4 +58,13 @@ public static class Helper
         return _results.Count > 0;
 
     }
+
+
+    public static void DestroyAllChilds(Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            Object.Destroy(child.gameObject);
+        }
+    }
 }

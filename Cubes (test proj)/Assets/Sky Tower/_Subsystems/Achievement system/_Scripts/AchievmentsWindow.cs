@@ -30,7 +30,7 @@ public class AchievmentsWindow : MonoBehaviour
 
         for (int i = 0; i < achievments.Count; i++)
         {
-            var icon = Instantiate(achievmentPrefab, gridWindow) as GameObject;
+            var icon = Instantiate(achievmentPrefab, gridWindow);
             icon.name = $"Achievment {i} ";
 
 
@@ -56,7 +56,7 @@ public class AchievmentsWindow : MonoBehaviour
     }
     private void OnEnable()
     {
-        StartCoroutine(ResetScrollValue());
+        StartCoroutine(ResetScrollValue(scrollbar));
         
 
         for (int i = 0; i < achievments.Count; i++)
@@ -79,10 +79,10 @@ public class AchievmentsWindow : MonoBehaviour
         }
     }
 
-    private IEnumerator ResetScrollValue()
+    private IEnumerator ResetScrollValue(Scrollbar scroll)
     {
         yield return null;
-        scrollbar.value = 1f;
+        scroll.value = 1f;
     }
     
     public void OpenAchievements()

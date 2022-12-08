@@ -37,10 +37,17 @@ public class GameSettings : MonoBehaviour
 
         SetUpApplicationSettings();
     }
-    
+
+    private void OnEnable()
+    {
+        LeaderboardUI.OnLeaderboardOpen += OnOtherWindowOpened;
+    }
 
     private void OnDisable()
     {
+        LeaderboardUI.OnLeaderboardOpen -= OnOtherWindowOpened;
+        
+        
         PlayerPrefs.SetFloat("MasterVolume", masterVolume);
         PlayerPrefs.SetFloat("MusicVolume", musicVolume);
         PlayerPrefs.SetInt("IsShakerOn", isShakerOn ? 1 : 0);
@@ -111,23 +118,11 @@ public class GameSettings : MonoBehaviour
         musicVolume = volume;
         mixer.SetFloat("MusicVolume", Mathf.Lerp(-80f, 0, GetEaseOutQuint(volume)));
     }
-
-    private void SetCameraShaker(bool isOn)
-    {
-        isShakerOn = isOn;
-        CameraShaker.isShakerOn = isOn;
-    }
-
+    
     public void ToggleCameraShaker(bool isOn)
     {
         SetCameraShaker(isOn);
         SoundManager.Instance.PlaySound("ButtonClick");
-    }
-    
-    private void SetPostProcessing(bool isOn)
-    {
-        isPostProcessingOn = isOn;
-        Helper.MainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = isOn;
     }
     
     public void TogglePostProcessing(bool isOn)
@@ -135,7 +130,6 @@ public class GameSettings : MonoBehaviour
         SetPostProcessing(isOn);
         SoundManager.Instance.PlaySound("ButtonClick");
     }
-
     
     public void OpenSettings()
     {
@@ -161,6 +155,30 @@ public class GameSettings : MonoBehaviour
         
         OnSettingsWindowOpen?.Invoke(false);
     }
+    
+    
+    
+    
+    private void SetCameraShaker(bool isOn)
+    {
+        isShakerOn = isOn;
+        CameraShaker.isShakerOn = isOn;
+    }
+    
+    private void SetPostProcessing(bool isOn)
+    {
+        isPostProcessingOn = isOn;
+        Helper.MainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = isOn;
+    }
+    
+    private void OnOtherWindowOpened(bool isWindowOpen)
+    {
+        if (!isOpen) return;
+        if (isWindowOpen) CloseSettings();
+    }
+
+    
+    
 
     
     

@@ -105,12 +105,12 @@ public class GameController : Singleton<GameController>
     private void OnEnable()
     {
         AchievmentsWindow.OnAchievmentsWindowOpen += SetAchievmentsOpened;
-        GameSettings.OnSettingsWindowOpen += PauseInGameSettings;
+        GameSettings.OnSettingsWindowOpen += PauseInGameWindow;
     }
     private void OnDisable()
     {
         AchievmentsWindow.OnAchievmentsWindowOpen -= SetAchievmentsOpened;
-        GameSettings.OnSettingsWindowOpen -= PauseInGameSettings;
+        GameSettings.OnSettingsWindowOpen -= PauseInGameWindow;
     }
 
     
@@ -158,12 +158,7 @@ public class GameController : Singleton<GameController>
     
     private void Update()
     {
-        /*if (Input.GetKey(KeyCode.Escape))
-        {
-            Application.Quit();
-        }*/
-        
-        if(isGamePause /*|| isSpawnPause*/) return;
+        if(isGamePause) return;
         
         if(isGameLost)
             TiltCamera();
@@ -171,27 +166,7 @@ public class GameController : Singleton<GameController>
         MoveCamera();
         ChangeBgColor();
         ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity);
-
-
-        /*bool isTowerDestroyed = allCubes == null;
-        bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
-        bool isCorectInput = (Input.GetMouseButtonDown(0) || Input.touchCount > 0) && !Helper.IsOverUI();
-        bool isBlindZone = Input.mousePosition.y < bottomBlindZone || Input.mousePosition.y > Screen.height - topBlindZone;
-        if (isGameContinue && isCorectInput && !isBlindZone)
-        {
-
-#if !UNITY_EDITOR
-            if (Input.GetTouch(0).phase != TouchPhase.Began)
-                return;
-#endif
-
-            if (!isGameStart)
-                StartGame();
-
-            InitializeCubeCreation();
-            InitializeSpawnerMovement();
-            
-        }*/
+        
 
 
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
@@ -325,6 +300,7 @@ public class GameController : Singleton<GameController>
     #region Methods;
 
 
+    
     public void HandleInput(Vector2 screenPosition)
     {
         bool isTowerDestroyed = allCubes == null;
@@ -341,7 +317,6 @@ public class GameController : Singleton<GameController>
             
         }
     }
-    
     
 
     public Vector3 GetLastCubePosition()
@@ -435,7 +410,7 @@ public class GameController : Singleton<GameController>
             Destroy(obj);
     }
     
-    private void PauseInGameSettings(bool isOpen)
+    private void PauseInGameWindow(bool isOpen)
     {
         isGamePause = isOpen;
     }

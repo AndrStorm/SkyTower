@@ -26,12 +26,14 @@ public class CanvasButtons : MonoBehaviour
             GetComponent<TextMeshProUGUI>().text = $"Best Score: {PlayerPrefs.GetInt("bestScore")}";
     }
 
+    
     public void Shop()
     {
         SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.shopTheme);
         SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Shop");
     }
+    
     public void ReturnToMain()
     {
         SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.mainTheme);

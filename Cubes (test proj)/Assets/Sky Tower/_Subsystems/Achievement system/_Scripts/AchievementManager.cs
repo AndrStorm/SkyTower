@@ -21,12 +21,12 @@ public class AchievementManager : Singleton<AchievementManager>
     
     private void OnEnable()
     {
-        GameController.OnScoreIncrised += AchieveByScore;
+        GameController.OnBestScoreIncrised += AchieveByBestScore;
     }
 
     private void OnDisable()
     {
-        GameController.OnScoreIncrised -= AchieveByScore;
+        GameController.OnBestScoreIncrised -= AchieveByBestScore;
     }
 
     
@@ -56,7 +56,7 @@ public class AchievementManager : Singleton<AchievementManager>
     
     
 
-    private void AchieveByScore(int score)
+    private void AchieveByBestScore(int score)
     {
         if (score >= allInclusive.scoreСondition && !allInclusive.GetAchived())
         {
@@ -152,6 +152,9 @@ public class AchievementManager : Singleton<AchievementManager>
             Instance.achievments[i].SetAchieved(false);
             PlayerPrefs.SetInt(Instance.achievments[i].title, 0);
         }
+        
+        PlayerPrefs.SetInt("bestScore",0);
+        PlayerPrefs.SetInt("lastScore",0);
     }
     
 #endif

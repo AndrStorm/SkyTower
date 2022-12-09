@@ -9,6 +9,8 @@ public class LeaderboardUI : MonoBehaviour
     public static event Action<bool> OnLeaderboardOpen;
 
 
+    [SerializeField] private int minLabelsFilling = 10;
+    
     [SerializeField] private GameObject scoreEntryPrefab;
     [SerializeField] private RectTransform leaderboardLayoutGroup;
     [SerializeField] private Button leaderboardButton;
@@ -20,13 +22,13 @@ public class LeaderboardUI : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerManager.OnLeaderboardFetched += ActivateLeaderboardButton;
+        PlayerManager.OnSessionStarted += ActivateLeaderboardButton;
         GameSettings.OnSettingsWindowOpen += OnOtherWindowOpened;
     }
 
     private void OnDisable()
     {
-        PlayerManager.OnLeaderboardFetched -= ActivateLeaderboardButton;
+        PlayerManager.OnSessionStarted -= ActivateLeaderboardButton;
         GameSettings.OnSettingsWindowOpen -= OnOtherWindowOpened;
     }
 
@@ -34,51 +36,56 @@ public class LeaderboardUI : MonoBehaviour
     private IEnumerator ResetScrollValue(Scrollbar scrollbar)
     {
         yield return null;
+        yield return null;
         scrollbar.value = 1f;
     }
-    
-    
-    
-    
-    public void OpenLeaderboard()
+
+    private IEnumerator OpenLeaderboardCoroutine()
     {
         isOpen = !isOpen;
         if (!isOpen)
         {
             CloseLeaderboard();
-            return;
+            yield break;
         }
+        
+        //settingsAnimator.SetTrigger(AnimationOpen);
+        transform.GetChild(0).gameObject.SetActive(true);
+        SoundManager.Instance?.PlaySound("ButtonClick");
+        OnLeaderboardOpen?.Invoke(true);
 
-
-        var playerName = PlayerManager.Instance.GetPlayerName();
+        
+        LeaderboardManager.Instance.UpdateScore();
+        yield return LeaderboardManager.Instance.FetchLeaderboard();
+        
+        
+        var playerName = PlayerManager.Instance.GetPlayerNameOrUiD();
         profileName.text = "Name:<br>" + playerName;
         
-
+        
         var records = LeaderboardManager.Instance.GetLeaderboardList();
         foreach (var record in records)
         {
             CreateRecordEntry(scoreEntryPrefab,leaderboardLayoutGroup,record);
         }
 
-        if (records.Count < 15)
+        if (records.Count < minLabelsFilling)
         {
-            for (int i = 0; i < 15 - records.Count; i++)
+            for (int i = 0; i < minLabelsFilling - records.Count; i++)
             {
                 CreateRecordEntry(scoreEntryPrefab,leaderboardLayoutGroup,"","","");
             }
         }
         
         
-        //LeaderboardManager.Instance.FetchLeaderboard();
-        
         StartCoroutine(ResetScrollValue(leaderboardScrollbar));
-
-        //settingsAnimator.SetTrigger(AnimationOpen);
-        transform.GetChild(0).gameObject.SetActive(true);
-        
-        SoundManager.Instance?.PlaySound("ButtonClick");
-        OnLeaderboardOpen?.Invoke(true);
-
+    }
+    
+    
+    
+    public void OpenLeaderboard()
+    {
+        StartCoroutine(OpenLeaderboardCoroutine());
     }
     
     public void CloseLeaderboard()
@@ -95,9 +102,9 @@ public class LeaderboardUI : MonoBehaviour
     
     
     
-    private void ActivateLeaderboardButton()
+    private void ActivateLeaderboardButton(bool isActive)
     {
-        leaderboardButton.interactable = true;
+        leaderboardButton.interactable = isActive;
     }
 
     private void OnOtherWindowOpened(bool isWindowOpen)
@@ -110,10 +117,13 @@ public class LeaderboardUI : MonoBehaviour
 
     private void CreateRecordEntry(GameObject prefab, RectTransform layout, LeaderboardRecord record)
     {
-        CreateRecordEntry(prefab, layout, record.place.ToString(), record.name, record.score.ToString());
+        string place = record.place == 0 ? "..." : record.place.ToString();
+        string score = record.score == 0 ? "..." : record.score.ToString();
+
+        CreateRecordEntry(prefab, layout, place, record.name, score);
     }
     
-    private void CreateRecordEntry(GameObject prefab, RectTransform layout, string place, string name, string score)
+    private void CreateRecordEntry(GameObject prefab, RectTransform layout, string place, string nickName, string score)
     {
         var scoreEntry = Instantiate(prefab, layout);
         scoreEntry.name = place;
@@ -129,7 +139,7 @@ public class LeaderboardUI : MonoBehaviour
             }
             else if (child.name == "Name")
             {
-                child.GetComponent<TextMeshProUGUI>().text = name;
+                child.GetComponent<TextMeshProUGUI>().text = nickName;
             }
             else if (child.name == "Score")
             {

@@ -34,7 +34,6 @@ public class GameSettings : MonoBehaviour
             PlayerPrefs.SetInt("FirstStart", 1);
             SetUpGameDefaultSettings();
         }
-
         SetUpApplicationSettings();
     }
 

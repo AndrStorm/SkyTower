@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class GameController : Singleton<GameController>
 {
-    public static event Action<int> OnScoreIncrised;
+    public static event Action<int> OnBestScoreIncrised;
 
     public static bool isGamePause;
 
@@ -86,6 +86,9 @@ public class GameController : Singleton<GameController>
     private bool isAchievmentsOpened;
     private bool isSpawnPause;
     
+    private int lastScore;
+    private int bestScore;
+    
     
     private List<Vector3> cubesPositions = new List<Vector3>
     {
@@ -147,6 +150,8 @@ public class GameController : Singleton<GameController>
         cameraStartPos = _playerCam.transform.localPosition;
         cameraTargetPos = cameraStartPos;
         
+        lastScore = PlayerPrefs.GetInt(LastScore);
+        bestScore = PlayerPrefs.GetInt(BestScore);
         
         CreateCube(new Vector3(0, 1, 0));
         moveCubeSpawner = StartCoroutine(MoveCubeSpawner());
@@ -403,7 +408,8 @@ public class GameController : Singleton<GameController>
         SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * musicVolume);
         
         
-        PlayerPrefs.SetInt("lastScore", 0);
+        PlayerPrefs.SetInt(LastScore, 0);
+        lastScore = 0;
         scoreText.text = $"Score: 0";
         
         foreach (GameObject obj in canvasMenu)
@@ -502,24 +508,25 @@ public class GameController : Singleton<GameController>
         
     }
 
+    
+    
     private void ChangeScore()
     {
-        int lastScore = PlayerPrefs.GetInt(LastScore);
-        int bestScore = PlayerPrefs.GetInt(BestScore);
         int currentScore = lastCube.y - 1;
 
         if (lastScore < currentScore)
         {
             PlayerPrefs.SetInt(LastScore, currentScore);
-            OnScoreIncrised.Invoke(currentScore);
+            lastScore = currentScore;
 
-            
             if (bestScore < currentScore)
             {
-               PlayerPrefs.SetInt(BestScore, currentScore); 
+               PlayerPrefs.SetInt(BestScore, currentScore);
+               bestScore = currentScore;
+               OnBestScoreIncrised.Invoke(currentScore);
             }
-
-            scoreText.text = $"Score: {PlayerPrefs.GetInt(LastScore)}";
+            
+            scoreText.text = $"Score: {currentScore}";
         }
 
     }
@@ -677,6 +684,7 @@ public class GameController : Singleton<GameController>
             cubeId = id;
         }
     }
+    
     
 
 }

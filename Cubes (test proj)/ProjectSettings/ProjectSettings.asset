@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: AndrStorm
+  companyName: AndrStorm Games
   productName: SkyTower
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -138,8 +138,10 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.8
-  preloadedAssets: []
+  bundleVersion: 0.9.1
+  preloadedAssets:
+  - {fileID: 0}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -157,7 +159,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.AndrStorm.SkyTower
+    Android: com.AndrStormGames.SkyTower
     Standalone: com.AndrStorm.SkyTower
   buildNumber:
     Standalone: 0
@@ -275,7 +277,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: e22c9166c9e166c45a8a8b8bfa02503b, type: 3}
+      m_Icon: {fileID: 2800000, guid: 53e1bdb834c55384dbc7401520aec2b1, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

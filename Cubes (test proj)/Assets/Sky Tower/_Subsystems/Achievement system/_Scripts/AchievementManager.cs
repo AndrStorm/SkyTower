@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -8,6 +9,9 @@ using TMPro;
 
 public class AchievementManager : Singleton<AchievementManager>
 {
+
+    public static event Action<string> OnGetAchievment; 
+
     [SerializeField] private float popupWindowDelay = 3f;
     [SerializeField] private Transform popupWindow;
     [SerializeField] private List<AchievmentScriptable> achievments;
@@ -109,7 +113,7 @@ public class AchievementManager : Singleton<AchievementManager>
             }
         }
         StartCoroutine(PopUpWindowEnable());
-        
+        OnGetAchievment?.Invoke(achievment.title);
     }
 
     IEnumerator PopUpWindowEnable()
@@ -152,7 +156,11 @@ public class AchievementManager : Singleton<AchievementManager>
             Instance.achievments[i].SetAchieved(false);
             PlayerPrefs.SetInt(Instance.achievments[i].title, 0);
         }
-        
+    }
+    
+    [MenuItem("Developer/ScoresClear")]
+    public static void ClearScoresSave()
+    {
         PlayerPrefs.SetInt("bestScore",0);
         PlayerPrefs.SetInt("lastScore",0);
     }

@@ -217,6 +217,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
         if (isBestScroreUpdated)
         {
             isBestScroreUpdated = false;
+            SubmitScore();
         }
     }
     

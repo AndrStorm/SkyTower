@@ -12,6 +12,12 @@ public class GameController : Singleton<GameController>
 
     public static bool isGamePause;
 
+    
+    
+    #region Inspector
+
+    
+    
     [Header("Cinematic Game property")]
     [SerializeField]private float camMovSpeed = 2f;
     [Tooltip("How far will the camera move backward when the tower will become wider")]
@@ -66,6 +72,14 @@ public class GameController : Singleton<GameController>
     [SerializeField]private GameObject[] canvasMenu;
 
     
+    
+    #endregion
+
+
+    #region Fields
+
+    
+    
     private AudioSource windSource;
     private Rigidbody allCubesRb;
 
@@ -83,7 +97,6 @@ public class GameController : Singleton<GameController>
     private float timerAutoPlace;
     private float maxZx;
     private bool isGameLost,isGameStart;
-    private bool isAchievmentsOpened;
     private bool isSpawnPause;
     
     private int lastScore;
@@ -100,20 +113,29 @@ public class GameController : Singleton<GameController>
     private static Camera _playerCam;
     
     
-    private const string LastScore = "lastScore";
-    private const string BestScore = "bestScore";
+    private const string LAST_SCORE = "lastScore";
+    private const string BEST_SCORE = "bestScore";
+
+    
+    
+    #endregion
+
+    
+    #region MonoBehaviour
     
     
     
     private void OnEnable()
     {
-        AchievmentsWindow.OnAchievmentsWindowOpen += SetAchievmentsOpened;
-        GameSettings.OnSettingsWindowOpen += PauseInGameWindow;
+        AchievmentsWindow.OnAchievmentsWindowOpen += SetIsGamePause;
+        GameSettings.OnSettingsWindowOpen += SetIsGamePause;
+        LeaderboardUI.OnLeaderboardOpen += SetIsGamePause;
     }
     private void OnDisable()
     {
-        AchievmentsWindow.OnAchievmentsWindowOpen -= SetAchievmentsOpened;
-        GameSettings.OnSettingsWindowOpen -= PauseInGameWindow;
+        AchievmentsWindow.OnAchievmentsWindowOpen -= SetIsGamePause;
+        GameSettings.OnSettingsWindowOpen -= SetIsGamePause;
+        LeaderboardUI.OnLeaderboardOpen -= SetIsGamePause;
     }
 
     
@@ -150,8 +172,8 @@ public class GameController : Singleton<GameController>
         cameraStartPos = _playerCam.transform.localPosition;
         cameraTargetPos = cameraStartPos;
         
-        lastScore = PlayerPrefs.GetInt(LastScore);
-        bestScore = PlayerPrefs.GetInt(BestScore);
+        lastScore = PlayerPrefs.GetInt(LAST_SCORE);
+        bestScore = PlayerPrefs.GetInt(BEST_SCORE);
         
         CreateCube(new Vector3(0, 1, 0));
         moveCubeSpawner = StartCoroutine(MoveCubeSpawner());
@@ -181,10 +203,13 @@ public class GameController : Singleton<GameController>
         CalculateWindSound(allCubes == null);
         
     }
-
-  
-
-    #region IE;
+    
+    
+    
+    #endregion
+    
+    
+    #region Coroutins
     
     
     
@@ -255,7 +280,7 @@ public class GameController : Singleton<GameController>
         isGamePause = false;
     }
     
-    private IEnumerator PauseGameSwitch(float delay)
+    private IEnumerator PauseGameTimeWhileIsGamePause(float delay)
     {
         yield return Helper.GetUnscaledWait(delay);
         
@@ -272,7 +297,7 @@ public class GameController : Singleton<GameController>
         //AudioListener.pause = false;
     }
     
-    private IEnumerator PauseSpawn(float t)
+    private IEnumerator PauseCubeSpawn(float t)
     {
         isSpawnPause = true;
         
@@ -301,15 +326,14 @@ public class GameController : Singleton<GameController>
     #endregion
     
     
+    #region Methods
     
-    #region Methods;
-
-
+    
     
     public void HandleInput(Vector2 screenPosition)
     {
         bool isTowerDestroyed = allCubes == null;
-        bool isGameContinue = !isAchievmentsOpened && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
+        bool isGameContinue = !isGamePause && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
         bool isCorectInput = !Helper.IsOverUI() && !isSpawnPause;
         bool isBlindZone = screenPosition.y < bottomBlindZone || screenPosition.y > Screen.height - topBlindZone;
         if (isGameContinue && isCorectInput && !isBlindZone)
@@ -408,7 +432,7 @@ public class GameController : Singleton<GameController>
         SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * musicVolume);
         
         
-        PlayerPrefs.SetInt(LastScore, 0);
+        PlayerPrefs.SetInt(LAST_SCORE, 0);
         lastScore = 0;
         scoreText.text = $"Score: 0";
         
@@ -416,15 +440,11 @@ public class GameController : Singleton<GameController>
             Destroy(obj);
     }
     
-    private void PauseInGameWindow(bool isOpen)
+    private void SetIsGamePause(bool isOpen)
     {
         isGamePause = isOpen;
     }
-
-    private void SetAchievmentsOpened(bool windowState)
-    {
-        isAchievmentsOpened = windowState;
-    }
+    
 
     private void ResetAutoPlaceTimer()
     {
@@ -446,7 +466,7 @@ public class GameController : Singleton<GameController>
     private void InitializeCubeCreation()
     {
         StartCoroutine(PauseGameTime(spawnGamePauseDuration));
-        StartCoroutine(PauseSpawn(spawnPauseDuration));
+        StartCoroutine(PauseCubeSpawn(spawnPauseDuration));
         ResetAutoPlaceTimer();
         
         
@@ -516,12 +536,12 @@ public class GameController : Singleton<GameController>
 
         if (lastScore < currentScore)
         {
-            PlayerPrefs.SetInt(LastScore, currentScore);
+            PlayerPrefs.SetInt(LAST_SCORE, currentScore);
             lastScore = currentScore;
 
             if (bestScore < currentScore)
             {
-               PlayerPrefs.SetInt(BestScore, currentScore);
+               PlayerPrefs.SetInt(BEST_SCORE, currentScore);
                bestScore = currentScore;
                OnBestScoreIncrised.Invoke(currentScore);
             }

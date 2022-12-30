@@ -50,7 +50,7 @@ Material:
     - _WaveFrequency: 1
     - _WaveOffset: 0
     - _WaveSpeed: 1
-    - _time: 0
+    - _time: 0.46
     m_Colors:
     - _Color: {r: 9.082411, g: 1.9971794, b: 0.80838215, a: 1}
     - _RemapSize: {r: 0, g: 1, b: 0, a: 0}

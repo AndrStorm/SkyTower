@@ -142,7 +142,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
         {
             if (response.success)
             {
-                Debug.Log("meta - " + response.metadata);
+                //Debug.Log("meta - " + response.metadata);
                 
                 int rank = response.rank;
                 int count = 30;

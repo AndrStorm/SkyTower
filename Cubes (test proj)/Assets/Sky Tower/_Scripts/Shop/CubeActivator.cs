@@ -1,40 +1,13 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class CubeActivator : MonoBehaviour
 {
+
+    private void OnEnable() => ShopCubeUI.OnActivatorPressed += ActivateCube;
+
+    private void OnDisable() => ShopCubeUI.OnActivatorPressed -= ActivateCube;
     
-    [SerializeField]private Material cubeLock;
-    [SerializeField]private Material[] cubesMatUnlock;
-
-    
-    private List<MeshRenderer> shopCubesMeshRenderers;
-    
-
-    private void OnEnable() => EventCubeActivator.OnActivatorPressed += ActivateCube;
-
-    private void OnDisable() => EventCubeActivator.OnActivatorPressed -= ActivateCube;
-
-    
-    private void Start()
-    {
-        shopCubesMeshRenderers = new List<MeshRenderer>();
-        var shopCubes = ShopManager.Instance.GetShopCubesList();
-        
-        foreach (var cube in shopCubes)
-        {
-            shopCubesMeshRenderers.Add(cube.GetComponent<MeshRenderer>());
-        }
-
-        
-#if UNITY_EDITOR
-        
-        if (shopCubes.Count != cubesMatUnlock.Length)
-            Debug.Log("allCubes.transform.childCount != cubesUnlock.Length");
-#endif
-        
-    }
     
     
     private void ActivateCube(GameObject score)
@@ -67,19 +40,16 @@ public class CubeActivator : MonoBehaviour
             cubeNumber = 12;
 
 
-        bool unlockedByScore = (score.GetComponent<TextMeshProUGUI>().text == ShopManager.PressToSelect);
-
-        if (PlayerPrefs.GetInt($"Cube{cubeNumber}") != 0)
+        if (PlayerPrefs.GetInt($"Cube{cubeNumber}") == 1)
         {
             PlayerPrefs.SetInt($"Cube{cubeNumber}", 0);
-            shopCubesMeshRenderers[cubeNumber-1].material = cubeLock;
-            score.GetComponent<TextMeshProUGUI>().text = ShopManager.PressToSelect;
+            ShopManager.Instance.LockCubeBySelection(cubeNumber);
+            
         }
-        else if (unlockedByScore)
+        else
         {
             PlayerPrefs.SetInt($"Cube{cubeNumber}", 1);
-            shopCubesMeshRenderers[cubeNumber - 1].material = cubesMatUnlock[cubeNumber-1];
-            score.GetComponent<TextMeshProUGUI>().text = ShopManager.AlreadySelected;
+            ShopManager.Instance.UnlockCubeByScore(cubeNumber);
         }
 
         SoundManager.Instance?.PlaySound("ButtonClick");

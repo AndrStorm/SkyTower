@@ -12,6 +12,8 @@ public class GameController : Singleton<GameController>
 
     public static bool isGamePause;
 
+    public int lastScore;
+    public int bestScore;
     
     
     #region Inspector
@@ -98,11 +100,8 @@ public class GameController : Singleton<GameController>
     private float maxZx;
     private bool isGameLost,isGameStart;
     private bool isSpawnPause;
-    
-    private int lastScore;
-    private int bestScore;
-    
-    
+
+
     private List<Vector3> cubesPositions = new List<Vector3>
     {
         new Vector3(0, 1, 0)
@@ -546,7 +545,7 @@ public class GameController : Singleton<GameController>
                OnBestScoreIncrised.Invoke(currentScore);
             }
             
-            scoreText.text = $"Score: {currentScore}";
+            //scoreText.text = $"Score: {currentScore}";
         }
 
     }

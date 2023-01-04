@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: SkyTowerText_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 6c67b570eb94f75479f0abd0477d73c0, type: 2}
+  m_Metadata:
+    m_Items:
+    - id: 0
+  m_TableData:
+  - m_Id: 95924772864
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 211825975296
+    m_Localized: Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 278410551296
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 337864810496
+    m_Localized: Camera shaking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608137371648
+    m_Localized: Post-processing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4431627149312
+    m_Localized: Tap to Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12517121187840
+    m_Localized: 'Best Score: {score.bestScore}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 12962661130240
+    m_Localized: 'Score: {score.lastScore}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 57293170270208
+    m_Localized: '{score.needScore} Score to unlock'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e08f5e620b000000e0cf1aca0b000000e00f9b1b340000

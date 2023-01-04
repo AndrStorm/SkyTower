@@ -1,72 +1,127 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class ShopManager : Singleton<ShopManager>
 {
+
+    
+
+    
+    
     [SerializeField]private Material cubeLock;
     
     [SerializeField]private CubeScriptable[] cubeScriptableObjects;
-    [SerializeField]private List<TextMeshProUGUI> scoreText;
+    [SerializeField]private List<Transform> scoreLabel;
     [SerializeField]private List<Transform> shopCubes;
+    [SerializeField]private Material[] cubesMatUnlock;
     
     [SerializeField]private Vector3 cubeOffset;
+
+
+    private int[] needScoreToUnlock;
     
-    
-    
-    //private int[] needScore;
-    
-    
-    
+
     public const string PressToSelect = "Press\n to select";
     public const string AlreadySelected = " ";
 
-    private const string BestScore = "bestScore";
+    private const string BEST_SCORE = "bestScore";
+    
 
-    private void Start()
+
+    protected override void Awake()
     {
-        int[] needScore = new int[cubeScriptableObjects.Length];
+        needScoreToUnlock = new int[cubeScriptableObjects.Length];
         
         int j = 0;
         foreach (var cube in cubeScriptableObjects)
         {
-            needScore[j++] = cube.scoreToAchieve;
+            needScoreToUnlock[j++] = cube.scoreToAchieve;
         }
 
-        
 #if UNITY_EDITOR
         
-        if (needScore.Length != scoreText.Count)
-                    Debug.Log("needScore.Length != scoreText.Count");
+        if (needScoreToUnlock.Length != scoreLabel.Count)
+            Debug.Log("needScore.Length != scoreText.Count");
 #endif
         
+    }
 
-        for (int i = 0; i < needScore.Length; i++)
+    
+    private void Start()
+    {
+
+        for (int i = 0; i < needScoreToUnlock.Length; i++)
         {
-            shopCubes[i].position = Helper.CanvasToWorld(scoreText[i].GetComponent<RectTransform>()) + cubeOffset;
-            
+            shopCubes[i].position = Helper.CanvasToWorld(scoreLabel[i].GetComponent<RectTransform>()) + cubeOffset;
 
-            if (PlayerPrefs.GetInt(BestScore) < needScore[i])
-            {
-                PlayerPrefs.SetInt($"Cube{i + 1}", 0);
-                scoreText[i].text = $"Score {needScore[i]} \n to unlock";
-            }
-            else
-            {
-                scoreText[i].text = AlreadySelected;
-            }
+            UnlockCubeByScore(i+1);
+            LockCubeBySelection(i+1);
 
-            if (PlayerPrefs.GetInt($"Cube{i + 1}") == 0)
-            {
-                shopCubes[i].gameObject.GetComponent<MeshRenderer>().material = cubeLock;
-
-                if (PlayerPrefs.GetInt(BestScore) >= needScore[i])
-                    scoreText[i].text = PressToSelect;
-            }
-            
         }      
     }
 
+    
+
+    
+
+    public void UnlockCubeByScore(int cubeIndex)
+    {
+        if (PlayerPrefs.GetInt(BEST_SCORE) >= needScoreToUnlock[cubeIndex-1])
+        {
+            UnlockCube(cubeIndex);
+            return;
+        }
+        
+        LockByScore(cubeIndex);
+    }
+    
+
+    public void LockCubeBySelection(int cubeIndex)
+    {
+        if (PlayerPrefs.GetInt($"Cube{cubeIndex}") == 1) return;
+
+        if (PlayerPrefs.GetInt(BEST_SCORE) >= needScoreToUnlock[cubeIndex-1])
+        {
+            LockBySelection(cubeIndex);
+        }
+            
+    }
+    
+    
+
+    private void UnlockCube(int cubeIndex)
+    {
+        shopCubes[cubeIndex - 1].gameObject.GetComponent<MeshRenderer>().material = cubesMatUnlock[cubeIndex - 1];
+        
+        scoreLabel[cubeIndex - 1].GetChild(0).gameObject.SetActive(false);
+        scoreLabel[cubeIndex - 1].GetChild(1).gameObject.SetActive(false);
+    }
+    
+    private void LockByScore(int cubeIndex)
+    {
+        PlayerPrefs.SetInt($"Cube{cubeIndex}", 0);
+        shopCubes[cubeIndex-1].gameObject.GetComponent<MeshRenderer>().material = cubeLock;
+        
+        scoreLabel[cubeIndex - 1].GetChild(0).gameObject.SetActive(true);
+        scoreLabel[cubeIndex - 1].GetChild(1).gameObject.SetActive(false);
+    }
+    private void LockBySelection(int cubeIndex)
+    {
+        shopCubes[cubeIndex-1].gameObject.GetComponent<MeshRenderer>().material = cubeLock;
+        
+        scoreLabel[cubeIndex - 1].GetChild(0).gameObject.SetActive(false);
+        scoreLabel[cubeIndex - 1].GetChild(1).gameObject.SetActive(true);
+    }
+
+
+
+    public int GetNeedScoreToUnlock(int cubeIndex)
+    {
+        return needScoreToUnlock[cubeIndex - 1];
+    }
+    
     public List<Transform> GetShopCubesList()
     {
         return shopCubes;

@@ -1,8 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using UnityEngine.Localization;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine.Localization.Settings;
 
 public class GameSettings : MonoBehaviour
 {
@@ -11,6 +16,7 @@ public class GameSettings : MonoBehaviour
 
     [Range(0f, 1f)] [SerializeField] private float defaultMasterVolume = 1f, defaultMusicVolume = 1f;
     [SerializeField] private AudioMixer mixer;
+    [SerializeField] private TMP_Dropdown languageDropdown;
     [SerializeField] private Slider masterSldier;
     [SerializeField] private Slider musicSldier;
     [SerializeField] private Toggle shakerToggle, postProcessingToggle;
@@ -56,6 +62,8 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(LanuageInitCouroutine());
+
         masterVolume = PlayerPrefs.GetFloat("MasterVolume");
         musicVolume = PlayerPrefs.GetFloat("MusicVolume");
         isShakerOn = PlayerPrefs.GetInt("IsShakerOn") != 0 ? true : false;
@@ -75,6 +83,32 @@ public class GameSettings : MonoBehaviour
     }
 
 
+    private IEnumerator LanuageInitCouroutine()
+    {
+        yield return LocalizationSettings.InitializationOperation;
+
+        var options = new List<TMP_Dropdown.OptionData>();
+
+        int selected = 0;
+        for(int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; ++i)
+        {
+            var locale = LocalizationSettings.AvailableLocales.Locales[i];
+            if (LocalizationSettings.SelectedLocale == locale)
+                selected = i;
+            options.Add(new TMP_Dropdown.OptionData(locale.name));
+        }
+        languageDropdown.options = options;
+
+        languageDropdown.value = selected;
+        languageDropdown.onValueChanged.AddListener(LocaleSelected);
+    }
+    
+    private static void LocaleSelected(int index)
+    {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+    }
+    
+    
     private void SetUpApplicationSettings()
     {
         Application.targetFrameRate = 60;
@@ -107,8 +141,25 @@ public class GameSettings : MonoBehaviour
         return 1 - Mathf.Pow(1 - value, 4);
     }
 
+    private void SetCameraShaker(bool isOn)
+    {
+        isShakerOn = isOn;
+        CameraShaker.isShakerOn = isOn;
+    }
     
+    private void SetPostProcessing(bool isOn)
+    {
+        isPostProcessingOn = isOn;
+        Helper.MainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = isOn;
+    }
+    
+    private void OnOtherWindowOpened(bool isWindowOpen)
+    {
+        if (!isOpen) return;
+        if (isWindowOpen) CloseSettings();
+    }
 
+    
     
     
     public void SetMasterVolume(float volume)
@@ -163,23 +214,7 @@ public class GameSettings : MonoBehaviour
     
     
     
-    private void SetCameraShaker(bool isOn)
-    {
-        isShakerOn = isOn;
-        CameraShaker.isShakerOn = isOn;
-    }
     
-    private void SetPostProcessing(bool isOn)
-    {
-        isPostProcessingOn = isOn;
-        Helper.MainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = isOn;
-    }
-    
-    private void OnOtherWindowOpened(bool isWindowOpen)
-    {
-        if (!isOpen) return;
-        if (isWindowOpen) CloseSettings();
-    }
 
     
     

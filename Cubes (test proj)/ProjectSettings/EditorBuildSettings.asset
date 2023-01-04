@@ -11,4 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sky Tower/Scenes/Shop.unity
     guid: 5a9081c13e16bfb4c976ffbce522e1cd
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 1b36b7347dca2914792f9281ff56ecfe, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 004babb65803d994e8e5845c61811515, type: 2}

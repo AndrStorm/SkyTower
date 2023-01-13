@@ -36,7 +36,7 @@ public class ExplodeCubes : MonoBehaviour
 
     private void CheckTowerCollision(Collision collision)
     {
-        if (collision.gameObject.tag=="Obstacle" && !collisionDestroyed)
+        if (collision.gameObject.CompareTag("Obstacle") && !collisionDestroyed)
         {
             var impactPos = collision.GetContact(0).point;
             explosionForce *= 1 + cubeInfos.Count/explosionCubeCountStep;

@@ -17,6 +17,9 @@ public class AchievementManager : Singleton<AchievementManager>
     [SerializeField] private List<AchievmentScriptable> achievments;
 
 
+    private Image popUpWindowImage;
+    private TMP_Text popUpWindowText;
+
     AchievmentScriptable raisingTheStakes;
     AchievmentScriptable youAreStartingImpress;
     AchievmentScriptable chiefEngineer;
@@ -37,6 +40,8 @@ public class AchievementManager : Singleton<AchievementManager>
 
     private void Start()
     {
+        InitPopUpWindow();
+        
         for (int i = 0; i < achievments.Count; i++)
         {
             if (PlayerPrefs.GetInt(achievments[i].title) != 0)
@@ -59,7 +64,24 @@ public class AchievementManager : Singleton<AchievementManager>
     
     
     
+    IEnumerator PopUpWindowEnable()
+    {
+        popupWindow.gameObject.SetActive(true);
+        yield return Helper.GetWait(popupWindowDelay);
+        popupWindow.gameObject.SetActive(false);
+    }
+    
+    
+    
+    
+    public List<AchievmentScriptable> GetAchievmentsList()
+    {
+        return achievments;
+    }
 
+    
+    
+    
     private void AchieveByBestScore(int score)
     {
         if (score >= allInclusive.scoreСondition && !allInclusive.GetAchived())
@@ -83,21 +105,29 @@ public class AchievementManager : Singleton<AchievementManager>
             Achieve(raisingTheStakes);
         }
     }
-
+    
     private void Achieve(AchievmentScriptable achievment)
     {
         SoundManager.Instance.PlaySound("Achievment");
 
 #if UNITY_EDITOR
-        
         Debug.Log($"{achievment.title} achieved");
 #endif
         
         
         achievment.SetAchieved(true);
         PlayerPrefs.SetInt(achievment.title, 1);
+        
+        SetUpPopUpWindow(achievment.title,achievment.image);
 
-
+        StartCoroutine(PopUpWindowEnable());
+        OnGetAchievment?.Invoke(achievment.title);
+    }
+    
+    
+    
+    private void InitPopUpWindow()
+    {
         var popupAchievment = popupWindow.GetChild(0);
 
         for (int i = 0; i < popupAchievment.childCount; i++)
@@ -105,32 +135,28 @@ public class AchievementManager : Singleton<AchievementManager>
             var child = popupAchievment.GetChild(i);
             if (child.name == "Sprite")
             {
-                child.GetComponent<Image>().sprite = achievment.image;
+                popUpWindowImage = child.GetComponent<Image>();
             }
             if (child.name == "Title")
             {
-                SetText(child, achievment.title);
+                popUpWindowText = child.GetComponent<TMP_Text>();
             }
         }
-        StartCoroutine(PopUpWindowEnable());
-        OnGetAchievment?.Invoke(achievment.title);
     }
-
-    IEnumerator PopUpWindowEnable()
+    
+    private void SetUpPopUpWindow(string achievmentTitle,Sprite sprite)
     {
-        popupWindow.gameObject.SetActive(true);
-        yield return Helper.GetWait(popupWindowDelay);
-        popupWindow.gameObject.SetActive(false);
+        TextLocalizer.Instance.SetLocalizedText(popUpWindowText,TextLocalizer.BASE_TABLE,achievmentTitle);
+        popUpWindowImage.sprite = sprite;
     }
 
+    
 
-    public List<AchievmentScriptable> GetAchievmentsList()
-    {
-        return achievments;
-    }
+    
+    
 
 
-    public static void SetText(Transform transform, string text)
+    /*public static void SetText(Transform transform, string text)
     {
         var tmpro = transform.GetComponent<TextMeshProUGUI>();
         if (tmpro != null)
@@ -141,14 +167,14 @@ public class AchievementManager : Singleton<AchievementManager>
         {
             transform.GetComponent<Text>().text = text;
         }
-    }
+    }*/
 
 
     
 #if UNITY_EDITOR
     
-    [MenuItem("Developer/AchievmentsClear #r")]
-    public static void ClearAchievmentsSave()
+    [MenuItem("Developer/Clear All Achievments #r")]
+    private static void ClearAchievmentsSave()
     {
         if (Instance == null) return;
         for (int i = 0; i < Instance.achievments.Count; i++)
@@ -158,8 +184,8 @@ public class AchievementManager : Singleton<AchievementManager>
         }
     }
     
-    [MenuItem("Developer/ScoresClear")]
-    public static void ClearScoresSave()
+    [MenuItem("Developer/Clear All Scores &#r")]
+    private static void ClearScoresSave()
     {
         PlayerPrefs.SetInt("bestScore",0);
         PlayerPrefs.SetInt("lastScore",0);

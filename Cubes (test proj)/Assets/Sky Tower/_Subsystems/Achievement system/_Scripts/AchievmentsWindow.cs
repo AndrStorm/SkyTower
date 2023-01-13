@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class AchievmentsWindow : MonoBehaviour
 {
@@ -28,62 +31,35 @@ public class AchievmentsWindow : MonoBehaviour
         achievmentsAnimator = gameObject.GetComponent<Animator>();
         achievments = AchievementManager.Instance.GetAchievmentsList();
 
-        for (int i = 0; i < achievments.Count; i++)
-        {
-            var icon = Instantiate(achievmentPrefab, gridWindow);
-            icon.name = $"Achievment {i} ";
-
-
-            for (int j = 0; j < icon.transform.childCount; j++)
-            {
-                var child = icon.transform.GetChild(j);
-
-                if (child.name =="Sprite")
-                {
-                    child.GetComponent<Image>().sprite = achievments[i].image;
-                }
-                else if (child.name == "Title")
-                {
-                    AchievementManager.SetText(child,$"{achievments[i].title}");
-                }
-                else if (child.name == "Description")
-                {
-                    AchievementManager.SetText(child,achievments[i].description);
-                }
-            }
-                      
-        }
+        InitAchievments();
     }
+
+    
+
     private void OnEnable()
     {
+        LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChange;
         StartCoroutine(ResetScrollValue(scrollbar));
-        
 
-        for (int i = 0; i < achievments.Count; i++)
-        {
-            var icon = gridWindow.GetChild(i);
-
-            for (int j = 0; j < icon.childCount; j++)
-            {
-                var child = icon.GetChild(j);
-                
-                if (child.name == "Mask")
-                {
-                    if (achievments[i].GetAchived())
-                        child.gameObject.SetActive(false);
-                    else
-                        child.gameObject.SetActive(true);
-                }
-            }
-
-        }
+        SetUpAchievmentsMask();
     }
+
+    private void OnDisable()
+    {
+        LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChange;
+    }
+    
+    
+    
 
     private IEnumerator ResetScrollValue(Scrollbar scroll)
     {
         yield return null;
         scroll.value = 1f;
     }
+    
+    
+    
     
     public void OpenAchievements()
     {
@@ -93,9 +69,8 @@ public class AchievmentsWindow : MonoBehaviour
         
         SoundManager.Instance?.PlaySound("ButtonClick");
         OnAchievmentsWindowOpen?.Invoke(true);
-        
-        
     }
+    
     public void CloseAchievements()
     {
         gameCanvas.gameObject.SetActive(true);
@@ -106,9 +81,78 @@ public class AchievmentsWindow : MonoBehaviour
         OnAchievmentsWindowOpen?.Invoke(false);
     }
 
-    public void OnAchievmentsClosed()
+    /*public void OnAchievmentsClosed()
     {
         achievmentCanvas.gameObject.SetActive(false);
+    }*/
+    
+    
+    
+    private void OnSelectedLocaleChange(Locale obj)
+    {
+        SetUpAchievments();
+    }
+    
+    private void InitAchievments()
+    {
+        for (int i = 0; i < achievments.Count; i++)
+        {
+            var achievment = Instantiate(achievmentPrefab, gridWindow);
+            achievment.name = $"Achievment {i} ";
+        }
+        
+        SetUpAchievments();
+    }
+
+    private void SetUpAchievments()
+    {
+        for (int i = 0; i < achievments.Count; i++)
+        {
+            var achievment = gridWindow.GetChild(i);
+
+            for (int j = 0; j < achievment.transform.childCount; j++)
+            {
+                var child = achievment.transform.GetChild(j);
+                TMP_Text tmpText = child.GetComponent<TMP_Text>();
+
+                if (child.name =="Sprite")
+                {
+                    child.GetComponent<Image>().sprite = achievments[i].image;
+                }
+                else if (child.name == "Title")
+                {
+                    TextLocalizer.Instance.SetLocalizedText(tmpText, TextLocalizer.BASE_TABLE, achievments[i].title);
+                    //AchievementManager.SetText(child,$"{achievments[i].title}");
+                }
+                else if (child.name == "Description")
+                {
+                    TextLocalizer.Instance.SetLocalizedText(tmpText, TextLocalizer.BASE_TABLE, achievments[i].description);
+                    //AchievementManager.SetText(child,achievments[i].description);
+                }
+            }
+                      
+        }
+    }
+
+    private void SetUpAchievmentsMask()
+    {
+        for (int i = 0; i < achievments.Count; i++)
+        {
+            var achievment = gridWindow.GetChild(i);
+
+            for (int j = 0; j < achievment.childCount; j++)
+            {
+                var child = achievment.GetChild(j);
+                
+                if (child.name == "Mask")
+                {
+                    if (achievments[i].GetAchived())
+                        child.gameObject.SetActive(false);
+                    else
+                        child.gameObject.SetActive(true);
+                }
+            }
+        }
     }
 
 }

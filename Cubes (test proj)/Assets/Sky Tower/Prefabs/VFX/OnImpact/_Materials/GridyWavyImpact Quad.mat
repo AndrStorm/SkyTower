@@ -2,14 +2,15 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GridyWavyImpact Quad
   m_Shader: {fileID: -6465566751694194690, guid: 5d8395b674bd255479cc04e06f74e5a0, type: 3}
-  m_ShaderKeywords: 
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -31,6 +32,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _FadingDelay: 1
     - _FadingSpeed: 1
@@ -40,6 +42,8 @@ Material:
     - _Intensity: 3
     - _IsFadeOut: 0
     - _IslandSize: 0.5
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _WaveA: 1
     - _WaveAmplitude: 1
     - _WaveB: 1
@@ -55,3 +59,16 @@ Material:
     - _Color: {r: 9.082411, g: 1.9971794, b: 0.80838215, a: 1}
     - _RemapSize: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &1544726976061339837
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5

@@ -44,20 +44,115 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12962661130240
-    m_Key: Score
+    m_Key: 'Score: last score'
     m_Metadata:
       m_Items: []
   - m_Id: 57293170270208
-    m_Key: Score to Unlock
+    m_Key: Score to unlock
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2188979190358016
+    m_Key: Press to select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2214095362187264
+    m_Key: Sky Tower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945810053455872
+    m_Key: Raising the stakes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945843469475840
+    m_Key: Increase the difficulty of the game for the first time.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945863618912256
+    m_Key: You are starting impress!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945887174123520
+    m_Key: Reach a high score of 20.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945904047808512
+    m_Key: Chief Engineer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945921168957440
+    m_Key: Reach a high score of 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945935853215744
+    m_Key: Skyscraper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945956896038912
+    m_Key: Build a tower over 100 meters high.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945972159111168
+    m_Key: All Inclusive!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945995060011008
+    m_Key: Unlock all cubes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3245884067274752
+    m_Key: Place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3245919114878976
+    m_Key: Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3245952371515392
+    m_Key: Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3248306303000576
+    m_Key: 'Name: playerName'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3299685473177600
+    m_Key: Enter your nickname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3300409523294208
+    m_Key: Game privacy policy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301409961267200
+    m_Key: Return
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301446179082240
+    m_Key: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301467406454784
+    m_Key: Ok
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301655198027776
+    m_Key: 'The max size of a nickname is 13
+
+      Bad Words are not allowed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3304008647168000
+    m_Key: 'Change your Nickname to: userNickname?'
     m_Metadata:
       m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    id: 0
+    rid: 0
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
         m_CustomEpoch: 1672750378291

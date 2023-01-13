@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Localization.Components;
 
 public class CanvasButtons : MonoBehaviour
 {
@@ -21,9 +22,9 @@ public class CanvasButtons : MonoBehaviour
             GetComponent<Image>().sprite = soundOn;
 
         else if (gameObject.name == "Score")
-            GetComponent<TextMeshProUGUI>().text = $"Score: {PlayerPrefs.GetInt("lastScore")}";
+            GetComponent<LocalizeStringEvent>().RefreshString();
         else if (gameObject.name == "Best Score")
-            GetComponent<TextMeshProUGUI>().text = $"Best Score: {PlayerPrefs.GetInt("bestScore")}";
+            GetComponent<LocalizeStringEvent>().RefreshString();
     }
 
     

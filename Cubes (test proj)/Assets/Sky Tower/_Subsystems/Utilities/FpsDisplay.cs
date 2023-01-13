@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System.Collections;
 using UnityEngine;
 
@@ -38,3 +40,5 @@ public class FpsDisplay : MonoBehaviour
             
         }
 }
+
+#endif

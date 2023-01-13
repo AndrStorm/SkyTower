@@ -61,7 +61,8 @@ public class ChangeNameUI : MonoBehaviour
             ConfirmNameDialog.gameObject.SetActive(true);
             ChangeNameDialog.gameObject.SetActive(false);
 
-            ConfirmNameDialog.GetChild(0).GetComponent<TMP_Text>().text = $"Change your Nickname to:<br>{userNickname}?";
+            var tmpText = ConfirmNameDialog.GetChild(0).GetComponent<TMP_Text>();
+            TextLocalizer.Instance.SetLocalizedText(tmpText, TextLocalizer.BASE_TABLE,"Change your Nickname to: userNickname?",userNickname);
         }
         else
         {

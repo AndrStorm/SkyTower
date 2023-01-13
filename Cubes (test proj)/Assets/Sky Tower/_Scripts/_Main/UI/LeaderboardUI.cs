@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 public class LeaderboardUI : MonoBehaviour
@@ -14,7 +16,7 @@ public class LeaderboardUI : MonoBehaviour
     [SerializeField] private GameObject scoreEntryPrefab;
     [SerializeField] private RectTransform leaderboardLayoutGroup;
     [SerializeField] private Button leaderboardButton;
-    [SerializeField] private TextMeshProUGUI profileName;
+    [SerializeField] private TMP_Text profileName;
     [SerializeField] private Scrollbar leaderboardScrollbar;
 
     private bool isOpen;
@@ -22,16 +24,20 @@ public class LeaderboardUI : MonoBehaviour
 
     private void OnEnable()
     {
+        LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChange;
         PlayerManager.OnSessionStarted += ActivateLeaderboardButton;
         GameSettings.OnSettingsWindowOpen += OnOtherWindowOpened;
     }
 
     private void OnDisable()
     {
+        LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChange;
         PlayerManager.OnSessionStarted -= ActivateLeaderboardButton;
         GameSettings.OnSettingsWindowOpen -= OnOtherWindowOpened;
     }
 
+    
+    
 
     private IEnumerator ResetScrollValue(Scrollbar scrollbar)
     {
@@ -57,10 +63,10 @@ public class LeaderboardUI : MonoBehaviour
         
         LeaderboardManager.Instance.UpdateScore();
         yield return LeaderboardManager.Instance.FetchLeaderboard();
+
+
+        ShowPlayerName();
         
-        
-        var playerName = PlayerManager.Instance.GetPlayerNameOrUiD();
-        profileName.text = "Name:<br>" + playerName;
         
         
         var records = LeaderboardManager.Instance.GetLeaderboardList();
@@ -80,9 +86,10 @@ public class LeaderboardUI : MonoBehaviour
         
         StartCoroutine(ResetScrollValue(leaderboardScrollbar));
     }
+
     
-    
-    
+
+
     public void OpenLeaderboard()
     {
         StartCoroutine(OpenLeaderboardCoroutine());
@@ -99,6 +106,19 @@ public class LeaderboardUI : MonoBehaviour
         OnLeaderboardOpen?.Invoke(false);
     }
     
+    
+    
+    private void OnSelectedLocaleChange(Locale obj)
+    {
+        ShowPlayerName();
+    }
+    
+    private void ShowPlayerName()
+    {
+        var playerName = PlayerManager.Instance.GetPlayerNameOrUiD();
+        //profileName.text = "Name:<br>" + playerName;
+        TextLocalizer.Instance.SetLocalizedText(profileName,TextLocalizer.BASE_TABLE,"Name: playerName", playerName);
+    }
     
     
     
@@ -123,6 +143,7 @@ public class LeaderboardUI : MonoBehaviour
         CreateRecordEntry(prefab, layout, place, record.name, score);
     }
     
+    
     private void CreateRecordEntry(GameObject prefab, RectTransform layout, string place, string nickName, string score)
     {
         var scoreEntry = Instantiate(prefab, layout);
@@ -135,15 +156,15 @@ public class LeaderboardUI : MonoBehaviour
 
             if (child.name =="Place")
             {
-                child.GetComponent<TextMeshProUGUI>().text = place;
+                child.GetComponent<TMP_Text>().text = place;
             }
             else if (child.name == "Name")
             {
-                child.GetComponent<TextMeshProUGUI>().text = nickName;
+                child.GetComponent<TMP_Text>().text = nickName;
             }
             else if (child.name == "Score")
             {
-                child.GetComponent<TextMeshProUGUI>().text = score;
+                child.GetComponent<TMP_Text>().text = score;
             }
         }
     }

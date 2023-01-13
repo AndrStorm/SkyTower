@@ -16,5 +16,5 @@ MonoBehaviour:
   cube: {fileID: 2823120304225344146, guid: 792b6c27502c4864383ae59cb5244e07, type: 3}
   vfx: {fileID: 8656163580939392010, guid: 68aa5f010cdbd804cb2cbdeb0e5ffbb0, type: 3}
   vfxImpulse: {fileID: 8701125693327745384, guid: 269ba8bb6a9e203408953eadc71daae1, type: 3}
-  scoreToAchieve: 30
+  scoreToAchieve: 300
   active: 0

@@ -37,8 +37,8 @@ public static class SaveSystem
     
 #if UNITY_EDITOR
 
-    [MenuItem("Developer/DeleteBanWordsFile")]
-    public static void ClearScoresSave()
+    [MenuItem("Developer/Delete Banwords File")]
+    private static void DeleteBanwordsFile()
     {
         File.Delete(Application.persistentDataPath + BANWORDS_PATH);
     }

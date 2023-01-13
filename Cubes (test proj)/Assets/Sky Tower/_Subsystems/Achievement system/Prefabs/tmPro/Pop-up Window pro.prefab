@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5010114905385683143
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30,6 +30,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1152144580849297789}
   m_Father: {fileID: 0}
@@ -104,7 +105,7 @@ MonoBehaviour:
   m_ConstraintCount: 2
 --- !u!95 &5010114905385683147
 Animator:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -117,10 +118,11 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &7649435711966035136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -128,6 +130,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5010114905385683143}
     m_Modifications:
+    - target: {fileID: 119621030018621251, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+      propertyPath: m_fontSize
+      value: 48.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 119621030018621251, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+      propertyPath: m_lineSpacing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 119621030018621251, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 48.2
+      objectReference: {fileID: 0}
     - target: {fileID: 4464637629185679269, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_Name
       value: Pop-up Achievment pro
@@ -150,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_AnchorMin.x
@@ -158,15 +172,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -198,11 +212,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 130
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -216,10 +230,109 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8322827360342084621, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 2945863618912256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8322827360342084621, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:6c67b570eb94f75479f0abd0477d73c0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7859875101740699695, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
 --- !u!224 &1152144580849297789 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7337907662744835517, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
   m_PrefabInstance: {fileID: 7649435711966035136}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7746398003073721217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 119621030018621249, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+  m_PrefabInstance: {fileID: 7649435711966035136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1411793670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746398003073721217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 8588487920458137638
+  references:
+    version: 2
+    RefIds:
+    - rid: 8588487920458137638
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 7746398003073721219}
+        m_TrackedProperties:
+          items:
+          - rid: 8588487920458137639
+          - rid: 8588487920458137640
+          - rid: 8588487920458137641
+          - rid: 8588487920458137642
+        m_UpdateType: 0
+    - rid: 8588487920458137639
+      type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_sharedMaterial
+        m_TypeString: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: {fileID: 1892101356446300858, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
+        - localeIdentifier:
+            m_Code: ru
+          value: {fileID: 2100000, guid: a582d6a96dfae44468d5648bd229a2b4, type: 2}
+    - rid: 8588487920458137640
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_fontSize
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 40
+        - localeIdentifier:
+            m_Code: ru
+          value: 35
+    - rid: 8588487920458137641
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_fontSizeBase
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 40
+        - localeIdentifier:
+            m_Code: ru
+          value: 35
+    - rid: 8588487920458137642
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_lineSpacing
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: -50
+        - localeIdentifier:
+            m_Code: ru
+          value: 0
+--- !u!114 &7746398003073721219 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 119621030018621251, guid: 90abe471cdb09e8418efdb50259557f2, type: 3}
+  m_PrefabInstance: {fileID: 7649435711966035136}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746398003073721217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

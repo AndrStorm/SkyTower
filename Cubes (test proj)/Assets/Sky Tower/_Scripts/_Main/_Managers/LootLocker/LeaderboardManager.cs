@@ -144,14 +144,14 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
             {
                 //Debug.Log("meta - " + response.metadata);
                 
-                int rank = response.rank;
-                int count = 30;
-                Debug.Log("Got member rank - " + rank);
+                int rankShowAfter = response.rank;
+                int countToShow = 30;
+                Debug.Log("Got member rank - " + rankShowAfter);
 
-                if (rank <= minRankToShowMax)
+                if (rankShowAfter <= minRankToShowMax)
                 {
-                    rank = 0;
-                    count = maxTopScoreToShow;
+                    rankShowAfter = 0;
+                    countToShow = maxTopScoreToShow;
                 }
                 else
                 {
@@ -163,11 +163,11 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
                     };
                     leaderboardRecords.Add(record);
                     
-                    rank -= nearRankToShow/2;
-                    count = nearRankToShow;
+                    rankShowAfter -= nearRankToShow/2;
+                    countToShow = nearRankToShow;
                 }
                 
-                LootLockerSDKManager.GetScoreList(leaderboardId,count,rank, response2 =>
+                LootLockerSDKManager.GetScoreList(leaderboardId, countToShow, rankShowAfter, response2 =>
                 {
                     if (response2.success)
                     {

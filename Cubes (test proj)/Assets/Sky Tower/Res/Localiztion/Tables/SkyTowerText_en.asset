@@ -17,7 +17,7 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 6c67b570eb94f75479f0abd0477d73c0, type: 2}
   m_Metadata:
     m_Items:
-    - id: 0
+    - rid: 0
   m_TableData:
   - m_Id: 95924772864
     m_Localized: Language
@@ -47,20 +47,119 @@ MonoBehaviour:
     m_Localized: 'Best Score: {score.bestScore}'
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 12962661130240
     m_Localized: 'Score: {score.lastScore}'
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 57293170270208
-    m_Localized: '{score.needScore} Score to unlock'
+    m_Localized: 'Score {labelScore.needScore}
+
+      to unlock'
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
+  - m_Id: 2188979190358016
+    m_Localized: "Press \nto select"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2214095362187264
+    m_Localized: Sky Tower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945810053455872
+    m_Localized: Raising the stakes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945843469475840
+    m_Localized: Increase the difficulty of the game for the first time.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945863618912256
+    m_Localized: You are starting impress!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945887174123520
+    m_Localized: Reach a high score of 20.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945904047808512
+    m_Localized: Chief Engineer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945921168957440
+    m_Localized: Reach a high score of 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945935853215744
+    m_Localized: Skyscraper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945956896038912
+    m_Localized: Build a tower over 100 meters high.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945972159111168
+    m_Localized: All Inclusive!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2945995060011008
+    m_Localized: Unlock all cubes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3245884067274752
+    m_Localized: Place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3245919114878976
+    m_Localized: Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3245952371515392
+    m_Localized: Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3248306303000576
+    m_Localized: "Name: \n{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 0
+  - m_Id: 3299685473177600
+    m_Localized: Enter your nickname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3300409523294208
+    m_Localized: Game privacy policy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301409961267200
+    m_Localized: Return
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301446179082240
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301467406454784
+    m_Localized: Ok
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3301655198027776
+    m_Localized: 'The max size of a nickname is 13
+
+      Bad Words are not allowed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3304008647168000
+    m_Localized: "Change your Nickname to: \n{0}?"
+    m_Metadata:
+      m_Items:
+      - rid: 0
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e08f5e620b000000e0cf1aca0b000000e00f9b1b340000
+        m_Entries: 00e08f5e620b000000e0cf1aca0b000000e00f9b1b34000000e04f3f518a0b0000d0bf75fabc0b00

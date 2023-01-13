@@ -1,13 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class ShopManager : Singleton<ShopManager>
 {
-
-    
-
     
     
     [SerializeField]private Material cubeLock;
@@ -32,6 +27,8 @@ public class ShopManager : Singleton<ShopManager>
 
     protected override void Awake()
     {
+        base.Awake();
+        
         needScoreToUnlock = new int[cubeScriptableObjects.Length];
         
         int j = 0;
@@ -47,7 +44,6 @@ public class ShopManager : Singleton<ShopManager>
 #endif
         
     }
-
     
     private void Start()
     {
@@ -64,7 +60,47 @@ public class ShopManager : Singleton<ShopManager>
 
     
 
+    public int GetLabelRefCubeID(string labelName)
+    {
+        int cubeID = -1;
+
+        if (labelName == "Score1")
+            cubeID = 1;
+        else if (labelName == "Score2")
+            cubeID = 2;
+        else if (labelName == "Score3")
+            cubeID = 3;
+        else if (labelName == "Score4")
+            cubeID = 4;
+        else if (labelName == "Score5")
+            cubeID = 5;
+        else if (labelName == "Score6")
+            cubeID = 6;
+        else if (labelName == "Score7")
+            cubeID = 7;
+        else if (labelName == "Score8")
+            cubeID = 8;
+        else if (labelName == "Score9")
+            cubeID = 9;
+        else if (labelName == "Score10")
+            cubeID = 10;
+        else if (labelName == "Score11")
+            cubeID = 11;
+        else if (labelName == "Score12")
+            cubeID = 12;
+
+        return cubeID;
+    }
     
+    public int GetNeedScoreToUnlock(int cubeIndex)
+    {
+        return needScoreToUnlock[cubeIndex - 1];
+    }
+    
+    public List<Transform> GetShopCubesList()
+    {
+        return shopCubes;
+    }
 
     public void UnlockCubeByScore(int cubeIndex)
     {
@@ -77,7 +113,6 @@ public class ShopManager : Singleton<ShopManager>
         LockByScore(cubeIndex);
     }
     
-
     public void LockCubeBySelection(int cubeIndex)
     {
         if (PlayerPrefs.GetInt($"Cube{cubeIndex}") == 1) return;
@@ -107,6 +142,7 @@ public class ShopManager : Singleton<ShopManager>
         scoreLabel[cubeIndex - 1].GetChild(0).gameObject.SetActive(true);
         scoreLabel[cubeIndex - 1].GetChild(1).gameObject.SetActive(false);
     }
+    
     private void LockBySelection(int cubeIndex)
     {
         shopCubes[cubeIndex-1].gameObject.GetComponent<MeshRenderer>().material = cubeLock;
@@ -117,13 +153,7 @@ public class ShopManager : Singleton<ShopManager>
 
 
 
-    public int GetNeedScoreToUnlock(int cubeIndex)
-    {
-        return needScoreToUnlock[cubeIndex - 1];
-    }
     
-    public List<Transform> GetShopCubesList()
-    {
-        return shopCubes;
-    }
+
+    
 }

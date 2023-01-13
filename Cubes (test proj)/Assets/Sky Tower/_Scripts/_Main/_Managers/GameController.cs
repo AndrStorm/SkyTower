@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEditor;
+using UnityEngine.Localization.Components;
 using Random = UnityEngine.Random;
 
 
@@ -80,6 +82,7 @@ public class GameController : Singleton<GameController>
 
     #region Fields
 
+    private bool isTestModOnlyUp;
     
     
     private AudioSource windSource;
@@ -433,7 +436,8 @@ public class GameController : Singleton<GameController>
         
         PlayerPrefs.SetInt(LAST_SCORE, 0);
         lastScore = 0;
-        scoreText.text = $"Score: 0";
+        //scoreText.text = $"Score: 0";
+        scoreStringEvent.RefreshString();
         
         foreach (GameObject obj in canvasMenu)
             Destroy(obj);
@@ -526,9 +530,9 @@ public class GameController : Singleton<GameController>
         cubeInfos.Add(cubeInfo);
         
     }
+    
 
-    
-    
+    [SerializeField] private LocalizeStringEvent scoreStringEvent;
     private void ChangeScore()
     {
         int currentScore = lastCube.y - 1;
@@ -544,12 +548,14 @@ public class GameController : Singleton<GameController>
                bestScore = currentScore;
                OnBestScoreIncrised.Invoke(currentScore);
             }
-            
+
+            scoreStringEvent.RefreshString();
             //scoreText.text = $"Score: {currentScore}";
         }
 
     }
-
+    
+    
     private void ChangeTargetBgColor()
     {
         float score = lastCube.y - 1f;
@@ -619,13 +625,22 @@ public class GameController : Singleton<GameController>
         List<Vector3> positions = new List<Vector3>();
         Vector3 newPosition = Vector3.zero;
 
-        if (IsPositionEmpty(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != 1)
-            positions.Add(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z));
-        if (IsPositionEmpty(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != - 1)
-            positions.Add(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z));
+        if (!isTestModOnlyUp)
+        {
+            if (IsPositionEmpty(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != 1)
+                positions.Add(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z));
+            if (IsPositionEmpty(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != - 1)
+                positions.Add(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z));
 
+            if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1)) && lastSpawnerVector.z != 1)
+                positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1));
+            if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1)) && lastSpawnerVector.z != - 1)
+                positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1));
+        }
+        
+        
         /*if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)))*/       //the top place is always free
-        if (lastSpawnerVector.y != 1)
+        if (lastSpawnerVector.y != 1 || isTestModOnlyUp)
         {
             positions.Add(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)); //20%
             positions.Add(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)); //33%
@@ -636,10 +651,7 @@ public class GameController : Singleton<GameController>
         //    && cubeToPlace.position.y != lastCube.y - 1)
         //    positions.Add(new Vector3(lastCube.x, lastCube.y - 1, lastCube.z));
 
-        if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1)) && lastSpawnerVector.z != 1)
-            positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1));
-        if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1)) && lastSpawnerVector.z != - 1)
-            positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1));
+        
 
         if (positions.Count > 1)
             newPosition = positions[UnityEngine.Random.Range(0, positions.Count)];
@@ -664,6 +676,20 @@ public class GameController : Singleton<GameController>
         return true;
     }
 
+
+    
+    
+#if UNITY_EDITOR
+    
+    [MenuItem("Developer/Switch Test Mod Up Only &#w")]
+    private static void SwitchTestMod()
+    {
+        Instance.isTestModOnlyUp = !Instance.isTestModOnlyUp;
+    }
+    
+#endif
+    
+    
     
     
     #endregion;

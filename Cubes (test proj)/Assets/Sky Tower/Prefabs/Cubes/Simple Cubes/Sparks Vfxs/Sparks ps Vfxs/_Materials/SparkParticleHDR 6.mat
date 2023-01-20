@@ -35,6 +35,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _Intensity: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _VertexIntensity: 7
     m_Colors:
     - _Color: {r: 2.0541432, g: 0.3964136, b: 3.4415908, a: 1}

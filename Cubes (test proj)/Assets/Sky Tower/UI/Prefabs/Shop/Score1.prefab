@@ -210,6 +210,7 @@ MonoBehaviour:
         m_TrackedProperties:
           items:
           - rid: 1
+          - rid: 8588488052127825942
         m_UpdateType: 0
     - rid: 1
       type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
@@ -223,7 +224,20 @@ MonoBehaviour:
           value: {fileID: 1892101356446300858, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 2100000, guid: a582d6a96dfae44468d5648bd229a2b4, type: 2}
+          value: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - rid: 8588488052127825942
+      type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_fontAsset
+        m_TypeString: TMPro.TMP_FontAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
+        - localeIdentifier:
+            m_Code: ru
+          value: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
 --- !u!1 &4451529465576790631
 GameObject:
   m_ObjectHideFlags: 0

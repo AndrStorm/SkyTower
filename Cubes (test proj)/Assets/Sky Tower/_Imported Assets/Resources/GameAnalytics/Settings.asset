@@ -30,7 +30,7 @@ MonoBehaviour:
   secretKey:
   - 5bb1db18b3ccf69d29552c555ad2c74a896164c0
   Build:
-  - 0.9.1
+  - 0.9.2
   SelectedPlatformOrganization:
   - AndrStorm Games
   SelectedPlatformStudio:
@@ -64,7 +64,7 @@ MonoBehaviour:
   ResourceCurrencies: []
   LastCreatedGamePlatform: -1
   Platforms: 0b000000
-  CurrentInspectorState: 3
+  CurrentInspectorState: 1
   ClosedHints: 
   DisplayHints: 0
   DisplayHintsScrollState: {x: 0, y: 0}

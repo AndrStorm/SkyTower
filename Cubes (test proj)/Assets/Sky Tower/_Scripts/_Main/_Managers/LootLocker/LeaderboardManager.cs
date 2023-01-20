@@ -10,7 +10,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
     public static event Action<bool> OnLeaderboardFetched;
 
     
-    [SerializeField] private int leaderboardId = 9370;
+    [SerializeField] private string leaderboardId = "highscoreLeaderboard";
     [SerializeField] private int minTopScoreToShow = 10;
     [SerializeField] private int maxTopScoreToShow = 50;
     [SerializeField] private int minRankToShowMax = 45;
@@ -68,7 +68,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
         string playerID = PlayerManager.Instance.GetPlayerID();
         int score = PlayerPrefs.GetInt("bestScore");
         
-        LootLockerSDKManager.SubmitScore(playerID, score, leaderboardId, (response) =>
+        LootLockerSDKManager.SubmitScore(playerID, score,leaderboardId, (response) =>
         {
             if (response.success) {
                 Debug.Log("Successful submit score");

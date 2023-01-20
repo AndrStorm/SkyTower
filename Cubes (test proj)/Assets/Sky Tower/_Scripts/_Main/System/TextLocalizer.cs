@@ -67,9 +67,18 @@ public class TextLocalizer : Singleton<TextLocalizer>
         
         tmpText.text = GetLocalizedString(tableName, entryName, objs);
     }
-    
-    
-    
+
+
+
+
+    public void SetSelecor()
+    {
+        foreach (var selector in LocalizationSettings.StartupLocaleSelectors)
+        {
+            Debug.Log(selector);
+        }
+        
+    }
     
     
     public void SetLocalizedText(TMP_Text tmpText, string tableName, string entryName, params object[] objs)

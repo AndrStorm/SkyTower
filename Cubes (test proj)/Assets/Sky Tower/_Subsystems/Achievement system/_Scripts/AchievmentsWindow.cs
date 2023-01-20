@@ -34,23 +34,23 @@ public class AchievmentsWindow : MonoBehaviour
         InitAchievments();
     }
 
-    
+    private void Start()
+    {
+        LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChange;
+    }
 
     private void OnEnable()
     {
-        LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChange;
         StartCoroutine(ResetScrollValue(scrollbar));
-
         SetUpAchievmentsMask();
     }
+    
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChange;
+        LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChange;;
     }
-    
-    
-    
+
 
     private IEnumerator ResetScrollValue(Scrollbar scroll)
     {

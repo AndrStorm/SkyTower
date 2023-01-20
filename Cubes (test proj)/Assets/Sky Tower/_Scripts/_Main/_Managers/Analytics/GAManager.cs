@@ -18,13 +18,6 @@ public class GAManager : Singleton<GAManager>
         AchievementManager.OnGetAchievment -= OnGettingAchievment;
         PlayerManager.OnSessionStarted -= OnSessionStarted;
     }
-
-    
-    private void Start()
-    {
-        
-    }
-    
     
     
 

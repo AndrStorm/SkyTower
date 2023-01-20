@@ -49,6 +49,8 @@ Material:
     m_Floats:
     - _Intensity: 15
     - _IslandSize: 0.5
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _WaveA: 1
     - _WaveAmplitude: 5
     - _WaveB: 0

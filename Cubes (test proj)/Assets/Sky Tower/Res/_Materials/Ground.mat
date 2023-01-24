@@ -60,6 +60,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Size: 55
+    - _TimeOffset: 0
     - _WaveAmplitude: 1
     - _WaveFrequency: 0.011
     - _WaveOffset: 0.16

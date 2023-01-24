@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using GameAnalyticsSDK;
 using LootLocker;
 using UnityEditor;
 using UnityEditor.Build;
@@ -55,9 +56,9 @@ public class DefininitionsManager : Editor
     
     private static readonly string [] DefineKeywords = new string[] {
         "UNITY_POST_PROCESSING_STACK_V2",
-        //"TEST_BUILD",
-        //"AG_BUILD",
-        "RS_BUILD",
+        "TEST_BUILD",
+        "AG_BUILD",
+        //"RS_BUILD",
         "RU_VERSION",
         //"EN_VERSION",
     };
@@ -113,70 +114,70 @@ public class DefininitionsManager : Editor
         }
     }
     */
-}
-
-
-
-
-public static class LocaleDefininitionsManager 
-{
     
-    public static void SetUp()
+    
+    
+    
+    
+    private static class LocaleDefininitionsManager 
     {
-        int i = -1;
-        var specificSelectorsList = new List<int>();
-        foreach (var selector in LocalizationSettings.StartupLocaleSelectors)
+    
+        public static void SetUp()
         {
-            i++;
-            if (selector.GetType() == typeof(SpecificLocaleSelector))
+            int i = -1;
+            var specificSelectorsList = new List<int>();
+            foreach (var selector in LocalizationSettings.StartupLocaleSelectors)
             {
-                specificSelectorsList.Add(i);
+                i++;
+                if (selector.GetType() == typeof(SpecificLocaleSelector))
+                {
+                    specificSelectorsList.Add(i);
+                }
             }
-        }
 
 #if RU_VERSION
-        LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("ru"));
+            LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("ru"));
 #else
         LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("en"));      
 #endif
         
-        SpecificLocaleSelector newSelector = new SpecificLocaleSelector
-        {
-            LocaleId = identifier
-        };
+            SpecificLocaleSelector newSelector = new SpecificLocaleSelector
+            {
+                LocaleId = identifier
+            };
         
-        LocalizationSettings.StartupLocaleSelectors.Add(newSelector);
+            LocalizationSettings.StartupLocaleSelectors.Add(newSelector);
 
-        foreach (var selectorID in specificSelectorsList)
-        {
-            LocalizationSettings.StartupLocaleSelectors.RemoveAt(selectorID);
+            foreach (var selectorID in specificSelectorsList)
+            {
+                LocalizationSettings.StartupLocaleSelectors.RemoveAt(selectorID);
+            }
         }
+
     }
-
-}
-
-
-
-
-public static class LootLockerDefenitionsManager
-{
-    private const string DEVELOP_MOD_API_KEY = "dev_cc3723a2ab584e9bb391faaf3ef1445d";//dev_cc3723a2ab584e9bb391faaf3ef1445d
-    private const string LIVE_MOD_API_KEY = "prod_3d88b362e4ea45a68c3251216574fcad"; //prod_3d88b362e4ea45a68c3251216574fcad
-
-
-    public static void SetUp()
+    
+    private static class LootLockerDefenitionsManager
     {
-        var config = LootLockerConfig.Get();
+        private const string DEVELOP_MOD_API_KEY = "dev_cc3723a2ab584e9bb391faaf3ef1445d";//dev_cc3723a2ab584e9bb391faaf3ef1445d
+        private const string LIVE_MOD_API_KEY = "prod_3d88b362e4ea45a68c3251216574fcad"; //prod_3d88b362e4ea45a68c3251216574fcad
+
+
+        public static void SetUp()
+        {
+            var config = LootLockerConfig.Get();
+            config.game_version = PlayerSettings.bundleVersion;
+        
 #if TEST_BUILD
         config.apiKey = DEVELOP_MOD_API_KEY;
         config.developmentMode = true;
 #else
-        config.apiKey = LIVE_MOD_API_KEY;
-        config.developmentMode = false;
+            config.apiKey = LIVE_MOD_API_KEY;
+            config.developmentMode = false;
 #endif
 
+        }
+
     }
-
+    
 }
-
 #endif

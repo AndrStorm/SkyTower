@@ -48,6 +48,8 @@ Material:
     - _Intensity: 2
     - _IslandSize: 0.458
     - _LineWidth: 3
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _Size: 55
     - _WaveAmplitude: 1
     - _WaveFrequency: 0.011

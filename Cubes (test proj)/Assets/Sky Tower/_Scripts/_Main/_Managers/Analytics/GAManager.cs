@@ -10,13 +10,13 @@ public class GAManager : Singleton<GAManager>
     private void OnEnable()
     {
         AchievementManager.OnGetAchievment += OnGettingAchievment;
-        PlayerManager.OnSessionStarted += OnSessionStarted;
+        PlayerManager.OnSessionStarted += InitializeGameAnalytics;
     }
 
     private void OnDisable()
     {
         AchievementManager.OnGetAchievment -= OnGettingAchievment;
-        PlayerManager.OnSessionStarted -= OnSessionStarted;
+        PlayerManager.OnSessionStarted -= InitializeGameAnalytics;
     }
     
     
@@ -31,7 +31,7 @@ public class GAManager : Singleton<GAManager>
     }
     
 
-    private void OnSessionStarted(bool isStarted)
+    private void InitializeGameAnalytics(bool isStarted)
     {
         if (!isStarted) return;
         

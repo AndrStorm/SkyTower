@@ -47,12 +47,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Intensity: 100
+    - _Intensity: 300
     - _IslandSize: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _WaveA: 1
-    - _WaveAmplitude: 5
+    - _WaveAmplitude: 15
     - _WaveB: 0
     - _WaveBAmplitude: 0.25
     - _WaveBFrequency: 16

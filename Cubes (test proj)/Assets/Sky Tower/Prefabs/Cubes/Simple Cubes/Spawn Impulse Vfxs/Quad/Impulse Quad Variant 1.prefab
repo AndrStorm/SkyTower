@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8823082791174285870, guid: 28892342457452840ad14319784f57f9, type: 3}
       propertyPath: m_Name
-      value: Impulse Quad
+      value: Impulse Quad Variant 1
       objectReference: {fileID: 0}
     - target: {fileID: 8823082791174285871, guid: 28892342457452840ad14319784f57f9, type: 3}
       propertyPath: m_RootOrder
@@ -54,6 +54,30 @@ PrefabInstance:
     - target: {fileID: 8823082791174285871, guid: 28892342457452840ad14319784f57f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082791619916000, guid: 28892342457452840ad14319784f57f9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082791619916000, guid: 28892342457452840ad14319784f57f9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082791619916000, guid: 28892342457452840ad14319784f57f9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082791619916000, guid: 28892342457452840ad14319784f57f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082791619916012, guid: 28892342457452840ad14319784f57f9, type: 3}
+      propertyPath: minMaxLifeTime.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082791619916012, guid: 28892342457452840ad14319784f57f9, type: 3}
+      propertyPath: minMaxLifeTime.y
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 8823082791619916014, guid: 28892342457452840ad14319784f57f9, type: 3}
       propertyPath: m_Materials.Array.data[0]

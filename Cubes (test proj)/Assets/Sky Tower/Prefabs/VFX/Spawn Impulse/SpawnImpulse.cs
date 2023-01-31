@@ -18,7 +18,7 @@ public class SpawnImpulse : MonoBehaviour
     private float timeRemap;
     
     
-    private static readonly int Time1 = Shader.PropertyToID("_time");
+    private static readonly int _time = Shader.PropertyToID("_time");
 
     
     private void Awake()
@@ -34,7 +34,7 @@ public class SpawnImpulse : MonoBehaviour
         lifeTime = Random.Range(minMaxLifeTime.x, minMaxLifeTime.y);
         timeRemap = 1 / lifeTime;
         
-        meshRenderer.material.SetFloat(Time1, 0f);
+        meshRenderer.material.SetFloat(_time, 0f);
 
         /*if (!_isSpawningOn) return;
         StartCoroutine(SpawnSubVfxs(subVfxsDelay, subVfxsCount));
@@ -49,7 +49,7 @@ public class SpawnImpulse : MonoBehaviour
         float ageTime = Time.time - startTime;
         if (ageTime < lifeTime)
         {
-            meshRenderer.material.SetFloat(Time1, ageTime * timeRemap);
+            meshRenderer.material.SetFloat(_time, ageTime * timeRemap);
         }
         else
         {

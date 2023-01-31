@@ -4835,5 +4835,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9180c64dc5275eb4494b5e9918efe367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxWindRateHeght: 100
+  maxWindRateHeght: 300
   maxWindRate: 3.5

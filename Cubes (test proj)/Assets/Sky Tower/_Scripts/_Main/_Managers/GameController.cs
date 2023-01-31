@@ -197,7 +197,6 @@ public class GameController : Singleton<GameController>
         ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity);
         
 
-
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
             LoseGame();
 

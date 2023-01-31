@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using GameAnalyticsSDK;
 using LootLocker;
 using UnityEditor;
 using UnityEditor.Build;
@@ -57,10 +56,10 @@ public class DefininitionsManager : Editor
     private static readonly string [] DefineKeywords = new string[] {
         "UNITY_POST_PROCESSING_STACK_V2",
         "TEST_BUILD",
-        "AG_BUILD",
-        //"RS_BUILD",
-        "RU_VERSION",
-        //"EN_VERSION",
+        //"AG_BUILD",
+        "RS_BUILD",
+        //"RU_VERSION",
+        "EN_VERSION",
     };
     
     
@@ -155,6 +154,8 @@ public class DefininitionsManager : Editor
         }
 
     }
+    
+    
     
     private static class LootLockerDefenitionsManager
     {

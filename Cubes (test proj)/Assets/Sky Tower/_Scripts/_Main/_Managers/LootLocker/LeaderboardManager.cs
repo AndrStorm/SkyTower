@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using LootLocker.Requests;
 using UnityEngine;
-using System;
 
 public class LeaderboardManager : Singleton<LeaderboardManager>
 {
     
-    public static event Action<bool> OnLeaderboardFetched;
+    //public static event Action<bool> OnLeaderboardFetched;
 
     
     [SerializeField] private string leaderboardId = "highscoreLeaderboard";
@@ -20,46 +19,21 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
     
     private List<LeaderboardRecord> leaderboardRecords;
     private bool isBestScroreUpdated;
+    private int memberRank;
 
 
     private void OnEnable()
     {
-        GameController.OnBestScoreIncrised += OnbestScoreUpdated;
+        GameController.OnBestScoreIncrised += SetIsBestScoreUpdated;
     }
 
     private void OnDisable()
     {
-        GameController.OnBestScoreIncrised -= OnbestScoreUpdated;
+        GameController.OnBestScoreIncrised -= SetIsBestScoreUpdated;
     }
     
     
-    
-    protected override void Awake()
-    {
-        base.Awake();
-        leaderboardRecords = new List<LeaderboardRecord>();
-        
-#if UNITY_EDITOR
-        for (int i = 1; i < 5; i++)
-        {
-            leaderboardRecords.Add(new LeaderboardRecord()
-            {
-                name = "person " + i,
-                place = i,
-                score = i*2
-            });
-        }
-#endif
-        
-    }
 
-    private void Start()
-    {
-        OnLeaderboardFetched?.Invoke(false);
-    }
-
-
-    
     private IEnumerator SubmitScoreCoroutine()
     {
         if(!PlayerManager.Instance.IsSessionStarted()) yield break;
@@ -84,22 +58,43 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
 
     private IEnumerator FetchLeaderboardCoroutine()
     {
-        yield return FetchLeaderboardTopRecords();
-        yield return FetchLeaderboardNearRecords();
+        if(!PlayerManager.Instance.IsSessionStarted()) yield break;
+        leaderboardRecords = new List<LeaderboardRecord>();
         
-        OnLeaderboardFetched?.Invoke(true);
+        yield return GetMemberRankCoroutine();
+        int countToShow;
+        
+        if (memberRank <= minRankToShowMax)
+        {
+            memberRank = 1;
+            countToShow = maxTopScoreToShow;
+        }
+        else
+        {
+            yield return GetScoreListCourutine(minTopScoreToShow, 1);
+            LeaderboardRecord record = new LeaderboardRecord
+            {
+                name = "...",
+                place = 0,
+                score = 0
+            };
+            leaderboardRecords.Add(record);
+
+            memberRank -= nearRankToShow / 2;
+            countToShow = nearRankToShow;
+        }
+        yield return GetScoreListCourutine(countToShow, memberRank);
+        
     }
 
-    private IEnumerator FetchLeaderboardTopRecords()
+    
+    private IEnumerator GetScoreListCourutine(int count, int startRank)
     {
-        if(!PlayerManager.Instance.IsSessionStarted()) yield break;
-        
         bool done = false;
-        LootLockerSDKManager.GetScoreList(leaderboardId,minTopScoreToShow,0, (response) =>
+        LootLockerSDKManager.GetScoreList(leaderboardId,count,startRank-1, (response) =>
         {
             if (response.success)
             {
-                leaderboardRecords = new List<LeaderboardRecord>();
                 LootLockerLeaderboardMember[] members = response.items;
                 foreach (var member in members)
                 {
@@ -119,7 +114,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
                     leaderboardRecords.Add(record);
                 }
                 
-                Debug.Log("Leaderboard top is Fetched");
+                Debug.Log($"Leaderboard is Fetched count: {count} startRank: {startRank}");
                 done = true;
             }
             else
@@ -129,75 +124,18 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
             }
         });
         yield return new WaitWhile(() => done == false);
-        
     }
-
-    private IEnumerator FetchLeaderboardNearRecords()
+    
+    private IEnumerator GetMemberRankCoroutine()
     {
-        if(!PlayerManager.Instance.IsSessionStarted()) yield break;
-        
         bool done = false;
         
         LootLockerSDKManager.GetMemberRank(leaderboardId,PlayerManager.Instance.GetPlayerID(), response =>
         {
             if (response.success)
             {
-                //Debug.Log("meta - " + response.metadata);
-                
-                int rankShowAfter = response.rank;
-                int countToShow = 30;
-                Debug.Log("Got member rank - " + rankShowAfter);
-
-                if (rankShowAfter <= minRankToShowMax)
-                {
-                    rankShowAfter = 0;
-                    countToShow = maxTopScoreToShow;
-                }
-                else
-                {
-                    LeaderboardRecord record = new LeaderboardRecord
-                    {
-                        name = "...",
-                        place = 0,
-                        score = 0
-                    };
-                    leaderboardRecords.Add(record);
-                    
-                    rankShowAfter -= nearRankToShow/2;
-                    countToShow = nearRankToShow;
-                }
-                
-                LootLockerSDKManager.GetScoreList(leaderboardId, countToShow, rankShowAfter, response2 =>
-                {
-                    if (response2.success)
-                    {
-                        LootLockerLeaderboardMember[] members = response2.items;
-                        foreach (var member in members)
-                        {
-                            LeaderboardRecord record = new LeaderboardRecord();
-                            if (member.player.name != "")
-                            {
-                                record.name = member.player.name;
-                            }
-                            else
-                            {
-                                record.name = member.player.public_uid;
-                            }
-
-                            record.place = member.rank;
-                            record.score = member.score;
-
-                            leaderboardRecords.Add(record);
-                        }
-                
-                        Debug.Log("Leaderboard near is Fetched");
-                    }
-                    else
-                    {
-                        Debug.Log("Failed to fetch near Leaderboard" + response2.Error);
-                    }
-                });
-                
+                memberRank = response.rank;
+                Debug.Log("Got member rank - " + memberRank);
                 done = true;
             }
             else
@@ -208,8 +146,9 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
 
         });
         yield return new WaitWhile(() => done == false);
-        
     }
+
+    
     
 
     public void UpdateScore()
@@ -238,7 +177,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
 
     
 
-    private void OnbestScoreUpdated(int score)
+    private void SetIsBestScoreUpdated(int score)
     {
         isBestScroreUpdated = true;
     }

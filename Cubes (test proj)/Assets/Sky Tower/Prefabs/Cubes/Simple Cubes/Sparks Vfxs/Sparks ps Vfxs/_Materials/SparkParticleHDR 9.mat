@@ -48,6 +48,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _Intensity: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _VertexIntensity: 7
     m_Colors:
     - _Color: {r: 0.30261838, g: 0.53798825, b: 6.4222345, a: 1}

@@ -24,7 +24,7 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
     public void OnPreprocessBuild(BuildReport report)
     {
 
-#if AG_BUILD
+#if AG_BUILD && !TEST_BUILD
 
     #if RU_VERSION
         Debug.Log("App Gallery ru");
@@ -38,7 +38,7 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
     #endif
         
         
-#elif RS_BUILD
+#elif RS_BUILD && !TEST_BUILD
 
         Debug.Log("Ru Store ");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
@@ -56,10 +56,10 @@ public class DefininitionsManager : Editor
     private static readonly string [] DefineKeywords = new string[] {
         "UNITY_POST_PROCESSING_STACK_V2",
         "TEST_BUILD",
-        //"AG_BUILD",
-        "RS_BUILD",
-        //"RU_VERSION",
-        "EN_VERSION",
+        "AG_BUILD",
+        //"RS_BUILD",
+        "RU_VERSION",
+        //"EN_VERSION",
     };
     
     

@@ -31,14 +31,14 @@ public class FpsDisplay : MonoBehaviour
         }
      
      
-        void OnGUI()
+        /*void OnGUI()
         {
             GUIStyle style = new GUIStyle();
             style.fontSize = 21;
             style.richText = true;
             GUI.Label(new Rect(Screen.width - 120,2,150,20), fps, style);
             
-        }
+        }*/
 }
 
 #endif

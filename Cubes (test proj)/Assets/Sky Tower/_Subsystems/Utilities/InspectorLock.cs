@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -51,8 +52,34 @@ public class InspectorLock
     [MenuItem("Stuff/Clear Console #&c")]
     static void ClearConsole()
     {
-        Type type = Assembly.GetAssembly(typeof(Editor)).GetType("UnityEditorInternal.LogEntries");
-        type.GetMethod("Clear").Invoke(null,null);
+        //var logEntries = Type.GetType("UnityEditor.LogEntries,UnityEditor.dll");
+        var logEntries = Assembly.GetAssembly(typeof(Editor)).GetType("UnityEditor.LogEntries");
+        logEntries.GetMethod("Clear").Invoke(null,null);
+        
+        //PrintAllMethods("UnityEditor.LogEntries");
+    }
+
+    static void PrintAllMethods(string assemblyName)
+    {
+        var assembly = Assembly.GetAssembly(typeof(Editor)).GetType(assemblyName);
+        var methods = assembly.GetMethods();
+        
+        foreach (var method in methods)
+        {
+            var parametersInfo = method.GetParameters();
+            List<Type> parameters = new List<Type>();
+            foreach (var parameter in parametersInfo)
+            {
+                parameters.Add(parameter.ParameterType);
+            }
+
+            string log = "";
+            log = parameters.Aggregate(log, (current, p) => current + $" {p.Name} ");
+            Debug.Log($"{method.Name} ({log})  IsPrivate - {method.IsPrivate}  IsPublic - {method.IsPublic}" +
+                      $"  IsAssembly - {method.IsAssembly}  IsAbstract - {method.IsAbstract} IsConstructor - " +
+                      $"{method.IsConstructor} IsStatic -  {method.IsStatic} IsVirtual - {method.IsVirtual}"
+                      );
+        }
     }
 }
 

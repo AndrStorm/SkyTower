@@ -23,26 +23,32 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
 
     public void OnPreprocessBuild(BuildReport report)
     {
-
-#if AG_BUILD && !TEST_BUILD
+#if TEST_BUILD
+       Debug.Log("Test Build");
+        
+#elif AG_BUILD
 
     #if RU_VERSION
         Debug.Log("App Gallery ru");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower.huawei.ru");
+        
     #elif EN_VERSION
         Debug.Log("App Gallery en");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower.huawei");
+        
     #else
         Debug.Log("App Gallery default");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower.huawei");
+        
     #endif
         
-        
-#elif RS_BUILD && !TEST_BUILD
-
+#elif RS_BUILD
         Debug.Log("Ru Store ");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
         
+#elif GP_BUILD
+        Debug.Log("Google Play ");
+        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
 #endif
     }
     
@@ -55,11 +61,12 @@ public class DefininitionsManager : Editor
     
     private static readonly string [] DefineKeywords = new string[] {
         "UNITY_POST_PROCESSING_STACK_V2",
-        "TEST_BUILD",
-        "AG_BUILD",
+        //"TEST_BUILD",
+        "GP_BUILD",
+        //"AG_BUILD",
         //"RS_BUILD",
-        "RU_VERSION",
-        //"EN_VERSION",
+        //"RU_VERSION",
+        "EN_VERSION",
     };
     
     
@@ -154,8 +161,6 @@ public class DefininitionsManager : Editor
         }
 
     }
-    
-    
     
     private static class LootLockerDefenitionsManager
     {

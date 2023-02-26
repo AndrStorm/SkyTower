@@ -1220,6 +1220,7 @@ Transform:
   - {fileID: 1592614656}
   - {fileID: 1698589979}
   - {fileID: 1292899560}
+  - {fileID: 1858333840}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2331,7 +2332,6 @@ GameObject:
   m_Component:
   - component: {fileID: 843554499}
   - component: {fileID: 843554498}
-  - component: {fileID: 843554501}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -2559,21 +2559,6 @@ Transform:
   m_Father: {fileID: 480894140}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &843554501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843554497}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c67fd41ff980894591565ca82c5de58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _androidGameId: 4618933
-  _iOSGameId: 4618932
-  _testMode: 1
 --- !u!1001 &855983558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5361,6 +5346,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10a819a219c767d48a47b692e02bbcde, type: 3}
+--- !u!1 &1858333839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1858333840}
+  - component: {fileID: 1858333841}
+  m_Layer: 0
+  m_Name: UnityAds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1858333840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858333839}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 480894140}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1858333841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858333839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c67fd41ff980894591565ca82c5de58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _androidGameId: 4618933
+  _iOSGameId: 4618932
+  _testMode: 1
 --- !u!4 &1868659434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7497736861078781010, guid: a7cde8f9fdf24bb47acf9632b4daa390, type: 3}

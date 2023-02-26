@@ -47,7 +47,8 @@ public class ShopManager : Singleton<ShopManager>
     
     private void Start()
     {
-
+        UnityAdsManager.Instance.ShowBannerAds();
+        
         for (int i = 0; i < needScoreToUnlock.Length; i++)
         {
             shopCubes[i].position = Helper.CanvasToWorld(scoreLabel[i].GetComponent<RectTransform>()) + cubeOffset;

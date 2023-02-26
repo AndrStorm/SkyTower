@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 using UnityEngine.Localization.Components;
 
 public class CanvasButtons : MonoBehaviour
 {
+    
     [SerializeField] private Sprite soundOn, soundOff;
+    
+    private const string RESTART_COUNTER = "RestartCounter";
+    private const string IS_ADS_WAS_SHOWN = "IsAdsWasShown";
 
     private void Start()
     {
@@ -37,6 +40,7 @@ public class CanvasButtons : MonoBehaviour
     
     public void ReturnToMain()
     {
+        UnityAdsManager.Instance.HideBannerAds();
         SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.mainTheme);
         SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Main Scene");
@@ -44,6 +48,7 @@ public class CanvasButtons : MonoBehaviour
 
     public void RestartGame()
     {
+        HandleAdsOnRestart();
         SoundManager.Instance?.PlaySound("ButtonClick");
         SceneLoader.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -85,6 +90,15 @@ public class CanvasButtons : MonoBehaviour
         if (PlayerPrefs.GetInt("sound") != 1) return;
         SoundManager.Instance?.PlaySound("ButtonClick");
 
+    }
+
+
+    private void HandleAdsOnRestart()
+    {
+        int restartCount = PlayerPrefs.GetInt(RESTART_COUNTER);
+        restartCount++;
+        PlayerPrefs.SetInt(RESTART_COUNTER, restartCount);
+        PlayerPrefs.SetInt(IS_ADS_WAS_SHOWN, 0);
     }
 
 }

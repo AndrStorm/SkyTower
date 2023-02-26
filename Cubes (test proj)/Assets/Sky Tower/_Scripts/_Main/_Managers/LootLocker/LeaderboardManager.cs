@@ -45,7 +45,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
         LootLockerSDKManager.SubmitScore(playerID, score,leaderboardId, (response) =>
         {
             if (response.success) {
-                Debug.Log("Successful submit score");
+                //Debug.Log("Successful submit score");
                 done = true;
             } else {
                 Debug.Log("failed to submit score: " + response.Error);
@@ -114,7 +114,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
                     leaderboardRecords.Add(record);
                 }
                 
-                Debug.Log($"Leaderboard is Fetched count: {count} startRank: {startRank}");
+                //Debug.Log($"Leaderboard is Fetched count: {count} startRank: {startRank}");
                 done = true;
             }
             else
@@ -135,7 +135,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
             if (response.success)
             {
                 memberRank = response.rank;
-                Debug.Log("Got member rank - " + memberRank);
+                //Debug.Log("Got member rank - " + memberRank);
                 done = true;
             }
             else

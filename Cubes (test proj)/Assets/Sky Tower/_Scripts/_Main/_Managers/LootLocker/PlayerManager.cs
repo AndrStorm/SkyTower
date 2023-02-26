@@ -42,7 +42,7 @@ public class PlayerManager : Singleton<PlayerManager>
             {
                 playerId = response.player_id.ToString();
                 playerUId = response.public_uid;
-                Debug.Log("Guest Session success, Player ID: " + playerId);
+                //Debug.Log("Guest Session success, Player ID: " + playerId);
                 PlayerPrefs.SetString("PlayerID", playerId);
                 done = isSessionStarted = true;
             }
@@ -66,7 +66,7 @@ public class PlayerManager : Singleton<PlayerManager>
             if (response.success)
             {
                 playerName = response.name;
-                Debug.Log("Get Player Name - " + playerName);
+                //Debug.Log("Get Player Name - " + playerName);
                 done = true;
             }
             else
@@ -89,7 +89,7 @@ public class PlayerManager : Singleton<PlayerManager>
             if (response.success)
             {
                 playerName = response.name;
-                Debug.Log("Name changed to " + playerName);
+                //Debug.Log("Name changed to " + playerName);
                 done = true;
             }
             else

@@ -1220,7 +1220,6 @@ Transform:
   - {fileID: 1592614656}
   - {fileID: 1698589979}
   - {fileID: 1292899560}
-  - {fileID: 1858333840}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3256,6 +3255,7 @@ Transform:
   - {fileID: 2144981233}
   - {fileID: 564420473}
   - {fileID: 858016984}
+  - {fileID: 1858333840}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5370,13 +5370,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858333839}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 480894140}
-  m_RootOrder: 6
+  m_Father: {fileID: 947549204}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1858333841
 MonoBehaviour:
@@ -5392,7 +5392,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _androidGameId: 4618933
   _iOSGameId: 4618932
-  _testMode: 1
+  _testMode: 0
+  _bannerPosition: 1
+  _interstitial_Android: Interstitial_Android
+  _interstitial_iOS: Interstitial_iOS
+  _banner_Android: Banner_Android
+  _banner_iOS: Banner_iOS
+  _rewarded_Android: Rewarded_Android
+  _rewarded_iOS: Rewarded_iOS
+  _restartsToShowAds: 3
 --- !u!4 &1868659434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7497736861078781010, guid: a7cde8f9fdf24bb47acf9632b4daa390, type: 3}

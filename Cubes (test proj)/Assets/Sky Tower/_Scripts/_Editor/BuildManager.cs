@@ -47,7 +47,7 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
         
 #elif GP_BUILD
-        Debug.Log("Google Play ");
+        Debug.Log("Google Play");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
 #endif
     }
@@ -62,11 +62,11 @@ public class DefininitionsManager : Editor
     private static readonly string [] DefineKeywords = new string[] {
         "UNITY_POST_PROCESSING_STACK_V2",
         //"TEST_BUILD",
-        "GP_BUILD",
-        //"AG_BUILD",
+        //"GP_BUILD",
+        "AG_BUILD",
         //"RS_BUILD",
-        //"RU_VERSION",
-        "EN_VERSION",
+        "RU_VERSION",
+        //"EN_VERSION",
     };
     
     

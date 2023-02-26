@@ -80,6 +80,7 @@ public class GameController : Singleton<GameController>
     #endregion
 
 
+    
     #region Fields
 
     private bool isTestModOnlyUp;
@@ -117,15 +118,16 @@ public class GameController : Singleton<GameController>
     
     private const string LAST_SCORE = "lastScore";
     private const string BEST_SCORE = "bestScore";
+    private const string RESTART_COUNTER = "RestartCounter";
+    private const string IS_ADS_WAS_SHOWN = "IsAdsWasShown";
 
     
     
     #endregion
 
     
+    
     #region MonoBehaviour
-    
-    
     
     private void OnEnable()
     {
@@ -133,14 +135,13 @@ public class GameController : Singleton<GameController>
         GameSettings.OnSettingsWindowOpen += SetIsGamePause;
         LeaderboardUI.OnLeaderboardOpen += SetIsGamePause;
     }
+    
     private void OnDisable()
     {
         AchievmentsWindow.OnAchievmentsWindowOpen -= SetIsGamePause;
         GameSettings.OnSettingsWindowOpen -= SetIsGamePause;
         LeaderboardUI.OnLeaderboardOpen -= SetIsGamePause;
     }
-
-    
     
     protected override void Awake()
     {
@@ -150,9 +151,10 @@ public class GameController : Singleton<GameController>
         allCubesRb = allCubes.GetComponent<Rigidbody>();
     }
     
-    
     private void Start()
     {
+        HandleAdsOnStart();
+        
         isGamePause = false;
         
         currentDifficulty = DifficultyManager.Instance.GetDifficulty(0f);
@@ -168,7 +170,6 @@ public class GameController : Singleton<GameController>
             }
         }
 
-        
         ResetAutoPlaceTimer();
         targetBgColor = _playerCam.backgroundColor;
         cameraStartPos = _playerCam.transform.localPosition;
@@ -179,11 +180,7 @@ public class GameController : Singleton<GameController>
         
         CreateCube(new Vector3(0, 1, 0));
         moveCubeSpawner = StartCoroutine(MoveCubeSpawner());
-        
-        
     }
-    
-    
     
     private void Update()
     {
@@ -196,23 +193,17 @@ public class GameController : Singleton<GameController>
         ChangeBgColor();
         ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity);
         
-
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
             LoseGame();
-
-
-        CalculateWindSound(allCubes == null);
         
+        CalculateWindSound(allCubes == null);
     }
-    
-    
     
     #endregion
     
     
+    
     #region Coroutins
-    
-    
     
     private IEnumerator MoveCubeSpawner()
     {
@@ -322,14 +313,11 @@ public class GameController : Singleton<GameController>
         restartButton.SetActive(true);
     }
     
-    
-    
     #endregion
     
     
+    
     #region Methods
-    
-    
     
     public void HandleInput(Vector2 screenPosition)
     {
@@ -347,7 +335,6 @@ public class GameController : Singleton<GameController>
             
         }
     }
-    
 
     public Vector3 GetLastCubePosition()
     {
@@ -394,6 +381,20 @@ public class GameController : Singleton<GameController>
 
     
     
+    private void HandleAdsOnStart()
+    {
+        int restartsToAds = UnityAdsManager.Instance.RestartsToShowAds;
+        int currentRestarts = PlayerPrefs.GetInt(RESTART_COUNTER);
+        if (currentRestarts == 0) return;
+
+        bool isAdsNeeded = PlayerPrefs.GetInt(RESTART_COUNTER) % restartsToAds == 0;
+        if (isAdsNeeded && PlayerPrefs.GetInt(IS_ADS_WAS_SHOWN) == 0)
+        {
+            string placementId = UnityAdsManager.Instance.GetInterstitialId();
+            UnityAdsManager.Instance.ShowFullScreenAds(placementId);
+            PlayerPrefs.SetInt(IS_ADS_WAS_SHOWN, 1);
+        }
+    }
 
     private void CalculateWindSound(bool isTowerDestroyed)
     {
@@ -677,7 +678,6 @@ public class GameController : Singleton<GameController>
 
 
     
-    
 #if UNITY_EDITOR
     
     [MenuItem("Developer/Switch Test Mod Up Only &#w")]
@@ -687,9 +687,6 @@ public class GameController : Singleton<GameController>
     }
     
 #endif
-    
-    
-    
     
     #endregion;
     

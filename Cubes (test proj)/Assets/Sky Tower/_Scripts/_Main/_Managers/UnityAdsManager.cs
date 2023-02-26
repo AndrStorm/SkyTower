@@ -1,25 +1,33 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
 public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
 {
-    private string type = "video";
-
+    
     [SerializeField] private string _androidGameId = "4618933";
     [SerializeField] private string _iOSGameId = "4618932";
     [SerializeField] private bool _testMode = true;
     
+    [SerializeField] private BannerPosition _bannerPosition = BannerPosition.TOP_CENTER;
+
     [SerializeField] private string _interstitial_Android = "Interstitial_Android";
-    [SerializeField] private string _banner_Android = "Banner_Android";
-    [SerializeField] private string _rewarded_Android = "Rewarded_Android";
     [SerializeField] private string _interstitial_iOS = "Interstitial_iOS";
-    [SerializeField] private string _bannerAndroid_iOS = "Banner_iOS";
-    [SerializeField] private string _rewardedAndroid_iOS = "Rewarded_iOS";
+    [SerializeField] private string _banner_Android = "Banner_Android";
+    [SerializeField] private string _banner_iOS = "Banner_iOS";
+    [SerializeField] private string _rewarded_Android = "Rewarded_Android";
+    [SerializeField] private string _rewarded_iOS = "Rewarded_iOS";
+    
+    [SerializeField] private int _restartsToShowAds = 3;
+    
+    public int RestartsToShowAds => _restartsToShowAds;
 
     
     private string _gameId;
+
     
 
+    
 
     private void Start()
     {
@@ -28,46 +36,106 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     
     private void InitializeAds()
     {
-        _gameId = Application.platform == RuntimePlatform.IPhonePlayer 
-            ? _iOSGameId : _androidGameId;
-        Advertisement.Initialize(_gameId, _testMode);
+        _gameId = IsiOS() ? _iOSGameId : _androidGameId;
+        Advertisement.Initialize(_gameId, _testMode, Instance);
+        Advertisement.Banner.SetPosition(_bannerPosition);
     }
 
 
-    public static void ShowAds(string placementId)
+    
+    public void ShowFullScreenAds(string placementId)
     {
-        if (Advertisement.isInitialized)
-        {
-            Advertisement.Show(placementId, Instance);
-            Debug.Log("show ad " + placementId);
-        }
-        else
-        {
-            Debug.Log("ads are not ready");
-        }
+        StartCoroutine(ShowFullScreenAdsCoroutine(placementId));
     }
     
+    private IEnumerator ShowFullScreenAdsCoroutine(string placementId)
+    {
+        if (!Advertisement.isInitialized)
+        {
+            yield return Helper.GetUnscaledWait(0.5f);
+            //Debug.Log("banner is not ready");
+        }
+        Advertisement.Load(placementId, Instance);
+    }
 
+    private void OnAdsLoaded(string placementId) 
+    {
+        Advertisement.Show(placementId, Instance);
+        //Debug.Log("OnAdsLoaded " + placementId);
+    }
+    
+    
+    public void ShowBannerAds()
+    {
+        StartCoroutine(ShowBannerCoroutine());
+    }
+    
+    private IEnumerator ShowBannerCoroutine()
+    {
+        if (!Advertisement.isInitialized)
+        {
+            yield return Helper.GetUnscaledWait(0.5f);
+            //Debug.Log("banner is not ready");
+        }
+        
+        Advertisement.Banner.SetPosition(_bannerPosition);
+        Advertisement.Banner.Load(GetBannerId());
+        
+        if (!Advertisement.Banner.isLoaded)
+        {
+            yield return Helper.GetUnscaledWait(0.5f);
+            //Debug.Log("banner is not loaded"); 
+        }
+        
+        Advertisement.Banner.Show(GetBannerId());
+        //Debug.Log("GetBannerId() " + GetBannerId());
+    }
+    
+    public void HideBannerAds()
+    {
+        Advertisement.Banner.Hide();
+    }
+    
     
 
+    public string GetInterstitialId()
+    {
+        return IsiOS() ? _interstitial_iOS : _interstitial_Android;;
+    }
+    
+    public string GetRewardedId()
+    {
+        return IsiOS() ? _rewarded_iOS : _rewarded_Android;;
+    }
+    
+    
+    private string GetBannerId()
+    {
+        return IsiOS() ? _banner_iOS : _banner_Android;;
+    }
+
+    private bool IsiOS()
+    {
+        return Application.platform == RuntimePlatform.IPhonePlayer;
+    }
+    
     
 
     public void OnInitializationComplete()
     {
-        Debug.Log("Unity Ads initialization complete.");
+        //Debug.Log("Unity Ads initialization complete.");
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)
     {
         Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
     }
-
     
     
     
     public void OnUnityAdsAdLoaded(string placementId)
     {
-        Debug.Log($"OnUnityAdsAdLoaded placementId {placementId}");
+        OnAdsLoaded(placementId);
     }
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
@@ -84,17 +152,17 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
 
     public void OnUnityAdsShowStart(string placementId)
     {
-        Debug.Log($"OnUnityAdsShowStart placementId {placementId}");
+        //Debug.Log($"OnUnityAdsShowStart placementId {placementId}");
     }
 
     public void OnUnityAdsShowClick(string placementId)
     {
-        Debug.Log($"OnUnityAdsShowClick placementId {placementId}");
+        //Debug.Log($"OnUnityAdsShowClick placementId {placementId}");
     }
 
     public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
     {
-        Debug.Log($"OnUnityAdsShowComplete placementId {placementId}");
+        //Debug.Log($"OnUnityAdsShowComplete placementId {placementId}");
         switch (showCompletionState)
         {
             case UnityAdsShowCompletionState.SKIPPED:

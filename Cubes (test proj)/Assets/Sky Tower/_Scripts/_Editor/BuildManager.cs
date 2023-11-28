@@ -10,6 +10,7 @@ using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using GameAnalyticsSDK;
 
 public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithReport
 {
@@ -59,22 +60,31 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
 public class DefininitionsManager : Editor
 {
     
-    private static readonly string [] DefineKeywords = new string[] {
+    private static readonly string [] DefineKeywords = {
         "UNITY_POST_PROCESSING_STACK_V2",
         //"TEST_BUILD",
-        //"GP_BUILD",
-        "AG_BUILD",
+        "GP_BUILD",
+        //"AG_BUILD",
         //"RS_BUILD",
-        "RU_VERSION",
-        //"EN_VERSION",
+        //"RU_VERSION",
+        "EN_VERSION",
     };
     
     
     static DefininitionsManager ()
     {
         SetUpDefinitions();
+        
+        string bundleVersion = PlayerSettings.bundleVersion;
+        SetUpGameAnalytics(bundleVersion);
         LocaleDefininitionsManager.SetUp();
-        LootLockerDefenitionsManager.SetUp();
+        LootLockerDefenitionsManager.SetUp(bundleVersion);
+    }
+
+    private static void SetUpGameAnalytics(string bundleVersion)
+    {
+        var buildVersion = new List<string>(){bundleVersion};
+        GameAnalytics.SettingsGA.Build = buildVersion;
     }
 
     private static void SetUpDefinitions()
@@ -120,11 +130,7 @@ public class DefininitionsManager : Editor
         }
     }
     */
-    
-    
-    
-    
-    
+
     private static class LocaleDefininitionsManager 
     {
     
@@ -144,7 +150,7 @@ public class DefininitionsManager : Editor
 #if RU_VERSION
             LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("ru"));
 #else
-        LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("en"));      
+            LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("en"));      
 #endif
         
             SpecificLocaleSelector newSelector = new SpecificLocaleSelector
@@ -164,18 +170,20 @@ public class DefininitionsManager : Editor
     
     private static class LootLockerDefenitionsManager
     {
-        private const string DEVELOP_MOD_API_KEY = "dev_cc3723a2ab584e9bb391faaf3ef1445d";//dev_cc3723a2ab584e9bb391faaf3ef1445d
-        private const string LIVE_MOD_API_KEY = "prod_3d88b362e4ea45a68c3251216574fcad"; //prod_3d88b362e4ea45a68c3251216574fcad
+        private const string DEVELOP_MOD_API_KEY = "dev_cc3723a2ab584e9bb391faaf3ef1445d";
+        //dev_cc3723a2ab584e9bb391faaf3ef1445d
+        private const string LIVE_MOD_API_KEY = "prod_3d88b362e4ea45a68c3251216574fcad"; 
+        //prod_3d88b362e4ea45a68c3251216574fcad
 
 
-        public static void SetUp()
+        public static void SetUp(string bundleVersion)
         {
             var config = LootLockerConfig.Get();
-            config.game_version = PlayerSettings.bundleVersion;
+            config.game_version = bundleVersion;
         
 #if TEST_BUILD
-        config.apiKey = DEVELOP_MOD_API_KEY;
-        config.developmentMode = true;
+            config.apiKey = DEVELOP_MOD_API_KEY;
+            config.developmentMode = true;
 #else
             config.apiKey = LIVE_MOD_API_KEY;
             config.developmentMode = false;

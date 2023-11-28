@@ -156,6 +156,18 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 0
+  - m_Id: 119268568004022272
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119268635951747072
+    m_Localized: Make a review
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119268782752387072
+    m_Localized: If you liked the game, you can leave a review!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

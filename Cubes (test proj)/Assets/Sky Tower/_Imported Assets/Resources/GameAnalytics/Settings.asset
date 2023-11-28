@@ -30,7 +30,7 @@ MonoBehaviour:
   secretKey:
   - 5bb1db18b3ccf69d29552c555ad2c74a896164c0
   Build:
-  - 0.9.3.2
+  - 0.9.3.4
   SelectedPlatformOrganization:
   - AndrStorm Games
   SelectedPlatformStudio:

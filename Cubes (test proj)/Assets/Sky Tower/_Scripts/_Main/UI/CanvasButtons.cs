@@ -95,6 +95,7 @@ public class CanvasButtons : MonoBehaviour
 
     private void HandleAdsOnRestart()
     {
+        UnityAdsManager.Instance.HideBannerAds();
         int restartCount = PlayerPrefs.GetInt(RESTART_COUNTER);
         restartCount++;
         PlayerPrefs.SetInt(RESTART_COUNTER, restartCount);

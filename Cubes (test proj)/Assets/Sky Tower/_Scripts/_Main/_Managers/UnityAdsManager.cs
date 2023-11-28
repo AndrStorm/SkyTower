@@ -26,9 +26,7 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     private string _gameId;
 
     
-
     
-
     private void Start()
     {
         InitializeAds();
@@ -37,11 +35,35 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     private void InitializeAds()
     {
         _gameId = IsiOS() ? _iOSGameId : _androidGameId;
+        
+        SetUpPersonolizedAds();
         Advertisement.Initialize(_gameId, _testMode, Instance);
         Advertisement.Banner.SetPosition(_bannerPosition);
     }
 
+    private void SetUpPersonolizedAds()
+    {
+#if GP_BUILD
+        // If the user opts out of personalized ads:
+        MetaData userMetaData = new MetaData("user");
+        userMetaData.Set("nonbehavioral", "true");
+        Advertisement.SetMetaData(userMetaData);
+#else
+        MetaData userMetaData = new MetaData("user");
+        userMetaData.Set("nonbehavioral", "false");
+        Advertisement.SetMetaData(userMetaData);
+#endif
+        
+    }
 
+    private bool IsiOS()
+    {
+        return Application.platform == RuntimePlatform.IPhonePlayer;
+    }
+
+    
+    
+    
     
     public void ShowFullScreenAds(string placementId)
     {
@@ -56,12 +78,6 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
             //Debug.Log("banner is not ready");
         }
         Advertisement.Load(placementId, Instance);
-    }
-
-    private void OnAdsLoaded(string placementId) 
-    {
-        Advertisement.Show(placementId, Instance);
-        //Debug.Log("OnAdsLoaded " + placementId);
     }
     
     
@@ -91,13 +107,17 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
         //Debug.Log("GetBannerId() " + GetBannerId());
     }
     
+    private string GetBannerId()
+    {
+        return IsiOS() ? _banner_iOS : _banner_Android;;
+    }
+    
     public void HideBannerAds()
     {
         Advertisement.Banner.Hide();
     }
     
     
-
     public string GetInterstitialId()
     {
         return IsiOS() ? _interstitial_iOS : _interstitial_Android;;
@@ -108,19 +128,17 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
         return IsiOS() ? _rewarded_iOS : _rewarded_Android;;
     }
     
+
     
-    private string GetBannerId()
+    
+    
+    private void OnAdsLoaded(string placementId) 
     {
-        return IsiOS() ? _banner_iOS : _banner_Android;;
+        Advertisement.Show(placementId, Instance);
+        //Debug.Log("OnAdsLoaded " + placementId);
     }
 
-    private bool IsiOS()
-    {
-        return Application.platform == RuntimePlatform.IPhonePlayer;
-    }
     
-    
-
     public void OnInitializationComplete()
     {
         //Debug.Log("Unity Ads initialization complete.");
@@ -130,9 +148,8 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     {
         Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
     }
-    
-    
-    
+
+
     public void OnUnityAdsAdLoaded(string placementId)
     {
         OnAdsLoaded(placementId);
@@ -142,7 +159,6 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     {
         Debug.Log($"OnUnityAdsFailedToLoad placementId {placementId} error {error}");
     }
-    
     
 
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)

@@ -145,6 +145,18 @@ MonoBehaviour:
     m_Key: 'Change your Nickname to: userNickname?'
     m_Metadata:
       m_Items: []
+  - m_Id: 119268568004022272
+    m_Key: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119268635951747072
+    m_Key: Make a review
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119268782752387072
+    m_Key: Review label
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

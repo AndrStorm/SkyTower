@@ -41,7 +41,7 @@ PlayerSettings:
     height: 1
   m_SplashScreenLogos:
   - logo: {fileID: 21300000, guid: 3db2ffb0889cf9e44a25e31c26781a4b, type: 3}
-    duration: 3
+    duration: 5
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
@@ -136,7 +136,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.9.3.2
+  bundleVersion: 0.9.3.4
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
@@ -167,7 +167,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 3
+  AndroidBundleVersionCode: 5
   AndroidMinSdkVersion: 22
   AndroidTargetSdkVersion: 33
   AndroidPreferredInstallLocation: 1
@@ -255,7 +255,7 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/GitRepositories/Keystores/SkyTower.keystore
+  AndroidKeystoreName: D:/GitRepositories/Keystores/SkyTower/SkyTower.keystore
   AndroidKeyaliasName: skytower game
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
@@ -805,7 +805,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: UNITY_POST_PROCESSING_STACK_V2;AG_BUILD;RU_VERSION
+    Android: UNITY_POST_PROCESSING_STACK_V2;GP_BUILD;EN_VERSION
     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2
     GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2
     LinuxHeadlessSimulation: UNITY_POST_PROCESSING_STACK_V2

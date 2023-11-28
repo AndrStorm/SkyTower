@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 public class GameController : Singleton<GameController>
 {
     public static event Action<int> OnBestScoreIncrised;
+    public static event Action OnInGameReviewRequested;
 
     public static bool isGamePause;
 
@@ -360,6 +361,7 @@ public class GameController : Singleton<GameController>
 
     public void LoseGame()
     {
+        HandleAdsOnLose();
         SoundManager.Instance.ResetMusicVolume();
         
         isGameLost = true;
@@ -376,17 +378,17 @@ public class GameController : Singleton<GameController>
         
         VfxManager.Instance.MoveWindVFX(Vector3.up);
         VfxManager.Instance.EnableWind(false);
-        
     }
 
-    
-    
+
     private void HandleAdsOnStart()
     {
         int restartsToAds = UnityAdsManager.Instance.RestartsToShowAds;
         int currentRestarts = PlayerPrefs.GetInt(RESTART_COUNTER);
         if (currentRestarts == 0) return;
 
+        HandleInGameReview(restartsToAds, currentRestarts);
+        
         bool isAdsNeeded = PlayerPrefs.GetInt(RESTART_COUNTER) % restartsToAds == 0;
         if (isAdsNeeded && PlayerPrefs.GetInt(IS_ADS_WAS_SHOWN) == 0)
         {
@@ -394,6 +396,16 @@ public class GameController : Singleton<GameController>
             UnityAdsManager.Instance.ShowFullScreenAds(placementId);
             PlayerPrefs.SetInt(IS_ADS_WAS_SHOWN, 1);
         }
+    }
+
+    private void HandleInGameReview(int restartsToAds, int currentRestarts)
+    {
+        if(currentRestarts == restartsToAds - 1) OnInGameReviewRequested?.Invoke();
+    }
+
+    private void HandleAdsOnLose()
+    {
+        UnityAdsManager.Instance.ShowBannerAds();
     }
 
     private void CalculateWindSound(bool isTowerDestroyed)

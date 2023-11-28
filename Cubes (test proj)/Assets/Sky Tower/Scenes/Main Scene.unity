@@ -3426,7 +3426,7 @@ MonoBehaviour:
           value: {fileID: 1892101356446300858, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+          value: {fileID: 2100000, guid: a582d6a96dfae44468d5648bd229a2b4, type: 2}
     - rid: 8588488052127825931
       type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
       data:
@@ -3439,7 +3439,7 @@ MonoBehaviour:
           value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+          value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
 --- !u!4 &945613731 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3845499028594428905, guid: 2bb3b1fc62157e449a8281a71f088517, type: 3}
@@ -4488,7 +4488,7 @@ MonoBehaviour:
           value: {fileID: 1892101356446300858, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+          value: {fileID: 2100000, guid: a582d6a96dfae44468d5648bd229a2b4, type: 2}
     - rid: 8588488052127825932
       type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
       data:
@@ -4501,7 +4501,7 @@ MonoBehaviour:
           value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+          value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
 --- !u!1001 &1261691203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5064,7 +5064,7 @@ MonoBehaviour:
           value: {fileID: 1892101356446300858, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+          value: {fileID: 2100000, guid: a582d6a96dfae44468d5648bd229a2b4, type: 2}
     - rid: 8588488052127825937
       type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
       data:
@@ -5077,7 +5077,7 @@ MonoBehaviour:
           value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
         - localeIdentifier:
             m_Code: ru
-          value: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+          value: {fileID: 11400000, guid: 1bd9ad97707601b4cba25fe3043508b1, type: 2}
 --- !u!1001 &1549400190
 PrefabInstance:
   m_ObjectHideFlags: 0

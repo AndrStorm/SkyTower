@@ -37,7 +37,6 @@ public class GPReviewHandler : IReviewHandler
             yield break;
         }
         _playReviewInfo = requestFlowOperation.GetResult();
-
         
         var launchFlowOperation = _reviewManager.LaunchReviewFlow(_playReviewInfo);
         yield return launchFlowOperation;

@@ -49,5 +49,11 @@ public class InGameReview : MonoBehaviour
         if (reviewCourutine != null) StartCoroutine(reviewCourutine);
         CloseScreen();
     }
+    
+    public void OpenStorePage()
+    {
+        SoundManager.Instance.PlaySound("ButtonClick");
+        Application.OpenURL(@"market://details?id=" + Application.identifier);
+    }
 
 }

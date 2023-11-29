@@ -57,7 +57,7 @@ public class LeaderboardUI : MonoBehaviour
         
         //settingsAnimator.SetTrigger(AnimationOpen);
         transform.GetChild(0).gameObject.SetActive(true);
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlaySound("ButtonClick");
         OnLeaderboardOpen?.Invoke(true);
 
         

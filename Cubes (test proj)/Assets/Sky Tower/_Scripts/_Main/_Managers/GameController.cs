@@ -501,7 +501,7 @@ public class GameController : Singleton<GameController>
         
         
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
-        SoundManager.Instance?.PlaySound("CubeSpawn", Random.Range(0.935f,1.075f));
+        SoundManager.Instance.PlaySound("CubeSpawn", Random.Range(0.935f,1.075f));
         PhaseColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
         

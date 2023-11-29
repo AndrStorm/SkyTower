@@ -33,23 +33,23 @@ public class CanvasButtons : MonoBehaviour
     
     public void Shop()
     {
-        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.shopTheme);
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlayMusicOnTransition(SoundManager.Instance.shopTheme);
+        SoundManager.Instance.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Shop");
     }
     
     public void ReturnToMain()
     {
         UnityAdsManager.Instance.HideBannerAds();
-        SoundManager.Instance?.PlayMusicOnTransition(SoundManager.Instance.mainTheme);
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlayMusicOnTransition(SoundManager.Instance.mainTheme);
+        SoundManager.Instance.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Main Scene");
     }
 
     public void RestartGame()
     {
         HandleAdsOnRestart();
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlaySound("ButtonClick");
         SceneLoader.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -59,14 +59,14 @@ public class CanvasButtons : MonoBehaviour
         {
             PlayerPrefs.SetInt("sound", 1);
             GetComponent<Image>().sprite = soundOn;
-            SoundManager.Instance?.PlaySound("ButtonClick");
-            SoundManager.Instance?.ResetMusicVolume();
+            SoundManager.Instance.PlaySound("ButtonClick");
+            SoundManager.Instance.ResetMusicVolume();
         }
         else
         {
             PlayerPrefs.SetInt("sound", 0);
             GetComponent<Image>().sprite = soundOff;
-            SoundManager.Instance?.SetMusicVolume(0f,0.5f);
+            SoundManager.Instance.SetMusicVolume(0f,0.5f);
         }
 
     }
@@ -78,17 +78,17 @@ public class CanvasButtons : MonoBehaviour
         {
             PlayerPrefs.SetInt("music", 1);
             btnImage.sprite = soundOn;
-            SoundManager.Instance?.StartMusic();
+            SoundManager.Instance.StartMusic();
         }
         else
         {
             PlayerPrefs.SetInt("music", 0);
             btnImage.sprite = soundOff;
-            SoundManager.Instance?.StopMusic();
+            SoundManager.Instance.StopMusic();
         }
 
         if (PlayerPrefs.GetInt("sound") != 1) return;
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlaySound("ButtonClick");
 
     }
 

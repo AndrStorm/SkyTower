@@ -67,7 +67,7 @@ public class AchievmentsWindow : MonoBehaviour
         achievmentCanvas.gameObject.SetActive(true);
         //achievmentsAnimator.SetTrigger(AnimationOpen);
         
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlaySound("ButtonClick");
         OnAchievmentsWindowOpen?.Invoke(true);
     }
     
@@ -77,7 +77,7 @@ public class AchievmentsWindow : MonoBehaviour
         achievmentCanvas.gameObject.SetActive(false);
         //achievmentsAnimator.SetTrigger(AnimationClose);
         
-        SoundManager.Instance?.PlaySound("ButtonClick");
+        SoundManager.Instance.PlaySound("ButtonClick");
         OnAchievmentsWindowOpen?.Invoke(false);
     }
 

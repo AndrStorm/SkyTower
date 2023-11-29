@@ -34,11 +34,13 @@ public class InGameReview : MonoBehaviour
     {
         if (_reviewHandler == null) return;
         GameReviewDialog.gameObject.SetActive(true);
+        SoundManager.Instance.PlaySound("ButtonClick");
     }
 
     public void CloseScreen()
     {
         GameReviewDialog.gameObject.SetActive(false);
+        SoundManager.Instance.PlaySound("ButtonClick");
     }
 
     public void MakeReview()

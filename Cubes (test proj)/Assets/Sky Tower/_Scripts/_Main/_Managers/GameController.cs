@@ -24,17 +24,17 @@ public class GameController : Singleton<GameController>
     
     
     [Header("Cinematic Game property")]
-    [SerializeField]private float camMovSpeed = 2f;
+    [SerializeField]private float camMovSpeed = 3f;
     [Tooltip("How far will the camera move backward when the tower will become wider")]
-    [SerializeField]private float cameraMoveBackMul =1.7f;
+    [SerializeField]private float cameraMoveBackMul =0.9f;
     [SerializeField]private bool isCameraMoveForward;
-    [SerializeField]private int cameraMoveThreshold = 2;
-    [SerializeField]private float slowMotionScale = 0.55f, slowMotionDuration=1.5f;
-    [SerializeField]private float loseCamYMul =1.5f, loseCamZMul =2f, loseCamMovSpeedMul=2f;
+    [SerializeField]private int cameraMoveThreshold = 1;
+    [SerializeField]private float slowMotionScale = 0.65f, slowMotionDuration=3.5f;
+    [SerializeField]private float loseCamYMul =0.9f, loseCamZMul =1.2f, loseCamMovSpeedMul=5.35f;
 
     [Header("Spawn Game property")] 
-    [SerializeField]private float spawnGamePauseDuration = 0.01f;
-    [SerializeField]private float spawnPauseDuration = 0.1f;
+    [SerializeField]private float spawnGamePauseDuration = 0.012f;
+    [SerializeField]private float spawnPauseDuration = 0.18f;
     [SerializeField]private float spawnShakeAmount = 0.01f;
     [SerializeField]private float spawnShakeDur = 0.05f;
 
@@ -48,17 +48,16 @@ public class GameController : Singleton<GameController>
     [SerializeField]private int maxWindTowerHeight = 100;
     [Range(0f,1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
     [SerializeField]private float minWindFactor=0.05f;
-    [SerializeField]private float windVolumeMul=0.5f, windFadingSpeed=0.7f;
+    [SerializeField]private float windVolumeMul=0.8f, windFadingSpeed=0.35f;
     [SerializeField]private float ambColorIntensity = 0.65f;
 
     [Header("Game property")]
     [SerializeField]private float bottomBlindZone = 50f;
     [SerializeField]private float topBlindZone = 50f;
     [SerializeField]private float restartButtonDelay = 3f;
-    [SerializeField]private float towerVelocityThreshold = 0.18f;
+    [SerializeField]private float towerVelocityThreshold = 0.23f;
     [SerializeField]private float finalPushVelocityMul = 3.5f;
-    [SerializeField]private Gradient[] backGroundGradients;
-    [SerializeField]private int lastColorScore = 100;
+    
 
     [SerializeField]private float timeLeftLow = 1f;
     [SerializeField]private float timeLeftMedium = 2f;
@@ -67,6 +66,18 @@ public class GameController : Singleton<GameController>
     [SerializeField]private Vector3 phaseSpawnerFlicker;
     
     
+    [Header("Game property - Background")]
+    [SerializeField]private Gradient[] backGroundGradients1;
+    [SerializeField]private Gradient[] backGroundGradients2;
+    [SerializeField] private Material _backgroundMaterial;
+    [SerializeField]private int lastColorScore = 375;
+    
+    private Color _bgColor1;
+    private Color _bgColor2;
+    private Color _targetBgColor1;
+    private Color _targetBgColor2;
+    
+
     [Header("References")]
     public GameObject allCubes;
     [SerializeField]private TextMeshProUGUI scoreText;
@@ -98,7 +109,7 @@ public class GameController : Singleton<GameController>
     private DifficultySettings currentDifficulty;
     private CubePos lastCube = new CubePos(0, 1, 0);
 
-    private Color targetBgColor;
+    
     private Vector3 cameraTargetPos,cameraStartPos;
     private Vector3 lastSpawnerVector = Vector3.up;
     private float timerAutoPlace;
@@ -172,7 +183,11 @@ public class GameController : Singleton<GameController>
         }
 
         ResetAutoPlaceTimer();
-        targetBgColor = _playerCam.backgroundColor;
+        //-
+        SetDefaultBgColor();
+        //targetBgColor = _playerCam.backgroundColor; 
+        //targetBgColor = backgroundImage.color;
+
         cameraStartPos = _playerCam.transform.localPosition;
         cameraTargetPos = cameraStartPos;
         
@@ -192,7 +207,10 @@ public class GameController : Singleton<GameController>
 
         MoveCamera();
         ChangeBgColor();
-        ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity);
+        //-
+        //ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity); 
+        ChangeAmbientLight(_bgColor1, ambColorIntensity);
+
         
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
             LoseGame();
@@ -371,7 +389,8 @@ public class GameController : Singleton<GameController>
         StopCoroutine(moveCubeSpawner);
         StartCoroutine(ShowRestartButton(restartButtonDelay));
 
-        cameraTargetPos = new Vector3(cameraTargetPos.x, -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
+        cameraTargetPos = new Vector3(cameraTargetPos.x,
+            -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         
         allCubesRb.velocity *= finalPushVelocityMul;
@@ -466,16 +485,20 @@ public class GameController : Singleton<GameController>
         timerAutoPlace = currentDifficulty.timeToCubeAutoPlace;
     }
 
-    private void ChangeAmbientLight(Color ambientColor, float ambColorIntensity = 1f)
+    private void ChangeAmbientLight(Color ambientColor, float intensity = 1f)
     {
-        ambientColor = new Color(ambientColor.r * ambColorIntensity, ambientColor.g * ambColorIntensity, ambientColor.b * ambColorIntensity, ambientColor.a);
+        ambientColor = new Color(ambientColor.r * intensity, ambientColor.g * intensity,
+            ambientColor.b * intensity, ambientColor.a);
         RenderSettings.ambientLight = ambientColor;
     }
 
     private void InitializeSpawnerMovement()
     {
         MoveSpawner();
-        PhaseColorManager.Instance.gameObject.transform.position = new Vector3(cubeSpawner.transform.position.x, cubeSpawner.transform.position.y + 2, cubeSpawner.transform.position.z);
+        Vector3 cubeSpawnerPos = cubeSpawner.transform.position;
+        PhaseColorManager.Instance.gameObject.transform.position =
+            new Vector3(cubeSpawnerPos.x, cubeSpawnerPos.y + 2,
+                cubeSpawnerPos.z);
     }
 
     private void InitializeCubeCreation()
@@ -489,20 +512,21 @@ public class GameController : Singleton<GameController>
         
         CreateCube(cubeSpawner.position);
 
-        //PlayOnSpawnVFX(vfxDir,vfxPos);
+        //method PlayOnSpawnVFX(vfxDir,vfxPos);
         Vector3 vfxPos = lastCube.getVector();
         vfxPos.x -= vfxDir.x/2;
         vfxPos.z -= vfxDir.z/2;
         if (vfxDir.y < 0.1f) vfxPos.y += 0.5f;
  
-        Quaternion vfxRotation = Quaternion.LookRotation(vfxDir, Vector3.up) * Quaternion.Euler(90, 0, 0);
+        Quaternion vfxRotation = Quaternion.LookRotation
+            (vfxDir, Vector3.up) * Quaternion.Euler(90, 0, 0);
         VfxManager.Instance.PlaySpawnVfx(vfxPos, vfxRotation, cubeToCreate.cubeId);
-        //
         
         
         CameraShaker.Instance.ShakeCamera(spawnShakeAmount,spawnShakeDur);
         SoundManager.Instance.PlaySound("CubeSpawn", Random.Range(0.935f,1.075f));
-        PhaseColorManager.Instance.ChangeLampColor(phaseColors[0], phaseLightIntensity.x, phaseSpawnerFlicker.x);
+        PhaseColorManager.Instance.ChangeLampColor(phaseColors[0],
+            phaseLightIntensity.x, phaseSpawnerFlicker.x);
 
         
         ChangeScore();
@@ -566,28 +590,66 @@ public class GameController : Singleton<GameController>
         }
 
     }
-    
-    
+
+
+    #region Background
     private void ChangeTargetBgColor()
     {
         float score = lastCube.y - 1f;
         
         float t = Mathf.Clamp01(score / lastColorScore);
         
-        t *= backGroundGradients.Length;
+        t *= backGroundGradients1.Length;
         
-        int i = Mathf.Clamp(Mathf.FloorToInt(t), 0, backGroundGradients.Length - 1);
+        int currentGradient = Mathf.Clamp(Mathf.FloorToInt(t),
+            0, backGroundGradients1.Length - 1);
         
-        t -= i;
+        t -= currentGradient;
         
-        targetBgColor = backGroundGradients[i].Evaluate(t);
+        _targetBgColor1 = backGroundGradients1[currentGradient].Evaluate(t);
+        _targetBgColor2 = backGroundGradients2[currentGradient].Evaluate(t);
     }
+    
+    private void SetDefaultBgColor()
+    {
+        _targetBgColor1 = backGroundGradients1[0].Evaluate(0f);
+        _targetBgColor2 = backGroundGradients2[0].Evaluate(0f);
 
+        _bgColor1 = _targetBgColor1;
+        _bgColor2 = _targetBgColor2;
+
+        _backgroundMaterial.SetColor("_Color1", _targetBgColor1);
+        _backgroundMaterial.SetColor("_Color2", _targetBgColor2);
+    }
+    
+    
     private void ChangeBgColor()
     {
-        _playerCam.backgroundColor = Color.Lerp(_playerCam.backgroundColor, targetBgColor, Time.deltaTime / 2f);
+        _bgColor1 = Color.Lerp(_bgColor1, _targetBgColor1,Time.deltaTime / 2f);
+        _bgColor2 = Color.Lerp(_bgColor2, _targetBgColor2,Time.deltaTime / 2f);
+
+        _backgroundMaterial.SetColor("_Color1", _bgColor1);
+        _backgroundMaterial.SetColor("_Color2", _bgColor2);
+        
+        // Texture2D bg = new Texture2D(2, 2);
+        // bg.SetPixel(0, 1, backgroundImage.color);
+        // bg.SetPixel(0, 0, Color.green);
+        // bg.SetPixel(1, 1, backgroundImage.color);
+        // bg.SetPixel(1, 0, Color.green);
+        //
+        // bg.filterMode = FilterMode.Bilinear;
+        //
+        // Sprite bg3 = Sprite.Create(bg, new Rect(0f, 0f, 2, 2),
+        //     new Vector2(0f, 0f));
+        //
+        // backgroundImage.sprite = bg3;
+        /*_playerCam.backgroundColor = Color.Lerp(_playerCam.backgroundColor,
+            targetBgColor, Time.deltaTime / 2f);*/
     }
 
+    #endregion
+    
+    
     private void MoveCameraTargetPos()
     {
         float x, z;
@@ -628,43 +690,46 @@ public class GameController : Singleton<GameController>
 
     private void TiltCamera()
     {
-        Vector3 viewDirrection = cameraViewDirection.position - _playerCam.transform.position;
-        _playerCam.transform.rotation = Quaternion.Lerp(_playerCam.transform.rotation, Quaternion.LookRotation(viewDirrection, Vector3.up), Time.deltaTime / 3f);
+        Transform camTransform = _playerCam.transform;
+        Vector3 viewDirrection = cameraViewDirection.position - camTransform.position;
+        camTransform.rotation = Quaternion.Lerp(camTransform.rotation, Quaternion.LookRotation
+                (viewDirrection, Vector3.up), Time.deltaTime / 3f);
     }
 
     private void MoveSpawner()
     {
-        List<Vector3> positions = new List<Vector3>();
+        List<Vector3> positions = new List<Vector3>(); //opt некешированный лист
         Vector3 newPosition = Vector3.zero;
 
         if (!isTestModOnlyUp)
         {
+            //-floats comparasion
             if (IsPositionEmpty(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != 1)
                 positions.Add(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z));
-            if (IsPositionEmpty(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != - 1)
+            
+            if (IsPositionEmpty(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != -1)
                 positions.Add(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z));
 
             if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1)) && lastSpawnerVector.z != 1)
                 positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1));
-            if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1)) && lastSpawnerVector.z != - 1)
+            if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1)) && lastSpawnerVector.z != -1)
                 positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1));
         }
         
-        
-        /*if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)))*/       //the top place is always free
+        //the top place is always free
+        /*if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)))*/       
         if (lastSpawnerVector.y != 1 || isTestModOnlyUp)
         {
             positions.Add(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)); //20%
             positions.Add(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)); //33%
         }
         
-
-        //if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y - 1, lastCube.z))          //the down placement is a boring gameplay
+        //the down placement is a boring gameplay
+        //if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y - 1, lastCube.z))
         //    && cubeToPlace.position.y != lastCube.y - 1)
         //    positions.Add(new Vector3(lastCube.x, lastCube.y - 1, lastCube.z));
-
         
-
+        
         if (positions.Count > 1)
             newPosition = positions[UnityEngine.Random.Range(0, positions.Count)];
         else if (positions.Count == 0)

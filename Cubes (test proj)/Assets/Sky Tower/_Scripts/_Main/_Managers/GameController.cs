@@ -5,6 +5,7 @@ using System;
 using TMPro;
 using UnityEditor;
 using UnityEngine.Localization.Components;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 
@@ -38,17 +39,22 @@ public class GameController : Singleton<GameController>
     [SerializeField]private float spawnShakeAmount = 0.01f;
     [SerializeField]private float spawnShakeDur = 0.05f;
 
-    
-    [Header("Sound Game property")]
-    [SerializeField]private float actionMusicVolumeMul = 0.5f;
 
+    [Header("Sound Game property")] 
+    [SerializeField] private float actionMusicVolumeMul = 0.5f;
     [SerializeField] private float minWindAmbientVol = 0.02f;
     [SerializeField] private float maxWindAmbientVol = 0.07f;
     [SerializeField] private float maxWindAmbientHeight = 100;
-    [SerializeField]private int maxWindTowerHeight = 100;
-    [Range(0f,1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
-    [SerializeField]private float minWindFactor=0.05f;
-    [SerializeField]private float windVolumeMul=0.8f, windFadingSpeed=0.35f;
+    [SerializeField] private int maxWindTowerHeight = 100;
+    [Range(0f, 1f)] [Tooltip("Add value to Tower Height mul and dot Product mul")]
+    [SerializeField] private float minWindFactor = 0.05f;
+    [SerializeField] private float windVolumeMul = 0.8f, windFadingSpeed = 0.35f;
+    [Range(0f, 0.2f)] [SerializeField] private float _maxWindDeltaPerSec = 0.05f;
+    
+    private AudioSource _windSource;
+    private float _windDelta;
+    
+    [Header("Ambient Game property")]
     [SerializeField]private float ambColorIntensity = 0.65f;
 
     [Header("Game property")]
@@ -66,11 +72,14 @@ public class GameController : Singleton<GameController>
     [SerializeField]private Vector3 phaseSpawnerFlicker;
     
     
-    [Header("Game property - Background")]
+    [Header("Background Game property")]
     [SerializeField]private Gradient[] backGroundGradients1;
     [SerializeField]private Gradient[] backGroundGradients2;
     [SerializeField] private Material _backgroundMaterial;
     [SerializeField]private int lastColorScore = 375;
+    
+    private static readonly int _ShaderBGColor1 = Shader.PropertyToID("_Color1");
+    private static readonly int _ShaderBGColor2 = Shader.PropertyToID("_Color2");
     
     private Color _bgColor1;
     private Color _bgColor2;
@@ -80,14 +89,14 @@ public class GameController : Singleton<GameController>
 
     [Header("References")]
     public GameObject allCubes;
-    [SerializeField]private TextMeshProUGUI scoreText;
-    [SerializeField]private Transform cubeSpawner;
-    [SerializeField]private Transform cameraViewDirection;
-    [SerializeField]private GameObject restartButton;
-    [SerializeField]private CubeScriptable cubeToCreate;
-    [SerializeField]private GameObject[] canvasMenu;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private Transform cubeSpawner;
+    [SerializeField] private Transform cameraViewDirection;
+    [SerializeField] private GameObject restartButton;
+    [SerializeField] private CubeScriptable cubeToCreate;
+    [SerializeField] private GameObject[] canvasMenu;
+    [SerializeField] private LocalizeStringEvent scoreStringEvent;
 
-    
     
     #endregion
 
@@ -98,7 +107,7 @@ public class GameController : Singleton<GameController>
     private bool isTestModOnlyUp;
     
     
-    private AudioSource windSource;
+    
     private Rigidbody allCubesRb;
 
     
@@ -168,25 +177,12 @@ public class GameController : Singleton<GameController>
         HandleAdsOnStart();
         
         isGamePause = false;
-        
         currentDifficulty = DifficultyManager.Instance.GetDifficulty(0f);
-        
-        windSource = SoundManager.Instance.GetSoundSource("Wind");
 
-        cubesToCreate = new List<CubeScriptable>();
-        foreach (var cube in CubesManager.Instance.GetCubesDictionary())
-        {
-            if (cube.Value.active)
-            {
-                cubesToCreate.Add(cube.Value);
-            }
-        }
-
+        InitWind();
+        InitCubesList();
         ResetAutoPlaceTimer();
-        //-
         SetDefaultBgColor();
-        //targetBgColor = _playerCam.backgroundColor; 
-        //targetBgColor = backgroundImage.color;
 
         cameraStartPos = _playerCam.transform.localPosition;
         cameraTargetPos = cameraStartPos;
@@ -197,7 +193,26 @@ public class GameController : Singleton<GameController>
         CreateCube(new Vector3(0, 1, 0));
         moveCubeSpawner = StartCoroutine(MoveCubeSpawner());
     }
-    
+
+    private void InitWind()
+    {
+        CalculateWindDelta();
+        _windSource = SoundManager.Instance.GetSoundSource("Wind");
+    }
+
+    private void InitCubesList()
+    {
+        cubesToCreate = new List<CubeScriptable>();
+        foreach (var cube 
+                 in CubesManager.Instance.GetCubesDictionary())
+        {
+            if (cube.Value.active)
+            {
+                cubesToCreate.Add(cube.Value);
+            }
+        }
+    }
+
     private void Update()
     {
         if(isGamePause) return;
@@ -207,15 +222,12 @@ public class GameController : Singleton<GameController>
 
         MoveCamera();
         ChangeBgColor();
-        //-
-        //ChangeAmbientLight(_playerCam.backgroundColor, ambColorIntensity); 
         ChangeAmbientLight(_bgColor1, ambColorIntensity);
-
         
         if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
             LoseGame();
         
-        CalculateWindSound(allCubes == null);
+        ChangeWindSound(allCubes == null);
     }
     
     #endregion
@@ -427,7 +439,15 @@ public class GameController : Singleton<GameController>
         UnityAdsManager.Instance.ShowBannerAds();
     }
 
-    private void CalculateWindSound(bool isTowerDestroyed)
+
+    
+    #region Wind
+    private void CalculateWindDelta()
+    {
+        _windDelta = _maxWindDeltaPerSec * Time.deltaTime;
+    }
+    
+    private void ChangeWindSound(bool isTowerDestroyed)
     {
         if (PlayerPrefs.GetInt("sound") != 1)
         {
@@ -437,7 +457,8 @@ public class GameController : Singleton<GameController>
         if(isTowerDestroyed)
         {
             //FadeWindSound();
-            windSource.volume = Mathf.MoveTowards(windSource.volume, 0f, windFadingSpeed * Time.deltaTime);
+            _windSource.volume = Mathf.MoveTowards(_windSource.volume,
+                0f, windFadingSpeed * Time.deltaTime);
         }
         else if (isGameLost)
         {
@@ -445,18 +466,23 @@ public class GameController : Singleton<GameController>
             float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.velocity.normalized);
             float windFactor = Mathf.Clamp01(dotProduct + minWindFactor);
             float towerHeightMul = Mathf.Clamp01(minWindFactor + (float) lastCube.y / maxWindTowerHeight);
-            windSource.volume = windFactor * windVolumeMul * towerHeightMul;
-            windSource.pitch = 0.75f + dotProduct;
+            _windSource.volume = windFactor * windVolumeMul * towerHeightMul;
+            _windSource.pitch = 0.75f + dotProduct;
         }
         else
         {
-            windSource.pitch = 1f;
-            windSource.volume = Mathf.Lerp(minWindAmbientVol, maxWindAmbientVol, (lastCube.y - 1) / maxWindAmbientHeight);
-            
+            _windSource.pitch = 1f;
+            float windVolume = Mathf.Lerp(minWindAmbientVol, maxWindAmbientVol,
+                (lastCube.y - 1) / maxWindAmbientHeight);
+            _windSource.volume = Mathf.MoveTowards
+                (_windSource.volume, windVolume, _windDelta);
         }
-        
     }
-
+    
+    #endregion
+    
+    
+    
     private void StartGame()
     {
         isGameStart = true;
@@ -464,11 +490,10 @@ public class GameController : Singleton<GameController>
         var musicVolume = SoundManager.Instance.GetMusicVolume();
         SoundManager.Instance.SetMusicVolume(actionMusicVolumeMul * musicVolume);
         
-        
         PlayerPrefs.SetInt(LAST_SCORE, 0);
+        
         lastScore = 0;
-        //scoreText.text = $"Score: 0";
-        scoreStringEvent.RefreshString();
+        RefreshScoreString();
         
         foreach (GameObject obj in canvasMenu)
             Destroy(obj);
@@ -479,7 +504,6 @@ public class GameController : Singleton<GameController>
         isGamePause = isOpen;
     }
     
-
     private void ResetAutoPlaceTimer()
     {
         timerAutoPlace = currentDifficulty.timeToCubeAutoPlace;
@@ -550,9 +574,9 @@ public class GameController : Singleton<GameController>
             cubeToCreate = cubesToCreate[UnityEngine.Random.Range(0, cubesToCreate.Count)];
 
         GameObject newCube = Instantiate(
-                cubeToCreate.cube,
-                position,
-                Quaternion.identity) as GameObject;
+            cubeToCreate.cube,
+            position,
+            Quaternion.identity) as GameObject;
         
         newCube.transform.SetParent(allCubes.transform);
         lastCube.setVector(newCube.transform.position);
@@ -567,8 +591,8 @@ public class GameController : Singleton<GameController>
         
     }
     
-
-    [SerializeField] private LocalizeStringEvent scoreStringEvent;
+    
+    
     private void ChangeScore()
     {
         int currentScore = lastCube.y - 1;
@@ -580,16 +604,21 @@ public class GameController : Singleton<GameController>
 
             if (bestScore < currentScore)
             {
-               PlayerPrefs.SetInt(BEST_SCORE, currentScore);
-               bestScore = currentScore;
-               OnBestScoreIncrised.Invoke(currentScore);
+                PlayerPrefs.SetInt(BEST_SCORE, currentScore);
+                bestScore = currentScore;
+                OnBestScoreIncrised.Invoke(currentScore);
             }
 
-            scoreStringEvent.RefreshString();
-            //scoreText.text = $"Score: {currentScore}";
+            RefreshScoreString();
         }
-
     }
+
+    private void RefreshScoreString()
+    {
+        scoreStringEvent.RefreshString();
+        //scoreText.text = $"Score: {currentScore}";
+    }
+    
 
 
     #region Background
@@ -618,18 +647,17 @@ public class GameController : Singleton<GameController>
         _bgColor1 = _targetBgColor1;
         _bgColor2 = _targetBgColor2;
 
-        _backgroundMaterial.SetColor("_Color1", _targetBgColor1);
-        _backgroundMaterial.SetColor("_Color2", _targetBgColor2);
+        _backgroundMaterial.SetColor(_ShaderBGColor1, _targetBgColor1);
+        _backgroundMaterial.SetColor(_ShaderBGColor2, _targetBgColor2);
     }
-    
     
     private void ChangeBgColor()
     {
         _bgColor1 = Color.Lerp(_bgColor1, _targetBgColor1,Time.deltaTime / 2f);
         _bgColor2 = Color.Lerp(_bgColor2, _targetBgColor2,Time.deltaTime / 2f);
 
-        _backgroundMaterial.SetColor("_Color1", _bgColor1);
-        _backgroundMaterial.SetColor("_Color2", _bgColor2);
+        _backgroundMaterial.SetColor(_ShaderBGColor1, _bgColor1);
+        _backgroundMaterial.SetColor(_ShaderBGColor2, _bgColor2);
         
         // Texture2D bg = new Texture2D(2, 2);
         // bg.SetPixel(0, 1, backgroundImage.color);
@@ -646,7 +674,7 @@ public class GameController : Singleton<GameController>
         /*_playerCam.backgroundColor = Color.Lerp(_playerCam.backgroundColor,
             targetBgColor, Time.deltaTime / 2f);*/
     }
-
+    
     #endregion
     
     
@@ -665,7 +693,7 @@ public class GameController : Singleton<GameController>
                 x = Mathf.Abs(pos.x);
                 z = Mathf.Abs(pos.z);
                 
-                 if(maxZx < x || maxZx < z || isCameraMoveForward)
+                if(maxZx < x || maxZx < z || isCameraMoveForward)
                     maxZx = x > z ? x : z;
             }
         
@@ -679,7 +707,8 @@ public class GameController : Singleton<GameController>
     private void MoveCamera()
     {
         Vector3 camPos = _playerCam.transform.localPosition;
-        camPos = Vector3.MoveTowards(camPos, cameraTargetPos, Time.deltaTime * camMovSpeed);
+        camPos = Vector3.MoveTowards(camPos, cameraTargetPos,
+            Time.deltaTime * camMovSpeed);
         _playerCam.transform.localPosition = camPos;
     }
 
@@ -693,32 +722,38 @@ public class GameController : Singleton<GameController>
         Transform camTransform = _playerCam.transform;
         Vector3 viewDirrection = cameraViewDirection.position - camTransform.position;
         camTransform.rotation = Quaternion.Lerp(camTransform.rotation, Quaternion.LookRotation
-                (viewDirrection, Vector3.up), Time.deltaTime / 3f);
+            (viewDirrection, Vector3.up), Time.deltaTime / 3f);
     }
+    
 
     private void MoveSpawner()
     {
         List<Vector3> positions = new List<Vector3>(); //opt некешированный лист
         Vector3 newPosition = Vector3.zero;
-
+        
         if (!isTestModOnlyUp)
         {
-            //-floats comparasion
-            if (IsPositionEmpty(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != 1)
-                positions.Add(new Vector3(lastCube.x + 1, lastCube.y, lastCube.z));
+            Vector3 checkPosition = lastCube.Position;
+            checkPosition.x += 1;
+            if (IsPositionEmpty(checkPosition) && !lastSpawnerVector.x.IsFloatsEqual(1f))
+                positions.Add(checkPosition);
             
-            if (IsPositionEmpty(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z)) && lastSpawnerVector.x != -1)
-                positions.Add(new Vector3(lastCube.x - 1, lastCube.y, lastCube.z));
+            checkPosition.x -= 2;
+            if (IsPositionEmpty(checkPosition) && !lastSpawnerVector.x.IsFloatsEqual(-1f))
+                positions.Add(checkPosition);
 
-            if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1)) && lastSpawnerVector.z != 1)
-                positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z + 1));
-            if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1)) && lastSpawnerVector.z != -1)
-                positions.Add(new Vector3(lastCube.x, lastCube.y, lastCube.z - 1));
+            checkPosition.x += 1;
+            checkPosition.z += 1;
+            if (IsPositionEmpty(checkPosition) && !lastSpawnerVector.z.IsFloatsEqual(1f))
+                positions.Add(checkPosition);
+            
+            checkPosition.z -= 2;
+            if (IsPositionEmpty(checkPosition) && !lastSpawnerVector.z.IsFloatsEqual(-1f))
+                positions.Add(checkPosition);
         }
         
-        //the top place is always free
-        /*if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)))*/       
-        if (lastSpawnerVector.y != 1 || isTestModOnlyUp)
+        
+        if (!lastSpawnerVector.y.IsFloatsEqual(1f) || isTestModOnlyUp)
         {
             positions.Add(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)); //20%
             positions.Add(new Vector3(lastCube.x, lastCube.y + 1, lastCube.z)); //33%
@@ -728,8 +763,7 @@ public class GameController : Singleton<GameController>
         //if (IsPositionEmpty(new Vector3(lastCube.x, lastCube.y - 1, lastCube.z))
         //    && cubeToPlace.position.y != lastCube.y - 1)
         //    positions.Add(new Vector3(lastCube.x, lastCube.y - 1, lastCube.z));
-        
-        
+
         if (positions.Count > 1)
             newPosition = positions[UnityEngine.Random.Range(0, positions.Count)];
         else if (positions.Count == 0)
@@ -772,6 +806,8 @@ public class GameController : Singleton<GameController>
     {
         public int x, y, z;
 
+        public Vector3 Position => new Vector3(x, y, z);
+
         public CubePos(int x,int y, int z)
         {
             this.x = x;
@@ -806,5 +842,3 @@ public class GameController : Singleton<GameController>
     
 
 }
-
-

@@ -67,6 +67,7 @@ public class CanvasButtons : MonoBehaviour
             PlayerPrefs.SetInt("sound", 0);
             GetComponent<Image>().sprite = soundOff;
             SoundManager.Instance.SetMusicVolume(0f,0.5f);
+            SoundManager.Instance.SetWindVolume(0f,0.5f);
         }
 
     }

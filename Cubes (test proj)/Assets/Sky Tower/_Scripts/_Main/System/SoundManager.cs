@@ -26,7 +26,13 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
       SceneLoader.OnFininshedLoadingScene -= OnSceneLoaded;
     }
-
+    
+    private void OnSceneLoaded()
+    {
+        isSceneLoaded = true;
+        windAudioSource.volume = 0f; //-
+    }
+    
     
     
     protected override void Awake()
@@ -37,13 +43,11 @@ public class SoundManager : PersistentSingleton<SoundManager>
         foreach (var sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();
-
             sound.source.outputAudioMixerGroup = sound.audioMixerGroup;
             sound.source.clip = sound.clip;
             sound.source.volume = sound.volume;
             sound.source.pitch = sound.pitch;
             sound.source.loop = sound.loop;
-            
         }
         
         adjustedMusicVolume = musicAudioSource.volume;
@@ -54,7 +58,6 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
         windAudioSource = GetSoundSource("Wind");
         
-        
         if (PlayerPrefs.GetInt("sound") == 0)
         {
             musicAudioSource.volume = 0f;
@@ -63,16 +66,6 @@ public class SoundManager : PersistentSingleton<SoundManager>
         PlaySound("Wind");
         //PlaySound("Achievment");
     }
-
-    
-    
-    
-    private void OnSceneLoaded()
-    {
-        isSceneLoaded = true;
-        windAudioSource.volume = 0f;
-    }
-    
     
     
     
@@ -87,11 +80,28 @@ public class SoundManager : PersistentSingleton<SoundManager>
         
         while (!Mathf.Approximately(musicAudioSource.volume,musicVolume))
         {
-            musicAudioSource.volume = Mathf.MoveTowards(musicAudioSource.volume, musicVolume, delta);
+            musicAudioSource.volume = Mathf.MoveTowards
+                (musicAudioSource.volume, musicVolume, delta);
             yield return Helper.GetWait(step);
         }
     }
-
+    
+    private IEnumerator ChangeWindVolume(float time, float vol)
+    {
+        if (Mathf.Approximately(time,0f)) time = 0.01f;
+        
+        const float step = 0.05f;
+        float volDif = Mathf.Abs(windAudioSource.volume - vol);
+        float delta = volDif / (time / step); 
+        
+        
+        while (!Mathf.Approximately(windAudioSource.volume,vol))
+        {
+            windAudioSource.volume = Mathf.MoveTowards
+                (windAudioSource.volume, vol, delta);
+            yield return Helper.GetWait(step);
+        }
+    }
     
     private IEnumerator ChangeMusicOnTransition(AudioClip mus)
     {
@@ -108,8 +118,6 @@ public class SoundManager : PersistentSingleton<SoundManager>
         
     }
 
-
-    
     
     
     public float GetMusicVolume()
@@ -130,6 +138,8 @@ public class SoundManager : PersistentSingleton<SoundManager>
         musicAudioSource.Play();
     }
     
+    
+    
     public void SetMusicVolume(float vol,float time = 1f)
     {
         musicVolume = vol;
@@ -146,6 +156,23 @@ public class SoundManager : PersistentSingleton<SoundManager>
         musicVolume = adjustedMusicVolume;
         StartCoroutine(ChangeMusicVolume(time));
     }
+    
+    public void SetWindVolume(float vol,float time = 1f)
+    {
+        StartCoroutine(ChangeWindVolume(time, vol));
+    }
+    
+    /// <summary>
+    /// Reset Wind Volume if sound on
+    /// </summary>
+    public void ResetWindVolume(float time = 1f)
+    {
+        if (PlayerPrefs.GetInt("sound") == 0) return;
+        StartCoroutine(ChangeWindVolume(time, 1f)); //-
+    }
+    
+    
+    
     
     public void StopMusic()
     {

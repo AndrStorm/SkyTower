@@ -354,7 +354,7 @@ public class GameController : Singleton<GameController>
     {
         bool isTowerDestroyed = allCubes == null;
         bool isGameContinue = !isGamePause && !isGameLost && !isTowerDestroyed && cubeSpawner != null;
-        bool isCorectInput = !Helper.IsOverUI() && !isSpawnPause;
+        bool isCorectInput = !Helper.IsOverUI(screenPosition) && !isSpawnPause;
         bool isBlindZone = screenPosition.y < bottomBlindZone || screenPosition.y > Screen.height - topBlindZone;
         if (isGameContinue && isCorectInput && !isBlindZone)
         {

@@ -3,10 +3,7 @@ using UnityEngine;
 
 public class ShopManager : Singleton<ShopManager>
 {
-    
-    
     [SerializeField]private Material cubeLock;
-    
     [SerializeField]private CubeScriptable[] cubeScriptableObjects;
     [SerializeField]private List<Transform> scoreLabel;
     [SerializeField]private List<Transform> shopCubes;
@@ -47,15 +44,20 @@ public class ShopManager : Singleton<ShopManager>
     
     private void Start()
     {
-        UnityAdsManager.Instance.ShowBannerAds();
+#if UNITY_EDITOR
         
+        UnityAdsManager.Instance?.ShowBannerAds();
+#else
+        UnityAdsManager.Instance.ShowBannerAds();
+#endif
+
         for (int i = 0; i < needScoreToUnlock.Length; i++)
         {
-            shopCubes[i].position = Helper.CanvasToWorld(scoreLabel[i].GetComponent<RectTransform>()) + cubeOffset;
+            shopCubes[i].position = Helper.CanvasToWorld(scoreLabel[i].
+                GetComponent<RectTransform>()) + cubeOffset;
 
-            UnlockCubeByScore(i+1);
-            LockCubeBySelection(i+1);
-
+            UnlockCubeByScore(i + 1);
+            LockCubeBySelection(i + 1);
         }      
     }
 

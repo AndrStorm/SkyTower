@@ -136,7 +136,6 @@ public class DefininitionsManager : Editor
     
     private static class LocaleDefininitionsManager 
     {
-    
         public static void SetUp()
         {
             int i = -1;
@@ -168,7 +167,6 @@ public class DefininitionsManager : Editor
                 LocalizationSettings.StartupLocaleSelectors.RemoveAt(selectorID);
             }
         }
-
     }
     
     private static class LootLockerDefenitionsManager

@@ -32,7 +32,7 @@ public class InputManager : MonoBehaviour
 
     private void TouchPressed(InputAction.CallbackContext context)
     {
-        var pos = touchPositionAction.ReadValue<Vector2>();
+        Vector2 pos = touchPositionAction.ReadValue<Vector2>();
         GameController.Instance.HandleInput(pos);
     }
 

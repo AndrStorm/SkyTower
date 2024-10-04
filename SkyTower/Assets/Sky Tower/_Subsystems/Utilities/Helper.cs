@@ -49,6 +49,16 @@ public static class Helper
 
     private static PointerEventData _eventDataCurrentPosition;
     private static List<RaycastResult> _results;
+    
+    public static bool IsOverUI(Vector2 ScreenPosition)
+    {
+        _eventDataCurrentPosition = new PointerEventData(EventSystem.current) {
+            position = ScreenPosition
+        };
+        _results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(_eventDataCurrentPosition, _results);
+        return _results.Count > 0;
+    }
     public static bool IsOverUI()
     {
         _eventDataCurrentPosition = new PointerEventData(EventSystem.current) {

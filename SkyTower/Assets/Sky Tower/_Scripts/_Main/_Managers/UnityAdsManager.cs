@@ -75,8 +75,6 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
 
     
     
-    
-    
     public void ShowFullScreenAds(string placementId)
     {
         StartCoroutine(ShowFullScreenAdsCoroutine(placementId));
@@ -194,19 +192,19 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
         switch (showCompletionState)
         {
             case UnityAdsShowCompletionState.SKIPPED:
-                Debug.Log($"SKIPPED");
+                //Debug.Log($"SKIPPED");
                 break;
             
             case UnityAdsShowCompletionState.COMPLETED:
-                Debug.Log($"COMPLETED");
+                //Debug.Log($"COMPLETED");
                 break;
             
             case UnityAdsShowCompletionState.UNKNOWN:
-                Debug.Log($"UNKNOWN");
+                //Debug.Log($"UNKNOWN");
                 break;
             
             default:
-                Debug.Log($"UNKNOWN");
+                //Debug.Log($"UNKNOWN");
                 break;
 
         }

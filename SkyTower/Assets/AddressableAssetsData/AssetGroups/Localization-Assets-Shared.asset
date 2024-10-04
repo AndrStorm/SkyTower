@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: f3f7214f6e9a67b40be0759457cd07da
   m_SerializeEntries:
-  - m_GUID: 6c67b570eb94f75479f0abd0477d73c0
-    m_Address: Assets/Sky Tower/Res/Localiztion/Tables/SkyTowerText Shared Data.asset
-    m_ReadOnly: 1
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1317265bd367bf24c8c9252ba14c8797
     m_Address: Assets/Samples/Localization/1.4.2/Smart Strings - Persistent Variables/String
       Table/Gender Sample Shared Data.asset
@@ -31,6 +26,11 @@ MonoBehaviour:
   - m_GUID: 27153e20147c06c4c8d1304d28104a87
     m_Address: Assets/Samples/Localization/1.4.2/Smart Strings - Persistent Variables/String
       Table/Global Variables Sample Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c67b570eb94f75479f0abd0477d73c0
+    m_Address: Assets/Sky Tower/Res/Localiztion/Tables/SkyTowerText Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

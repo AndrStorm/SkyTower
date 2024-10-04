@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 8a0f81a175420884c92213a89672a7ed
   m_SerializeEntries:
+  - m_GUID: 2819ab3aa1c55f5438561e94d1c17c10
+    m_Address: Global Variables Sample_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8a3daea40014eba439e319bce8cebf4a
     m_Address: SkyTowerText_en
     m_ReadOnly: 1
@@ -25,12 +31,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c045014c75799144b1716f552861afe
     m_Address: Gender Sample_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2819ab3aa1c55f5438561e94d1c17c10
-    m_Address: Global Variables Sample_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

@@ -1,15 +1,14 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
-public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializationListener,
-    IUnityAdsLoadListener, IUnityAdsShowListener
+public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener,
+    IUnityAdsLoadListener, IUnityAdsShowListener, IAdsGiver
 {
     
     [SerializeField] private string _androidGameId = "4618933";
     [SerializeField] private string _iOSGameId = "4618932";
-    [SerializeField] private bool _testMode = true;
+    [SerializeField] private bool _testMode = false;
     
     [SerializeField] private BannerPosition _bannerPosition = BannerPosition.TOP_CENTER;
 
@@ -20,36 +19,33 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     [SerializeField] private string _rewarded_Android = "Rewarded_Android";
     [SerializeField] private string _rewarded_iOS = "Rewarded_iOS";
     
-    [SerializeField] private int _restartsToShowAds = 3;
-    
-    public int RestartsToShowAds => _restartsToShowAds;
+    /*[SerializeField] private int _restartsToShowAds = 3;
+    public int RestartsToShowAds => _restartsToShowAds;*/
 
-    
+    private UnityAdsManager _instance;
     private string _gameId;
-
     
+
     
     private void Start()
     {
-        //обработка ошибок, не работает
-        //так как обработка происходит в сервисе через евент
-        // try
-        // {
-        //     InitializeAds();
-        // }
-        // catch (Exception e)
-        // {
-        //     Helper.Log(e.Message);
-        // }
-        InitializeAds();
+        //InitAds();
     }
     
-    private void InitializeAds()
+    public void InitAds()
     {
+        Helper.Log("Init Unity Ads");
+        _instance = this;
         _gameId = IsiOS() ? _iOSGameId : _androidGameId;
         
         SetUpPersonolizedAds();
-        Advertisement.Initialize(_gameId, _testMode, Instance);
+        
+#if UNITY_EDITOR
+        //error with gameId
+        //_testMode = true;
+#endif
+        
+        Advertisement.Initialize(_gameId, _testMode, _instance);
         Advertisement.Banner.SetPosition(_bannerPosition);
     }
 
@@ -75,23 +71,23 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
 
     
     
-    public void ShowFullScreenAds(string placementId)
+    public void ShowFullScreenAd()
     {
-        StartCoroutine(ShowFullScreenAdsCoroutine(placementId));
+        StartCoroutine(ShowFullScreenAdsCoroutine());
     }
     
-    private IEnumerator ShowFullScreenAdsCoroutine(string placementId)
+    private IEnumerator ShowFullScreenAdsCoroutine()
     {
         if (!Advertisement.isInitialized)
         {
             yield return Helper.GetUnscaledWait(0.5f);
             //Debug.Log("banner is not ready");
         }
-        Advertisement.Load(placementId, Instance);
+        Advertisement.Load(GetInterstitialId(), _instance);
     }
     
     
-    public void ShowBannerAds()
+    public void ShowBannerAd()
     {
         StartCoroutine(ShowBannerCoroutine());
     }
@@ -122,7 +118,7 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
         return IsiOS() ? _banner_iOS : _banner_Android;;
     }
     
-    public void HideBannerAds()
+    public void HideBannerAd()
     {
         Advertisement.Banner.Hide();
     }
@@ -144,7 +140,7 @@ public class UnityAdsManager : Singleton<UnityAdsManager>, IUnityAdsInitializati
     
     private void OnAdsLoaded(string placementId) 
     {
-        Advertisement.Show(placementId, Instance);
+        Advertisement.Show(placementId, _instance);
         //Debug.Log("OnAdsLoaded " + placementId);
     }
 

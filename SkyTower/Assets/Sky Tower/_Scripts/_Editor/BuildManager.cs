@@ -48,7 +48,7 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
         
 #elif GP_BUILD
-        Debug.Log("Google Play");
+        Debug.Log("Google Play ");
         PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
 #endif
     }
@@ -185,9 +185,11 @@ public class DefininitionsManager : Editor
 #if TEST_BUILD
             config.apiKey = DEVELOP_MOD_API_KEY;
             config.developmentMode = true;
+            Debug.Log($"LL Dev mode");
 #else
             config.apiKey = LIVE_MOD_API_KEY;
             config.developmentMode = false;
+            Debug.Log($"LL Live mode");
 #endif
         }
     }

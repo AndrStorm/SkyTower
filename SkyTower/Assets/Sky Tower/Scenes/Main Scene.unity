@@ -912,7 +912,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.12777351, y: 0.024891393}
   m_AnchorMax: {x: 0.21400002, y: 0.053763933}
-  m_AnchoredPosition: {x: -2.000061, y: 31.499512}
+  m_AnchoredPosition: {x: -2.000061, y: 31.501465}
   m_SizeDelta: {x: 42, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &361503710
@@ -2308,7 +2308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.8014099, y: 0.024891393}
   m_AnchorMax: {x: 0.8641367, y: 0.053763933}
-  m_AnchoredPosition: {x: -1, y: 31.999268}
+  m_AnchoredPosition: {x: -1, y: 32}
   m_SizeDelta: {x: 54, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &756282994
@@ -3643,7 +3643,7 @@ Transform:
   - {fileID: 2144981233}
   - {fileID: 564420473}
   - {fileID: 858016984}
-  - {fileID: 1858333840}
+  - {fileID: 1823188714}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &961105393 stripped
@@ -5795,7 +5795,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10a819a219c767d48a47b692e02bbcde, type: 3}
---- !u!1 &1858333839
+--- !u!1 &1823188713
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5803,53 +5803,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1858333840}
-  - component: {fileID: 1858333841}
+  - component: {fileID: 1823188714}
+  - component: {fileID: 1823188715}
   m_Layer: 0
-  m_Name: UnityAds
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1858333840
+--- !u!4 &1823188714
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858333839}
+  m_GameObject: {fileID: 1823188713}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 947549204}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1858333841
+--- !u!114 &1823188715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858333839}
+  m_GameObject: {fileID: 1823188713}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c67fd41ff980894591565ca82c5de58, type: 3}
+  m_Script: {fileID: 11500000, guid: 9255c7a0f38a55a42aa2d5f2df7a7ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _androidGameId: 4618933
-  _iOSGameId: 4618932
-  _testMode: 0
-  _bannerPosition: 1
-  _interstitial_Android: Interstitial_Android
-  _interstitial_iOS: Interstitial_iOS
-  _banner_Android: Banner_Android
-  _banner_iOS: Banner_iOS
-  _rewarded_Android: Rewarded_Android
-  _rewarded_iOS: Rewarded_iOS
-  _restartsToShowAds: 6
+  _restartsToShowAds: 3
 --- !u!4 &1868659434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7497736861078781010, guid: a7cde8f9fdf24bb47acf9632b4daa390, type: 3}

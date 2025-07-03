@@ -15,7 +15,7 @@ public class SpawnImpulse : MonoBehaviour
     private MeshRenderer meshRenderer;
     private float startTime;
     private float lifeTime;
-    private float timeRemap;
+    private float vfxSpeed;
     
     
     private static readonly int _time = Shader.PropertyToID("_time");
@@ -26,38 +26,33 @@ public class SpawnImpulse : MonoBehaviour
         currentVfx = gameObject;
         meshRenderer = currentVfx.GetComponent<MeshRenderer>();
     }
-
     
     private void OnEnable()
     {
         startTime = Time.time;
         lifeTime = Random.Range(minMaxLifeTime.x, minMaxLifeTime.y);
-        timeRemap = 1 / lifeTime;
+        vfxSpeed = 1 / lifeTime;
         
         meshRenderer.material.SetFloat(_time, 0f);
-
         /*if (!_isSpawningOn) return;
         StartCoroutine(SpawnSubVfxs(subVfxsDelay, subVfxsCount));
         _isSpawningOn = false;*/
-
-
     }
 
-    
     private void Update()
     {
         float ageTime = Time.time - startTime;
         if (ageTime < lifeTime)
         {
-            meshRenderer.material.SetFloat(_time, ageTime * timeRemap);
+            meshRenderer.material.SetFloat(_time, ageTime * vfxSpeed);
         }
         else
         {
             gameObject.SetActive(false);
         }
-        
     }
 
+    
     
     /*private IEnumerator SpawnSubVfxs(float delay, int count)
     {

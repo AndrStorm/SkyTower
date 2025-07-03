@@ -40,7 +40,7 @@ public class CanvasButtons : MonoBehaviour
     
     public void ReturnToMain()
     {
-        UnityAdsManager.Instance.HideBannerAds();
+        AdsManager.Instance.HideBannerAd();
         SoundManager.Instance.PlayMusicOnTransition(SoundManager.Instance.mainTheme);
         SoundManager.Instance.PlaySound("ButtonClick");
         SceneLoader.LoadScene("Main Scene");
@@ -96,7 +96,7 @@ public class CanvasButtons : MonoBehaviour
 
     private void HandleAdsOnRestart()
     {
-        UnityAdsManager.Instance.HideBannerAds();
+        AdsManager.Instance.HideBannerAd();
         int restartCount = PlayerPrefs.GetInt(RESTART_COUNTER);
         restartCount++;
         PlayerPrefs.SetInt(RESTART_COUNTER, restartCount);

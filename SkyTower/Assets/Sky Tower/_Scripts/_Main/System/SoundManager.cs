@@ -39,7 +39,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
     {
         base.Awake();
         musicAudioSource = GetComponent<AudioSource>();
-        
+
         foreach (var sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();

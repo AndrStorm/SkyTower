@@ -44,12 +44,12 @@ public class ShopManager : Singleton<ShopManager>
     
     private void Start()
     {
-#if UNITY_EDITOR
-        
-        UnityAdsManager.Instance?.ShowBannerAds();
+/*#if UNITY_EDITOR
+        AdsManager.Instance?.ShowBannerAd();
 #else
-        UnityAdsManager.Instance.ShowBannerAds();
-#endif
+        AdsManager.Instance.ShowBannerAd();
+#endif*/
+        AdsManager.Instance.ShowBannerAd();
 
         for (int i = 0; i < needScoreToUnlock.Length; i++)
         {

@@ -5,7 +5,6 @@ using System;
 using TMPro;
 using UnityEditor;
 using UnityEngine.Localization.Components;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 
@@ -414,7 +413,7 @@ public class GameController : Singleton<GameController>
 
     private void HandleAdsOnStart()
     {
-        int restartsToAds = UnityAdsManager.Instance.RestartsToShowAds;
+        int restartsToAds = AdsManager.Instance.RestartsToShowAds;
         int currentRestarts = PlayerPrefs.GetInt(RESTART_COUNTER);
         if (currentRestarts == 0) return;
 
@@ -423,9 +422,8 @@ public class GameController : Singleton<GameController>
         bool isAdsNeeded = PlayerPrefs.GetInt(RESTART_COUNTER) % restartsToAds == 0;
         if (isAdsNeeded && PlayerPrefs.GetInt(IS_ADS_WAS_SHOWN) == 0)
         {
-            string placementId = UnityAdsManager.Instance.GetInterstitialId();
-            UnityAdsManager.Instance.ShowFullScreenAds(placementId);
             PlayerPrefs.SetInt(IS_ADS_WAS_SHOWN, 1);
+            AdsManager.Instance.ShowFullScreenAd();
         }
     }
 
@@ -436,7 +434,7 @@ public class GameController : Singleton<GameController>
 
     private void HandleAdsOnLose()
     {
-        UnityAdsManager.Instance.ShowBannerAds();
+        AdsManager.Instance.ShowBannerAd();
     }
 
 

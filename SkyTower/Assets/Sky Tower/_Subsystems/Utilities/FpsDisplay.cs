@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-
 using System.Collections;
 using UnityEngine;
 
@@ -9,10 +7,12 @@ public class FpsDisplay : MonoBehaviour
         private float frequency = 1.0f;
         private string fps;
      
-     
-     
-        void Start(){
+        
+        void Start()
+        {
+#if UNITY_EDITOR
             StartCoroutine(FPS());
+#endif
         }
      
         private IEnumerator FPS() {
@@ -41,4 +41,3 @@ public class FpsDisplay : MonoBehaviour
         }*/
 }
 
-#endif

@@ -99,6 +99,7 @@ public class AchievementManager : Singleton<AchievementManager>
         else if (score >= youAreStartingImpress.scoreСondition && !youAreStartingImpress.GetAchived())
         {
             Achieve(youAreStartingImpress);
+            GameController.Instance.ResetIngameReviewValue();
         }
         else if (score >= raisingTheStakes.scoreСondition && !raisingTheStakes.GetAchived())
         {

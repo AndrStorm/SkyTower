@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEditor.Build;
 
 namespace GameAnalyticsSDK.Editor
 {
@@ -56,7 +57,13 @@ namespace GameAnalyticsSDK.Editor
         {
             foreach (var group in groups)
             {
-                var defines = new List<string>(PlayerSettings.GetScriptingDefineSymbolsForGroup(group).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                /*var namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(group);
+                PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, definitions);*/
+                
+                
+                var defines = new List<string>(PlayerSettings.
+                    GetScriptingDefineSymbolsForGroup(group).Split(new[] { ';' },
+                        StringSplitOptions.RemoveEmptyEntries));
                 var edited = false;
                 if (enabled && !defines.Contains(entry))
                 {
@@ -69,7 +76,8 @@ namespace GameAnalyticsSDK.Editor
                     edited = true;
                 }
                 if (edited) {
-                    PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", defines.ToArray()));
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup
+                        (group, string.Join(";", defines.ToArray()));
                 }
             }
         }

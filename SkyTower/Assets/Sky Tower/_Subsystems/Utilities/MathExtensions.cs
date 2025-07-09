@@ -162,7 +162,7 @@ public static class MathExtensions
         
         if (isKinematic) return bulletVelocityVector; //*added recently
         
-        var shipVelocity = shipRB.velocity;
+        var shipVelocity = shipRB.linearVelocity;
         bulletVelocityVector.x += shipVelocity.x;
         bulletVelocityVector.y += shipVelocity.y;
         return bulletVelocityVector;

@@ -8,9 +8,6 @@ public class CanvasButtons : MonoBehaviour
     
     [SerializeField] private Sprite soundOn, soundOff;
     
-    private const string RESTART_COUNTER = "RestartCounter";
-    private const string IS_ADS_WAS_SHOWN = "IsAdsWasShown";
-
     private void Start()
     {
 
@@ -97,10 +94,10 @@ public class CanvasButtons : MonoBehaviour
     private void HandleAdsOnRestart()
     {
         AdsManager.Instance.HideBannerAd();
-        int restartCount = PlayerPrefs.GetInt(RESTART_COUNTER);
+        int restartCount = PlayerPrefs.GetInt(GameController.RESTART_COUNTER);
         restartCount++;
-        PlayerPrefs.SetInt(RESTART_COUNTER, restartCount);
-        PlayerPrefs.SetInt(IS_ADS_WAS_SHOWN, 0);
+        PlayerPrefs.SetInt(GameController.RESTART_COUNTER, restartCount);
+        PlayerPrefs.SetInt(GameController.IS_ADS_WAS_SHOWN, 0);
     }
 
 }

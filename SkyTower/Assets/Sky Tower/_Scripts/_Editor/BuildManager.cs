@@ -14,12 +14,11 @@ using GameAnalyticsSDK;
 
 public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithReport
 {
-
     public int callbackOrder => 0;
 
     public void OnPostprocessBuild(BuildReport report)
     {
-        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower");
     }
 
     public void OnPreprocessBuild(BuildReport report)
@@ -31,25 +30,25 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
 
     #if RU_VERSION
         Debug.Log("App Gallery ru");
-        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower.huawei.ru");
-        
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower.huawei.ru");
+
     #elif EN_VERSION
         Debug.Log("App Gallery en");
-        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower.huawei");
-        
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower.huawei");
+
     #else
         Debug.Log("App Gallery default");
-        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower.huawei");
-        
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower.huawei");
+
     #endif
         
 #elif RS_BUILD
         Debug.Log("Ru Store ");
-        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower");
         
 #elif GP_BUILD
         Debug.Log("Google Play ");
-        PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.AndrStormGames.SkyTower");
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower");
 #endif
     }
     
@@ -89,8 +88,9 @@ public class DefininitionsManager : Editor
         string definitions = string.Join(";", allDefines.ToArray());
         Debug.Log(definitions);
         
-        PlayerSettings.SetScriptingDefineSymbolsForGroup
-            (EditorUserBuildSettings.selectedBuildTargetGroup, definitions);
+        var namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup
+            (EditorUserBuildSettings.selectedBuildTargetGroup);
+        PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, definitions);
     }
     
     //CustomEditor

@@ -138,8 +138,9 @@ public class GameController : Singleton<GameController>
     
     private const string LAST_SCORE = "lastScore";
     private const string BEST_SCORE = "bestScore";
-    private const string RESTART_COUNTER = "RestartCounter";
-    private const string IS_ADS_WAS_SHOWN = "IsAdsWasShown";
+    private const string INGAME_REVIEW = "IngameReview";
+    public const string RESTART_COUNTER = "RestartCounter";
+    public const string IS_ADS_WAS_SHOWN = "IsAdsWasShown";
 
     
     
@@ -223,7 +224,7 @@ public class GameController : Singleton<GameController>
         ChangeBgColor();
         ChangeAmbientLight(_bgColor1, ambColorIntensity);
         
-        if (isGameStart && !isGameLost && allCubesRb.velocity.magnitude >= towerVelocityThreshold)
+        if (isGameStart && !isGameLost && allCubesRb.linearVelocity.magnitude >= towerVelocityThreshold)
             LoseGame();
         
         ChangeWindSound(allCubes == null);
@@ -404,7 +405,7 @@ public class GameController : Singleton<GameController>
             -cameraTargetPos.z * loseCamYMul, cameraTargetPos.z * loseCamZMul);
         camMovSpeed *= loseCamMovSpeedMul;
         
-        allCubesRb.velocity *= finalPushVelocityMul;
+        allCubesRb.linearVelocity *= finalPushVelocityMul;
         
         VfxManager.Instance.MoveWindVFX(Vector3.up);
         VfxManager.Instance.EnableWind(false);
@@ -415,7 +416,7 @@ public class GameController : Singleton<GameController>
     {
         int restartsToAds = AdsManager.Instance.RestartsToShowAds;
         int currentRestarts = PlayerPrefs.GetInt(RESTART_COUNTER);
-        if (currentRestarts == 0) return;
+        if (restartsToAds == 0 || currentRestarts == 0) return;
 
         HandleInGameReview(restartsToAds, currentRestarts);
         
@@ -423,13 +424,25 @@ public class GameController : Singleton<GameController>
         if (isAdsNeeded && PlayerPrefs.GetInt(IS_ADS_WAS_SHOWN) == 0)
         {
             PlayerPrefs.SetInt(IS_ADS_WAS_SHOWN, 1);
+            PlayerPrefs.SetInt(RESTART_COUNTER, 0);
             AdsManager.Instance.ShowFullScreenAd();
         }
     }
 
+    public void ResetIngameReviewValue()
+    {
+        PlayerPrefs.SetInt(INGAME_REVIEW, 0);
+    }
+    
     private void HandleInGameReview(int restartsToAds, int currentRestarts)
     {
-        if(currentRestarts == restartsToAds - 1) OnInGameReviewRequested?.Invoke();
+        if (PlayerPrefs.GetInt(INGAME_REVIEW) == 1) return;
+
+        if (currentRestarts == restartsToAds - 1)
+        {
+            OnInGameReviewRequested?.Invoke();
+            PlayerPrefs.SetInt(INGAME_REVIEW, 1);
+        }
     }
 
     private void HandleAdsOnLose()
@@ -461,7 +474,7 @@ public class GameController : Singleton<GameController>
         else if (isGameLost)
         {
             
-            float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.velocity.normalized);
+            float dotProduct = Vector3.Dot(Vector3.down, allCubesRb.linearVelocity.normalized);
             float windFactor = Mathf.Clamp01(dotProduct + minWindFactor);
             float towerHeightMul = Mathf.Clamp01(minWindFactor + (float) lastCube.y / maxWindTowerHeight);
             _windSource.volume = windFactor * windVolumeMul * towerHeightMul;
@@ -563,7 +576,8 @@ public class GameController : Singleton<GameController>
 
     private void IncriseDifficulty()
     {
-        currentDifficulty = DifficultyManager.Instance.GetDifficulty((float)lastCube.y / DifficultyManager.Instance.maxDifficultyScore);
+        currentDifficulty = DifficultyManager.Instance.GetDifficulty
+            ((float)lastCube.y / DifficultyManager.Instance.maxDifficultyScore);
     }
 
     private void CreateCube(Vector3 position)

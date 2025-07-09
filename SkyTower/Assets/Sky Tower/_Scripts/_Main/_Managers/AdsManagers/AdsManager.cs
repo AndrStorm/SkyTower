@@ -1,14 +1,36 @@
 using UnityEngine;
-
+using UnityEngine.Serialization;
 
 
 public class AdsManager : Singleton<AdsManager>
 {
     
-    [SerializeField]private int _restartsToShowAds = 5;
-    public int RestartsToShowAds => _restartsToShowAds;
+    [SerializeField]private int _restartsToShowFullScreenAds = 3;
     
+    [SerializeField]private bool _isRandomRangeRestarts = true;
+    [SerializeField]private int _maxRestartsToShowFSAds = 5;
+    [SerializeField]private int _minRestartsToShowFSAds = 3;
     
+    private const string RESTARTS_NUMBER = "RestartsNumber";
+
+    private int _currentRestartsToShowAds;
+    
+    public int RestartsToShowAds
+    {
+        get
+        {
+            if (_currentRestartsToShowAds != 0) 
+                return _currentRestartsToShowAds;
+            
+            _currentRestartsToShowAds = GetRestartsNumber();
+            
+            return _currentRestartsToShowAds == 0 
+                ? GenerateNewRestartsToShowNumber() 
+                : _currentRestartsToShowAds;
+        }
+    }
+
+
     private IAdsGiver _currentAdsGiver;
     
     
@@ -19,7 +41,6 @@ public class AdsManager : Singleton<AdsManager>
 
     private void InitAds()
     {
-        //сделать Ру адс
         InitYandexMediationAds();
         //InitVKAds();
         //InitUnityAds();
@@ -52,8 +73,38 @@ public class AdsManager : Singleton<AdsManager>
     }
 
 
+    private int GetRestartsNumber()
+    {
+        return PlayerPrefs.GetInt(RESTARTS_NUMBER);
+    }
+
+    private void SaveRestartNumber(int number)
+    {
+        PlayerPrefs.SetInt(RESTARTS_NUMBER, number);
+    }
+
+    private int GenerateNewRestartsToShowNumber()
+    {
+        if (_isRandomRangeRestarts)
+        {
+            _currentRestartsToShowAds = Random.Range(_minRestartsToShowFSAds,
+                _maxRestartsToShowFSAds);
+        }
+        else
+        {
+            _currentRestartsToShowAds = _restartsToShowFullScreenAds;
+        }
+        
+        Helper.Log($"Generate restarts number - {_currentRestartsToShowAds}");
+        SaveRestartNumber(_currentRestartsToShowAds);
+        return _currentRestartsToShowAds;
+    }
+    
+    
     public void ShowFullScreenAd()
     {
+        Helper.Log($"Show FS");
+        GenerateNewRestartsToShowNumber();
         _currentAdsGiver.ShowFullScreenAd();
     }
 

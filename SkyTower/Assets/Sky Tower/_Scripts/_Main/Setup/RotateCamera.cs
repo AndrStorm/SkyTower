@@ -52,7 +52,7 @@ public class RotateCamera : Singleton<RotateCamera>
         else if (!trackDownTowerVelocity)
         {
             moveRotatorTarget(rotatorStartPos);
-            TrackVelocity(allCubesRB.velocity, loseCamRotOffset, out allCubesTracker,false);
+            TrackVelocity(allCubesRB.linearVelocity, loseCamRotOffset, out allCubesTracker,false);
             trackDownTowerVelocity = true;
             speed *= loseSpeedMul;
         }
@@ -75,7 +75,7 @@ public class RotateCamera : Singleton<RotateCamera>
     private bool IsRotatorEqual(Quaternion Tracker)
     {
         bool IsRotatorEqual;
-        int quarter = CheckQuarter(allCubesRB.velocity.x, allCubesRB.velocity.z);
+        int quarter = CheckQuarter(allCubesRB.linearVelocity.x, allCubesRB.linearVelocity.z);
         if(quarter == 1 || quarter == 4)
             IsRotatorEqual = Mathf.Approximately(rotator.rotation.x, Tracker.x) &&
             Mathf.Approximately(rotator.rotation.y, Tracker.y) &&

@@ -44,12 +44,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12517121187840
-    m_Localized: 'Best Score: {score.bestScore}'
+    m_Localized: 'Best Score: {gc.bestScore}'
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 12962661130240
-    m_Localized: 'Score: {score.lastScore}'
+    m_Localized: 'Score: {gc.lastScore}'
     m_Metadata:
       m_Items:
       - rid: 0
@@ -174,4 +174,10 @@ MonoBehaviour:
     - rid: 0
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e08f5e620b000000e0cf1aca0b000000e00f9b1b34000000e04f3f518a0b0000d0bf75fabc0b00
+        m_Entries: 
+        m_SharedEntries:
+        - id: 12517121187840
+        - id: 12962661130240
+        - id: 57293170270208
+        - id: 3248306303000576
+        - id: 3304008647168000

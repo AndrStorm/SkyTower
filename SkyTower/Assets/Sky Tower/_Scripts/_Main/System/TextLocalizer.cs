@@ -85,7 +85,8 @@ public class TextLocalizer : Singleton<TextLocalizer>
     {
         foreach (var preset in presetsList)
         {
-            if (string.CompareOrdinal(preset.localeName,0 ,LocalizationSettings.SelectedLocale.name,0,preset.localeName.Length) == 0)
+            if (string.CompareOrdinal(preset.localeName,0 ,
+                    LocalizationSettings.SelectedLocale.name,0,preset.localeName.Length) == 0)
             {
                 tmpText.fontSharedMaterial = preset.fontMaterial;
             }

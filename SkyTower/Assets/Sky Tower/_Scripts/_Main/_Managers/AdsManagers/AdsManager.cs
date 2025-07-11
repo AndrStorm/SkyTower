@@ -42,7 +42,6 @@ public class AdsManager : Singleton<AdsManager>
     private void InitAds()
     {
         InitYandexMediationAds();
-        //InitVKAds();
         //InitUnityAds();
         
         
@@ -62,10 +61,6 @@ public class AdsManager : Singleton<AdsManager>
         _currentAdsGiver = gameObject.AddComponent<UnityAdsManager>();
     }
     
-    private void InitVKAds()
-    {
-        _currentAdsGiver = gameObject.AddComponent<VKAdsManager>();
-    }
     
     private void InitYandexMediationAds()
     {

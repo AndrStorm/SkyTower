@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mycom.Target.Unity.Ads;
 using Mycom.Target.Unity.Common;
-using Object = System.Object;
+using Object = System.Object;*/
 
-public class VKAdsManager : MonoBehaviour, IAdsGiver
+public class VKAdsManager /*: MonoBehaviour, IAdsGiver*/
 {
-    private static class AdSlots
+    /*private static class AdSlots
     {
         public static UInt32 GetBanner300x250()
         {
@@ -82,7 +82,7 @@ public class VKAdsManager : MonoBehaviour, IAdsGiver
         //MyTargetManager.DebugMode = true;
         //null ref ex
         /*MyTargetManager.Config = new MyTargetConfig.Builder().
-            WithTestDevices("TEST_DEVICE_ID").Build();*/
+            WithTestDevices("TEST_DEVICE_ID").Build();#1#
     }
     
     
@@ -214,7 +214,7 @@ public class VKAdsManager : MonoBehaviour, IAdsGiver
                     Age = 23,
                     Gender = GenderEnum.Male,
                     Lang = "ru-RU"
-                }*/
+                }#1#
             };
 
             _interstitialAd.AdClicked += (s, e) => 
@@ -282,7 +282,7 @@ public class VKAdsManager : MonoBehaviour, IAdsGiver
                     Age = 23,
                     Gender = GenderEnum.Male,
                     Lang = "ru-RU"
-                }*/
+                }#1#
             };
             
 
@@ -402,9 +402,5 @@ public class VKAdsManager : MonoBehaviour, IAdsGiver
             _rewardedAd?.Dispose();
             _rewardedAd = null;
         }
-    }
-
-    
-
-    
+    }*/
 }

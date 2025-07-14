@@ -5854,7 +5854,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9255c7a0f38a55a42aa2d5f2df7a7ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _restartsToShowAds: 3
+  _restartsToShowFullScreenAds: 5
+  _isRandomRangeRestarts: 1
+  _maxRestartsToShowFSAds: 6
+  _minRestartsToShowFSAds: 4
 --- !u!4 &1868659434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7497736861078781010, guid: a7cde8f9fdf24bb47acf9632b4daa390, type: 3}
@@ -7397,7 +7400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8035375700487505856, guid: b1d7f89ad074372448e976069bcbac42, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 250.99991
+      value: 250.9999
       objectReference: {fileID: 0}
     - target: {fileID: 8035375700524345898, guid: b1d7f89ad074372448e976069bcbac42, type: 3}
       propertyPath: m_AnchorMax.x

@@ -1,5 +1,21 @@
 # Changelog for com.google.play.core
 
+## [1.8.6] - 2025-02-03
+- Bump External Dependency Manager to latest version.
+
+## [1.8.5] - 2024-09-18
+- Removed unused dependency on Google Play Android App Bundle.
+
+## [1.8.4] - 2024-07-05
+- Bumped the Core-common Java maven dependency to 2.0.4 to benefit from a number of bug fixes
+- Bumped minimum supported Unity version to 2018.4
+
+## [1.8.3] - 2024-01-12
+- Added integrity prefix constant
+
+## [1.8.2] - 2023-03-10
+- Updated Android App Bundle dependency from 1.8.0 to 1.9.0
+
 ## [1.8.1] - 2022-09-08
 - Updated plugin's data collection procedure. For more information and the opt-out
   process, please refer to the [data collection](https://github.com/google/play-unity-plugins#data-collection)
@@ -55,4 +71,3 @@
 ### New Features
  - Initial release
  - Includes playcore.aar version 1.7.1
-

@@ -25,29 +25,21 @@ public class BuildManager : IPreprocessBuildWithReport, IPostprocessBuildWithRep
     {
 #if TEST_BUILD
        Debug.Log("Test Build");
-        
+
 #elif AG_BUILD
-
-    #if RU_VERSION
-        Debug.Log("App Gallery ru");
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower.huawei.ru");
-
-    #elif EN_VERSION
-        Debug.Log("App Gallery en");
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower.huawei");
-
-    #else
         Debug.Log("App Gallery default");
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower.huawei");
 
-    #endif
-        
 #elif RS_BUILD
         Debug.Log("Ru Store ");
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower");
         
 #elif GP_BUILD
         Debug.Log("Google Play ");
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower");
+        
+#else
+        Debug.Log("Default package name ");
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.AndrStormGames.SkyTower");
 #endif
     }
@@ -65,8 +57,6 @@ public class DefininitionsManager : Editor
         "GP_BUILD",
         //"AG_BUILD",
         //"RS_BUILD",
-        //"RU_VERSION",
-        "EN_VERSION",
     };
     
     
@@ -149,7 +139,7 @@ public class DefininitionsManager : Editor
                 }
             }
 
-#if RU_VERSION
+#if RS_BUILD
             LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("ru"));
 #else
             LocaleIdentifier identifier = new LocaleIdentifier(new CultureInfo("en"));      

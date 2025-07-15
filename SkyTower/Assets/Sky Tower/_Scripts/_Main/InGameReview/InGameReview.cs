@@ -45,6 +45,8 @@ public class InGameReview : MonoBehaviour
 
     public void MakeReview()
     {
+        PlayerPrefs.SetInt(GameController.MAKE_REVIEW_PRESSED, 1);
+        
         var reviewCourutine = _reviewHandler?.MakeReview();
         if (reviewCourutine != null) StartCoroutine(reviewCourutine);
         CloseScreen();

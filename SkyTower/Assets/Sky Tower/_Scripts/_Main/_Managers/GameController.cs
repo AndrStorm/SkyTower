@@ -138,7 +138,8 @@ public class GameController : Singleton<GameController>
     
     private const string LAST_SCORE = "lastScore";
     private const string BEST_SCORE = "bestScore";
-    private const string INGAME_REVIEW = "IngameReview";
+    public const string INGAME_REVIEW = "IngameReview";
+    public const string MAKE_REVIEW_PRESSED = "MAKE_REVIEW_PRESSED";
     public const string RESTART_COUNTER = "RestartCounter";
     public const string IS_ADS_WAS_SHOWN = "IsAdsWasShown";
 
@@ -433,9 +434,10 @@ public class GameController : Singleton<GameController>
     {
         PlayerPrefs.SetInt(INGAME_REVIEW, 0);
     }
-    
+
     private void HandleInGameReview(int restartsToAds, int currentRestarts)
     {
+        if (PlayerPrefs.GetInt(MAKE_REVIEW_PRESSED) == 1) return;
         if (PlayerPrefs.GetInt(INGAME_REVIEW) == 1) return;
 
         if (currentRestarts == restartsToAds - 1)

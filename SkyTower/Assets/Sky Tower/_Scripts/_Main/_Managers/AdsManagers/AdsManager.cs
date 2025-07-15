@@ -8,8 +8,11 @@ public class AdsManager : Singleton<AdsManager>
     [SerializeField]private int _restartsToShowFullScreenAds = 3;
     
     [SerializeField]private bool _isRandomRangeRestarts = true;
-    [SerializeField]private int _maxRestartsToShowFSAds = 5;
-    [SerializeField]private int _minRestartsToShowFSAds = 3;
+    [SerializeField]private int _maxRestartsToShowFSAds = 6;
+    [SerializeField]private int _minRestartsToShowFSAds = 4;
+
+    [SerializeField] [Range(0, 100)] private int _chanceToShowBanner = 50;
+
     
     private const string RESTARTS_NUMBER = "RestartsNumber";
 
@@ -105,6 +108,11 @@ public class AdsManager : Singleton<AdsManager>
 
     public void ShowBannerAd()
     {
+        if (Random.Range(1, 100) <= _chanceToShowBanner)
+        {
+            return;
+        }
+        
         _currentAdsGiver.ShowBannerAd();
     }
 

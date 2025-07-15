@@ -54,9 +54,9 @@ public class DefininitionsManager : Editor
     private static readonly string [] DefineKeywords = {
         "UNITY_POST_PROCESSING_STACK_V2",
         //"TEST_BUILD",
-        "GP_BUILD",
+        //"GP_BUILD",
         //"AG_BUILD",
-        //"RS_BUILD",
+        "RS_BUILD",
     };
     
     

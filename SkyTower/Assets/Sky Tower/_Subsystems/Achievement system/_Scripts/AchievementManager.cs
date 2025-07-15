@@ -55,7 +55,10 @@ public class AchievementManager : Singleton<AchievementManager>
             if (achievments[i].title == "Chief Engineer")
                 chiefEngineer = achievments[i];
             if (achievments[i].title == "Skyscraper")
+            {
                 skyscraper = achievments[i];
+                PlayerPrefs.SetInt(GameController.INGAME_REVIEW, 0);
+            }
             if (achievments[i].title == "All Inclusive!")
                 allInclusive = achievments[i];
 

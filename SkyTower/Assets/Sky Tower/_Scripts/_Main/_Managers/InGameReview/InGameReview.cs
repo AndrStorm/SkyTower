@@ -20,7 +20,6 @@ public class InGameReview : MonoBehaviour
 
     private void Start()
     {
-        //_reviewHandler = new AGReviewHandler();
 #if GP_BUILD
         _reviewHandler = new GPReviewHandler();
 #elif AG_BUILD

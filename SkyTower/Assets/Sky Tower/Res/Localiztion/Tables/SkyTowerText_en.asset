@@ -168,6 +168,14 @@ MonoBehaviour:
     m_Localized: If you liked the game, you can leave a review!
     m_Metadata:
       m_Items: []
+  - m_Id: 335245873195765760
+    m_Localized: A game update is available! Do you want to download it?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 335246908341604352
+    m_Localized: Update Game
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

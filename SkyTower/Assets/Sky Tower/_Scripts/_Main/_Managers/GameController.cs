@@ -12,6 +12,7 @@ public class GameController : Singleton<GameController>
 {
     public static event Action<int> OnBestScoreIncrised;
     public static event Action OnInGameReviewRequested;
+    public static event Action OnInGameUodateRequested;
 
     public static bool isGamePause;
 
@@ -175,6 +176,7 @@ public class GameController : Singleton<GameController>
     
     private void Start()
     {
+        HandleInGameUpdate();
         HandleAdsOnStart();
         
         isGamePause = false;
@@ -445,6 +447,11 @@ public class GameController : Singleton<GameController>
             OnInGameReviewRequested?.Invoke();
             PlayerPrefs.SetInt(INGAME_REVIEW, 1);
         }
+    }
+    
+    private void HandleInGameUpdate()
+    {
+        OnInGameUodateRequested?.Invoke();
     }
 
     private void HandleAdsOnLose()

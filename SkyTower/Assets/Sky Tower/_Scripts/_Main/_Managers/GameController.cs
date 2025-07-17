@@ -444,8 +444,8 @@ public class GameController : Singleton<GameController>
 
         if (currentRestarts == restartsToAds - 1)
         {
-            OnInGameReviewRequested?.Invoke();
             PlayerPrefs.SetInt(INGAME_REVIEW, 1);
+            OnInGameReviewRequested?.Invoke();
         }
     }
     
@@ -519,7 +519,7 @@ public class GameController : Singleton<GameController>
             Destroy(obj);
     }
     
-    private void SetIsGamePause(bool isOpen)
+    public void SetIsGamePause(bool isOpen)
     {
         isGamePause = isOpen;
     }

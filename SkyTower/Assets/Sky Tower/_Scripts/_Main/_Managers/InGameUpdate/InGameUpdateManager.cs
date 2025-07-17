@@ -1,28 +1,33 @@
 using System;
 using UnityEngine;
-using System.Collections;
-using UnityEditor;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 
 public class InGameUpdateManager : MonoBehaviour
 {
-    
-    //public static event Action<bool> OnAppUodateInfoReceived;
-
-    
-    [SerializeField] private RectTransform GameUpdateDialog;
+    [SerializeField] private RectTransform _gameUpdateDialog;
+    [SerializeField] private RectTransform _updateDownloadingDialog;
+    [SerializeField] private Slider _downloadingSlider;
 
     private IUpdateHandler _updateHandler;
     
+    private bool _isUpdateAvailable;
+    private bool _isUpdateRequested;
+    private bool _isDownloadingScreenShown;
+
+    
     private void OnEnable()
     {
-        GameController.OnInGameUodateRequested += RequestGameUpdateInfo;
+        GameController.OnInGameUodateRequested += OnGameUpdateRequested;
     }
 
     private void OnDisable()
     {
-        GameController.OnInGameUodateRequested -= RequestGameUpdateInfo;
+        GameController.OnInGameUodateRequested -= OnGameUpdateRequested;
+        _updateHandler.OnGameUodateInfoReceived -= OnGameUodateInfoReceived;
+        _updateHandler.OnGameUodateDowloading -= OnGameUpdateDownloading;
+        _updateHandler.OnGameUodateDowloaded -= OnGameUpdateDownloaded;
+        _updateHandler.OnGameUodateFailed -= OnGameUpdateFailed;
     }
     
     private void Start()
@@ -34,73 +39,132 @@ public class InGameUpdateManager : MonoBehaviour
 #endif
         if (_updateHandler == null)
         {
-            _updateHandler = new DefaultUpdateHandler();
+            return;
         }
         
-        Helper.Log("Init Update Handler");
         _updateHandler.OnGameUodateInfoReceived += OnGameUodateInfoReceived;
+        _updateHandler.OnGameUodateDowloading += OnGameUpdateDownloading;
+        _updateHandler.OnGameUodateDowloaded += OnGameUpdateDownloaded;
+        _updateHandler.OnGameUodateFailed += OnGameUpdateFailed;
         _updateHandler.Init();
     }
-
-    private void OnDestroy()
-    {
-        _updateHandler.Destroy();
-        _updateHandler.OnGameUodateInfoReceived -= OnGameUodateInfoReceived;
-    }
+    
 
     
     private void OnGameUodateInfoReceived(bool isUpdateAvailable)
     {
         if (!isUpdateAvailable)
         {
-            Helper.Log("Update is not available");
             return;
         }
-        
-        Helper.Log("Update is available");
-        ShowScreen();
-    }
 
-    private void RequestGameUpdateInfo()
-    {
-        
+        _isUpdateAvailable = true;
+        if (_isUpdateRequested)
+        {
+            ShowUpdateScreen();
+        }
     }
     
-    private void ShowScreen()
+    private void OnGameUpdateRequested()
+    {
+        if (_isUpdateRequested) return;
+        
+        _isUpdateRequested = true;
+        if (_isUpdateAvailable)
+        {
+            ShowUpdateScreen();
+        }
+    }
+
+    private void OnGameUpdateDownloading(float progress)
+    {
+        if (!_isDownloadingScreenShown)
+        {
+            ShowDownloadingScreen();
+        }
+        
+        _downloadingSlider.value = Mathf.Clamp01(progress);
+    }
+    
+    private void OnGameUpdateDownloaded()
+    {
+        //_updateHandler.InstallUpdate();
+        InstallUpdate();
+    }
+    
+    private void OnGameUpdateFailed()
+    {
+        Helper.Log("Update Downloading Failed");
+        CloseDownloadingScreen();
+    }
+    
+    
+    private void ShowUpdateScreen()
     {
         if (_updateHandler == null) return;
-        GameUpdateDialog.gameObject.SetActive(true);
+        if (_gameUpdateDialog == null) return;
+        
+        GameController.Instance.SetIsGamePause(true);
+        
+        _gameUpdateDialog.gameObject.SetActive(true);
         SoundManager.Instance.PlaySound("ButtonClick");
     }
 
-    public void CloseScreen()
+    public void CloseUpdateScreen()
     {
-        GameUpdateDialog.gameObject.SetActive(false);
+        GameController.Instance.SetIsGamePause(false);
+        
+        _gameUpdateDialog.gameObject.SetActive(false);
         SoundManager.Instance.PlaySound("ButtonClick");
     }
     
     public void UpdateGame()
     {
-        //PlayerPrefs.SetInt(GameController.MAKE_REVIEW_PRESSED, 1);
-        
-        //var reviewCourutine = _reviewHandler?.MakeReview();
-        //if (reviewCourutine != null) StartCoroutine(reviewCourutine);
-        CloseScreen();
+        _updateHandler.DownloadUpdate();
+        CloseUpdateScreen();
+        //ShowDownloadingScreen();
     }
     
-    private class DefaultUpdateHandler : IUpdateHandler
+    
+    
+    private void ShowDownloadingScreen()
     {
-        public event Action<bool> OnGameUodateInfoReceived;
-        public void Init() { }
-        public void Destroy() { }
+        if (_updateDownloadingDialog == null) return;
+        
+        GameController.Instance.SetIsGamePause(true);
+        
+        _isDownloadingScreenShown = true;
+        _updateDownloadingDialog.gameObject.SetActive(true);
     }
+    
+    private void CloseDownloadingScreen()
+    {
+        if (_updateDownloadingDialog == null) return;
+        
+        GameController.Instance.SetIsGamePause(false);
+        
+        _isDownloadingScreenShown = false;
+        _updateDownloadingDialog.gameObject.SetActive(false);
+    }
+    
+    private void InstallUpdate()
+    {
+        CloseDownloadingScreen();
+        _updateHandler.InstallUpdate();
+    }
+    
+    
 }
 
 public interface IUpdateHandler
 {
     public event Action<bool> OnGameUodateInfoReceived;
-    
+    public event Action<float> OnGameUodateDowloading;
+    public event Action OnGameUodateDowloaded;
+    public event Action OnGameUodateFailed;
+
     public void Init();
-    public void Destroy();
-    //public IEnumerator MakeReview();
+    public void DownloadUpdate();
+    public void InstallUpdate();
+    
 }

@@ -165,6 +165,10 @@ MonoBehaviour:
     m_Key: Update game
     m_Metadata:
       m_Items: []
+  - m_Id: 335638283725819904
+    m_Key: Downloading the update
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

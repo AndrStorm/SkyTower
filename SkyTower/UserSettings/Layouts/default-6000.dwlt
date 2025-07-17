@@ -168,7 +168,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 2059
-    height: 875
+    height: 874
   m_MinSize: {x: 300, y: 50}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
@@ -192,7 +192,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 304
-    height: 875
+    height: 874
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 15}
@@ -219,7 +219,7 @@ MonoBehaviour:
     x: 304
     y: 0
     width: 1250
-    height: 875
+    height: 874
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 14}
@@ -251,7 +251,7 @@ MonoBehaviour:
     x: 1554
     y: 0
     width: 505
-    height: 875
+    height: 874
   m_MinSize: {x: 232, y: 276}
   m_MaxSize: {x: 10002, y: 10026}
   m_ActualView: {fileID: 21}
@@ -276,9 +276,9 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 875
+    y: 874
     width: 2059
-    height: 426
+    height: 427
   m_MinSize: {x: 101, y: 126}
   m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 22}
@@ -338,7 +338,7 @@ MonoBehaviour:
     x: 304
     y: 79
     width: 1248
-    height: 849
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
     x: 305
     y: 24
     width: 1248
-    height: 849
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -929,9 +929,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -3.2216458, y: 3.598749, z: 0.4048462}
+    m_Target: {x: -4.552674, y: 1.700189, z: -3.5670443}
     speed: 2
-    m_Value: {x: -3.2216458, y: 3.598749, z: 0.4048462}
+    m_Value: {x: -4.552674, y: 1.700189, z: -3.5670443}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -977,9 +977,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.030672457, y: 0.95328057, z: -0.103655025, w: -0.28208405}
+    m_Target: {x: -0.0353381, y: 0.96418595, z: -0.16978993, w: -0.20067447}
     speed: 2
-    m_Value: {x: -0.03067245, y: 0.9532803, z: -0.103655, w: -0.282084}
+    m_Value: {x: -0.035338063, y: 0.96418494, z: -0.16978975, w: -0.20067427}
   m_Size:
     m_Target: 7.2447534
     speed: 2
@@ -1041,7 +1041,7 @@ MonoBehaviour:
     x: 0
     y: 24
     width: 303
-    height: 849
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1058,7 +1058,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: fe75ffff1676ffffb87bffff9a80ffffaeb8ffffc6b8ffff70beffff5ac3ffffe2faffff
+      m_ExpandedIDs: 90ddffffe2faffff58b30000beb300002eb400008cb40000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -2645,7 +2645,7 @@ MonoBehaviour:
     x: 1554
     y: 79
     width: 503
-    height: 849
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -2700,22 +2700,22 @@ MonoBehaviour:
       x: 0
       y: 21
       width: 503
-      height: 828
-    m_Scale: {x: 0.646875, y: 0.646875}
-    m_Translation: {x: 251.5, y: 414}
+      height: 827
+    m_Scale: {x: 0.6460937, y: 0.6460937}
+    m_Translation: {x: 251.50002, y: 413.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -388.79227
+      x: -389.26242
       y: -640
-      width: 777.58453
+      width: 778.52484
       height: 1280
     m_MinimalGUI: 1
-  m_defaultScale: 0.646875
-  m_LastWindowPixelSize: {x: 503, y: 849}
+  m_defaultScale: 0.6460937
+  m_LastWindowPixelSize: {x: 503, y: 848}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000001000000000000
@@ -2746,7 +2746,7 @@ MonoBehaviour:
     x: 1555
     y: 24
     width: 503
-    height: 849
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -2769,7 +2769,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/RuStoreSDK
+    - Assets/Sky Tower/_Imported Assets/RuStoreSDK
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2787,7 +2787,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 5c420000
     m_LastClickedID: 16988
-    m_ExpandedIDs: 0000000010be000012be000014be000016be000018be00001abe00001cbe00001ebe000020be000022be000024be000026be000028be00002abe00002cbe00002ebe000030be0000
+    m_ExpandedIDs: 000000006cbe00006ebe000070be000072be000074be000076be000078be00007abe00007cbe00007ebe000080be000082be000084be000086be000088be00008abe00008cbe00008ebe000090be000092be000094be000096be0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2816,7 +2816,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000010be000012be000014be000016be000018be00001abe00001cbe00001ebe000020be000022be000024be000026be000028be00002abe00002cbe00002ebe000030be0000
+    m_ExpandedIDs: 000000006cbe00006ebe000070be000072be000074be000076be000078be00007abe00007cbe00007ebe000080be000082be000084be000086be000088be00008abe00008cbe00008ebe000090be000092be000094be000096be0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2896,9 +2896,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 899
+    y: 898
     width: 2058
-    height: 400
+    height: 401
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -3055,10 +3055,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Gradient Background\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 310
-    y: 87
-    width: 1240
-    height: 838
+    x: 304
+    y: 79
+    width: 1248
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -3076,6 +3076,7 @@ MonoBehaviour:
     \"m_ObjectId\": \"2cd32f884a9643ec8cc2a972c971532f\",\n    \"m_Properties\":
     [\n        {\n            \"m_Id\": \"ebb29f1b78404d408adc8ae14522a17c\"\n       
     },\n        {\n            \"m_Id\": \"d9fbf3f7de8946ce964fbfc18073d6c9\"\n       
+    },\n        {\n            \"m_Id\": \"8ebf0965250e47b5aff4e403e6232aeb\"\n       
     }\n    ],\n    \"m_Keywords\": [],\n    \"m_Dropdowns\": [],\n    \"m_CategoryData\":
     [\n        {\n            \"m_Id\": \"d9ed98a54a6f4abbbb42811fc13f3c92\"\n       
     }\n    ],\n    \"m_Nodes\": [\n        {\n            \"m_Id\": \"7dbb38c186f7410bb4db8e2c5802eb9a\"\n       
@@ -3371,6 +3372,17 @@ MonoBehaviour:
     \"x\"\n    ],\n    \"m_Precision\": 0,\n    \"m_PreviewExpanded\": false,\n   
     \"m_DismissedVersion\": 0,\n    \"m_PreviewMode\": 0,\n    \"m_CustomColors\":
     {\n        \"m_SerializableColors\": []\n    }\n}\n\n{\n    \"m_SGVersion\":
+    0,\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty\",\n   
+    \"m_ObjectId\": \"8ebf0965250e47b5aff4e403e6232aeb\",\n    \"m_Guid\": {\n       
+    \"m_GuidSerialized\": \"2bd3aa64-c14e-4ad6-bc9e-bba66932373b\"\n    },\n    \"m_Name\":
+    \"_MainTex\",\n    \"m_DefaultRefNameVersion\": 1,\n    \"m_RefNameGeneratedByDisplayName\":
+    \"_MainTex\",\n    \"m_DefaultReferenceName\": \"_MainTex\",\n    \"m_OverrideReferenceName\":
+    \"\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_UseCustomSlotLabel\":
+    false,\n    \"m_CustomSlotLabel\": \"\",\n    \"m_DismissedVersion\": 0,\n   
+    \"m_Precision\": 0,\n    \"overrideHLSLDeclaration\": false,\n    \"hlslDeclarationOverride\":
+    0,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"m_SerializedTexture\":
+    \"\",\n        \"m_Guid\": \"\"\n    },\n    \"isMainTexture\": false,\n    \"useTilingAndOffset\":
+    false,\n    \"m_Modifiable\": true,\n    \"m_DefaultType\": 0\n}\n\n{\n    \"m_SGVersion\":
     0,\n    \"m_Type\": \"UnityEditor.Rendering.Universal.ShaderGraph.UniversalSpriteUnlitSubTarget\",\n   
     \"m_ObjectId\": \"933f598cd87f41eb8fde0bfc73e5f360\"\n}\n\n{\n    \"m_SGVersion\":
     0,\n    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\n    \"m_ObjectId\":
@@ -3476,6 +3488,7 @@ MonoBehaviour:
     \"d9ed98a54a6f4abbbb42811fc13f3c92\",\n    \"m_Name\": \"\",\n    \"m_ChildObjectList\":
     [\n        {\n            \"m_Id\": \"ebb29f1b78404d408adc8ae14522a17c\"\n       
     },\n        {\n            \"m_Id\": \"d9fbf3f7de8946ce964fbfc18073d6c9\"\n       
+    },\n        {\n            \"m_Id\": \"8ebf0965250e47b5aff4e403e6232aeb\"\n       
     }\n    ]\n}\n\n{\n    \"m_SGVersion\": 3,\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.ColorShaderProperty\",\n   
     \"m_ObjectId\": \"d9fbf3f7de8946ce964fbfc18073d6c9\",\n    \"m_Guid\": {\n       
     \"m_GuidSerialized\": \"c4824347-9a20-40bd-8176-262a991dcf6a\"\n    },\n    \"m_Name\":
@@ -3576,7 +3589,7 @@ MonoBehaviour:
     x: 0
     y: 79
     width: 303
-    height: 849
+    height: 848
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0

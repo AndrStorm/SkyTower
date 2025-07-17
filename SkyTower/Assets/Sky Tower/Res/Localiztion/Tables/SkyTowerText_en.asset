@@ -176,6 +176,10 @@ MonoBehaviour:
     m_Localized: Update Game
     m_Metadata:
       m_Items: []
+  - m_Id: 335638283725819904
+    m_Localized: Downloading the update...
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -14,19 +14,19 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
     private MessageBox _messageBox;*/
     
     public event Action<bool> OnGameUodateInfoReceived;
+    public event Action<float> OnGameUodateDowloading;
+    public event Action OnGameUodateDowloaded;
+    public event Action OnGameUodateFailed;
+
+
+    private UpdateType _currentUpdateTupe;
     
     public void Init() 
     {
         RuStoreAppUpdateManager.Instance.Init();
         GetAppUpdateInfo();
     }
-
-    public void Destroy()
-    {
-        
-    }
-
-
+    
     private void GetAppUpdateInfo() 
     {
         RuStoreAppUpdateManager.Instance.GetAppUpdateInfo(
@@ -34,7 +34,7 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
             onSuccess: OnAppUodateInfoReceived);
     }
     
-    void OnAppUodateInfoReceived(AppUpdateInfo info)
+    private void OnAppUodateInfoReceived(AppUpdateInfo info)
     {
         bool isUpdateAvailable = false;
         
@@ -55,31 +55,38 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
         ShowMessage("Обновление", message);
         var isImmediateUpdateAllowed = RuStoreAppUpdateManager.Instance.IsImmediateUpdateAllowed();
         Debug.LogFormat("isImmediateUpdateAllowed: {0}", isImmediateUpdateAllowed);
-        
         OnGameUodateInfoReceived?.Invoke(isUpdateAvailable);
     }
     
-    void OnAppUpdateError(RuStoreError error) 
+    private void OnAppUpdateError(RuStoreError error) 
     {
         ShowMessage("Error", $"{error.name} : {error.description}");
     }
-    
-    
-    
-    public void StartImmediateUpdate() 
+
+
+
+    public void DownloadUpdate()
     {
+        StartFlexibleUpdate();
+    }
+    
+    private void StartImmediateUpdate()
+    {
+        _currentUpdateTupe = UpdateType.IMMEDIATE;
         RuStoreAppUpdateManager.Instance.RegisterListener(this);
         RuStoreAppUpdateManager.Instance.StartUpdateFlow(UpdateType.IMMEDIATE, OnAppUpdateError,
             (result) => {
                 Debug.LogFormat("Update flow result -> {0}", result);
-                if (result == UpdateFlowResult.RESULT_CANCELED || result == UpdateFlowResult.RESULT_ACTIVITY_NOT_FOUND) {
+                if (result == UpdateFlowResult.RESULT_CANCELED ||
+                    result == UpdateFlowResult.RESULT_ACTIVITY_NOT_FOUND) {
                     RuStoreAppUpdateManager.Instance.UnregisterListener(this);
                 }
             });
     }
     
-    public void StartFlexibleUpdate() 
+    private void StartFlexibleUpdate() 
     {
+        _currentUpdateTupe = UpdateType.FLEXIBLE;
         RuStoreAppUpdateManager.Instance.RegisterListener(this);
         RuStoreAppUpdateManager.Instance.StartUpdateFlow(UpdateType.FLEXIBLE, OnAppUpdateError,
             (result) => {
@@ -90,8 +97,9 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
             });
     }
     
-    public void StartSilentUpdate() 
+    private void StartSilentUpdate() 
     {
+        _currentUpdateTupe = UpdateType.SILENT;
         RuStoreAppUpdateManager.Instance.RegisterListener(this);
         RuStoreAppUpdateManager.Instance.StartUpdateFlow(UpdateType.SILENT, OnAppUpdateError,
             (result) => {
@@ -99,34 +107,58 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
             });
     }
     
-    public void FinishSilentUpdate() 
+    
+    
+    void IInstallStateUpdateListener.OnStateUpdated(InstallState state) 
+    {
+        if (state.installStatus == InstallState.InstallStatus.DOWNLOADED) 
+        {
+            ShowUpdateProgress(progress: 1f);
+            OnGameUodateDowloaded?.Invoke();
+        } 
+        else if (state.installStatus == InstallState.InstallStatus.FAILED) 
+        {
+            RuStoreAppUpdateManager.Instance.UnregisterListener(this);
+            ShowUpdateProgress(progress: 0f);
+            OnGameUodateFailed?.Invoke();
+        } 
+        else if (state.installStatus == InstallState.InstallStatus.DOWNLOADING)
+        {
+            float progress = (float)state.bytesDownloaded / (float)state.totalBytesToDownload;
+            ShowUpdateProgress(progress: progress);
+            OnGameUodateDowloading?.Invoke(progress);
+        }
+    }
+
+
+
+    public void InstallUpdate()
+    {
+        Helper.Log($"Finish update type {_currentUpdateTupe}");
+        if (_currentUpdateTupe == UpdateType.SILENT)
+        {
+            FinishSilentUpdate();
+        }
+        else
+        {
+            FinishFlexibleUpdate();
+        }
+    }
+    
+    private void FinishSilentUpdate() 
     {
         RuStoreAppUpdateManager.Instance.CompleteUpdate(UpdateType.SILENT, OnAppUpdateError);
     }
     
-    public void FinishFlexibleUpdate() 
+    private void FinishFlexibleUpdate() 
     {
         RuStoreAppUpdateManager.Instance.CompleteUpdate(UpdateType.FLEXIBLE, OnAppUpdateError);
     }
     
     
-    
-    
-    
-    void IInstallStateUpdateListener.OnStateUpdated(InstallState state) 
+    private void ShowUpdateProgress(float progress) 
     {
-        if (state.installStatus == InstallState.InstallStatus.DOWNLOADED) {
-            ShowUpdateProgress(progress: 1f);
-        } else if (state.installStatus == InstallState.InstallStatus.FAILED) {
-            RuStoreAppUpdateManager.Instance.UnregisterListener(this);
-            ShowUpdateProgress(progress: 0f);
-        } else if (state.installStatus == InstallState.InstallStatus.DOWNLOADING) {
-            ShowUpdateProgress(progress: (float)state.bytesDownloaded / (float)state.totalBytesToDownload);
-        }
-    }
-    
-    public void ShowUpdateProgress(float progress) 
-    {
+        Helper.Log($"Update progress {progress}");
         /*var scale = _updateLoadingBar.transform.localScale;
         scale.x = progress;
         _updateLoadingBar.transform.localScale = scale;*/
@@ -138,7 +170,7 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
     
     
     
-    void ShowMessage(string title, string message, Action onClose = null) 
+    private void ShowMessage(string title, string message, Action onClose = null) 
     {
         Helper.Log($"Title: {title}, Messege {message}");
         /*_messageBox.Show(

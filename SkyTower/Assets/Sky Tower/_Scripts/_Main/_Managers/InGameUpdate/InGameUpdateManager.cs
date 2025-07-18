@@ -48,16 +48,18 @@ public class InGameUpdateManager : MonoBehaviour
         _updateHandler.OnGameUodateFailed += OnGameUpdateFailed;
         _updateHandler.Init();
     }
-    
 
-    
-    private void OnGameUodateInfoReceived(bool isUpdateAvailable)
+
+    private bool _isUpdateDownloaded;
+    private void OnGameUodateInfoReceived(bool isUpdateAvailable,
+        bool isUpdateDownloaded)
     {
         if (!isUpdateAvailable)
         {
             return;
         }
 
+        _isUpdateDownloaded = isUpdateDownloaded;
         _isUpdateAvailable = true;
         if (_isUpdateRequested)
         {
@@ -120,8 +122,15 @@ public class InGameUpdateManager : MonoBehaviour
     
     public void UpdateGame()
     {
-        _updateHandler.DownloadUpdate();
         CloseUpdateScreen();
+        if (_isUpdateDownloaded)
+        {
+            _updateHandler.InstallUpdate();
+        }
+        else
+        {
+            _updateHandler.DownloadUpdate();
+        }
         //ShowDownloadingScreen();
     }
     
@@ -158,7 +167,7 @@ public class InGameUpdateManager : MonoBehaviour
 
 public interface IUpdateHandler
 {
-    public event Action<bool> OnGameUodateInfoReceived;
+    public event Action<bool, bool> OnGameUodateInfoReceived;
     public event Action<float> OnGameUodateDowloading;
     public event Action OnGameUodateDowloaded;
     public event Action OnGameUodateFailed;

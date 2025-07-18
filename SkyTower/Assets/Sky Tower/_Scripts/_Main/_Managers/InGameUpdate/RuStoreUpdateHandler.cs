@@ -13,7 +13,7 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
     [SerializeField]
     private MessageBox _messageBox;*/
     
-    public event Action<bool> OnGameUodateInfoReceived;
+    public event Action<bool, bool> OnGameUodateInfoReceived;
     public event Action<float> OnGameUodateDowloading;
     public event Action OnGameUodateDowloaded;
     public event Action OnGameUodateFailed;
@@ -37,7 +37,10 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
     private void OnAppUodateInfoReceived(AppUpdateInfo info)
     {
         bool isUpdateAvailable = false;
-        
+        bool isUpdateDownloaded = 
+            info.installStatus == 
+            AppUpdateInfo.InstallStatus.DOWNLOADED;
+       
         var message = "Обновление недоступно";
         switch (info.updateAvailability) {
             case AppUpdateInfo.UpdateAvailability.UPDATE_AVAILABLE:
@@ -55,7 +58,8 @@ public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener
         ShowMessage("Обновление", message);
         var isImmediateUpdateAllowed = RuStoreAppUpdateManager.Instance.IsImmediateUpdateAllowed();
         Debug.LogFormat("isImmediateUpdateAllowed: {0}", isImmediateUpdateAllowed);
-        OnGameUodateInfoReceived?.Invoke(isUpdateAvailable);
+        
+        OnGameUodateInfoReceived?.Invoke(isUpdateAvailable, isUpdateDownloaded);
     }
     
     private void OnAppUpdateError(RuStoreError error) 

@@ -929,9 +929,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -4.552674, y: 1.700189, z: -3.5670443}
+    m_Target: {x: -2.1521447, y: 4.555295, z: 2.986803}
     speed: 2
-    m_Value: {x: -4.552674, y: 1.700189, z: -3.5670443}
+    m_Value: {x: -2.1521447, y: 4.555295, z: 2.986803}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -977,13 +977,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.0353381, y: 0.96418595, z: -0.16978993, w: -0.20067447}
+    m_Target: {x: -0.04303769, y: 0.95241725, z: -0.16036244, w: -0.25560734}
     speed: 2
-    m_Value: {x: -0.035338063, y: 0.96418494, z: -0.16978975, w: -0.20067427}
+    m_Value: {x: -0.043037646, y: 0.95241624, z: -0.16036226, w: -0.25560707}
   m_Size:
-    m_Target: 7.2447534
+    m_Target: 3.933557
     speed: 2
-    m_Value: 7.2447534
+    m_Value: 3.933557
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1058,7 +1058,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 90ddffffe2faffff58b30000beb300002eb400008cb40000
+      m_ExpandedIDs: 54a1feff6ca1feff10a7feff34acfeffc8b1feffe4c3fefffcc3feffa0c9feffc4cefeff58d4feff0803ffffb805ffff6412ffffd615ffffa64affffbe4affff2450ffff4c55ffffe45affff6265ffff7a65ffff226bffff4a70ffffb678ffff2a88ffffb4c7ffffccc7ffff70cdffff94d2ffffe2fafffff4ffffff26e90000ce3e0100d43f0100004101002c5201006c530100bc530100a6550100866201000663010072630100c26401003e650100be6501002a660100228801002e8901007a8a0100368c0100189e0100689e0100249f010070a00100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -2768,8 +2768,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SkipHidden: 0
     m_SearchArea: 1
-    m_Folders:
-    - Assets/Sky Tower/_Imported Assets/RuStoreSDK
+    m_Folders: []
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2787,7 +2786,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 5c420000
     m_LastClickedID: 16988
-    m_ExpandedIDs: 000000006cbe00006ebe000070be000072be000074be000076be000078be00007abe00007cbe00007ebe000080be000082be000084be000086be000088be00008abe00008cbe00008ebe000090be000092be000094be000096be0000
+    m_ExpandedIDs: 00000000a0be0000a2be0000a4be0000a6be0000a8be0000aabe0000acbe0000aebe0000b0be0000b2be0000b4be0000b6be0000b8be0000babe0000bcbe0000bebe0000c0be0000c2be0000c4be0000c6be0000c8be0000cabe0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2816,7 +2815,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000006cbe00006ebe000070be000072be000074be000076be000078be00007abe00007cbe00007ebe000080be000082be000084be000086be000088be00008abe00008cbe00008ebe000090be000092be000094be000096be0000
+    m_ExpandedIDs: 00000000a0be0000a2be0000a4be0000a6be0000a8be0000aabe0000acbe0000aebe0000b0be0000b2be0000b4be0000b6be0000b8be0000babe0000bcbe0000bebe0000c0be0000c2be0000c4be0000c6be0000c8be0000cabe0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2948,7 +2947,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 72518
+  m_LastSelectedObjectID: 106974
 --- !u!114 &24
 MonoBehaviour:
   m_ObjectHideFlags: 52

@@ -13,6 +13,7 @@ public class InGameUpdateManager : MonoBehaviour
     
     private bool _isUpdateAvailable;
     private bool _isUpdateRequested;
+    private bool _isUpdateDownloaded;
     private bool _isDownloadingScreenShown;
 
     
@@ -50,7 +51,7 @@ public class InGameUpdateManager : MonoBehaviour
     }
 
 
-    private bool _isUpdateDownloaded;
+    
     private void OnGameUodateInfoReceived(bool isUpdateAvailable,
         bool isUpdateDownloaded)
     {

@@ -1,10 +1,8 @@
 using RuStore.AppUpdate;
-//using RuStore.AppUpdateExample.UI;
 using System;
 using RuStore;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+
 
 public class RuStoreUpdateHandler : IUpdateHandler, IInstallStateUpdateListener 
 {

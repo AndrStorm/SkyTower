@@ -18,6 +18,8 @@ public class RSReviewHandler : IReviewHandler
     private bool _isRequestFailed;
     private bool _isLaunchSucced;
     private bool _isLaunchFailed;
+
+
     
     public IEnumerator MakeReview()
     {
@@ -60,6 +62,12 @@ public class RSReviewHandler : IReviewHandler
         yield return null;
     }
 
+    public void OpenStoreUrl()
+    {
+        OpenReviewInRuStore();
+    }
+    
+    
     private void Init()
     {
         _isInit = true;

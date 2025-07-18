@@ -1,4 +1,4 @@
-#if GP_BUILD
+//#if GP_BUILD
 using System.Collections;
 using Google.Play.Review;
 using UnityEngine;
@@ -12,11 +12,6 @@ public class GPReviewHandler : IReviewHandler
     private PlayReviewInfo _playReviewInfo;
     private bool _isInit;
 
-    private void Init()
-    {
-        _isInit = true;
-        _reviewManager = new ReviewManager();
-    }
     
     
     public IEnumerator MakeReview()
@@ -24,6 +19,18 @@ public class GPReviewHandler : IReviewHandler
         if(!_isInit) Init();
         
         return LaunchReview();
+    }
+    
+    public void OpenStoreUrl()
+    {
+        Application.OpenURL(@"market://details?id=" + Application.identifier);
+    }
+    
+    
+    private void Init()
+    {
+        _isInit = true;
+        _reviewManager = new ReviewManager();
     }
     
     private IEnumerator LaunchReview()
@@ -52,4 +59,4 @@ public class GPReviewHandler : IReviewHandler
         // matter the result, we continue our app flow.
     }
 }
-#endif
+//#endif

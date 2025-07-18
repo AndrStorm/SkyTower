@@ -54,7 +54,8 @@ public class InGameReview : MonoBehaviour
     public void OpenStorePage()
     {
         SoundManager.Instance.PlaySound("ButtonClick");
-        Application.OpenURL(@"market://details?id=" + Application.identifier);
+        _reviewHandler.OpenStoreUrl();
+        //Application.OpenURL(@"market://details?id=" + Application.identifier);
     }
 
 }

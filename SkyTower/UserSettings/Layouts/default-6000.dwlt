@@ -371,8 +371,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 305
-    y: 24
+    x: 304
+    y: 79
     width: 1248
     height: 848
   m_SerializedDataModeController:
@@ -929,9 +929,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -2.1521447, y: 4.555295, z: 2.986803}
+    m_Target: {x: -3.3087568, y: 3.292119, z: 0.9095546}
     speed: 2
-    m_Value: {x: -2.1521447, y: 4.555295, z: 2.986803}
+    m_Value: {x: -3.3087568, y: 3.292119, z: 0.9095546}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -977,13 +977,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.04303769, y: 0.95241725, z: -0.16036244, w: -0.25560734}
+    m_Target: {x: -0.038747706, y: 0.96077895, z: -0.17811944, w: -0.20900388}
     speed: 2
-    m_Value: {x: -0.043037646, y: 0.95241624, z: -0.16036226, w: -0.25560707}
+    m_Value: {x: -0.038434032, y: 0.96104187, z: -0.17667747, w: -0.20906107}
   m_Size:
-    m_Target: 3.933557
+    m_Target: 5.3313694
     speed: 2
-    m_Value: 3.933557
+    m_Value: 5.582586
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1039,7 +1039,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 24
+    y: 79
     width: 303
     height: 848
   m_SerializedDataModeController:
@@ -1058,21 +1058,21 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 54a1feff6ca1feff10a7feff34acfeffc8b1feffe4c3fefffcc3feffa0c9feffc4cefeff58d4feff0803ffffb805ffff6412ffffd615ffffa64affffbe4affff2450ffff4c55ffffe45affff6265ffff7a65ffff226bffff4a70ffffb678ffff2a88ffffb4c7ffffccc7ffff70cdffff94d2ffffe2fafffff4ffffff26e90000ce3e0100d43f0100004101002c5201006c530100bc530100a6550100866201000663010072630100c26401003e650100be6501002a660100228801002e8901007a8a0100368c0100189e0100689e0100249f010070a00100
+      m_ExpandedIDs: 4ef7ffff5af7ffff78f7ffffe2faffff60b30000c6b3000064b40000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Achievment prefab pro
+        m_OriginalName: Achievment prefab pro
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: -14744
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 4
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 8}
@@ -2690,7 +2690,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -2743,8 +2743,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1555
-    y: 24
+    x: 1554
+    y: 79
     width: 503
     height: 848
   m_SerializedDataModeController:
@@ -2768,7 +2768,8 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SkipHidden: 0
     m_SearchArea: 1
-    m_Folders: []
+    m_Folders:
+    - Assets/Sky Tower/_Scripts/Subsystems/Achievement system/Prefabs/tmPro
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2786,7 +2787,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 5c420000
     m_LastClickedID: 16988
-    m_ExpandedIDs: 00000000a0be0000a2be0000a4be0000a6be0000a8be0000aabe0000acbe0000aebe0000b0be0000b2be0000b4be0000b6be0000b8be0000babe0000bcbe0000bebe0000c0be0000c2be0000c4be0000c6be0000c8be0000cabe0000
+    m_ExpandedIDs: 00000000a4be0000a6be0000a8be0000aabe0000acbe0000aebe0000b0be0000b2be0000b4be0000b6be0000b8be0000babe0000bcbe0000bebe0000c0be0000c2be0000c4be0000c6be0000c8be0000cabe0000ccbe0000cebe0000d0be0000d2be0000d4be0000d6be0000d8be0000dabe0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2812,24 +2813,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 0}
+    scrollPos: {x: 0, y: 180}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a0be0000a2be0000a4be0000a6be0000a8be0000aabe0000acbe0000aebe0000b0be0000b2be0000b4be0000b6be0000b8be0000babe0000bcbe0000bebe0000c0be0000c2be0000c4be0000c6be0000c8be0000cabe0000
+    m_ExpandedIDs: c0c8ffffffffffff00000000a4be0000a6be0000a8be0000aabe0000acbe0000aebe0000b0be0000b2be0000b4be0000b6be0000b8be0000babe0000bcbe0000bebe0000c0be0000c2be0000c4be0000c6be0000c8be0000cabe0000ccbe0000cebe0000d0be0000d2be0000d4be0000d6be0000d8be0000dabe000058c00000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Achievment prefab pro
+      m_OriginalName: Achievment prefab pro
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 48338
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 10}
@@ -2895,7 +2896,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 898
+    y: 953
     width: 2058
     height: 401
   m_SerializedDataModeController:
@@ -2947,7 +2948,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 106974
+  m_LastSelectedObjectID: 72816
 --- !u!114 &24
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -2969,8 +2970,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 2060
-    y: 24
+    x: 2059
+    y: 79
     width: 500
     height: 1275
   m_SerializedDataModeController:

@@ -75,7 +75,7 @@ public class GameController : Singleton<GameController>
     [Header("Background Game property")]
     [SerializeField]private Gradient[] backGroundGradients1;
     [SerializeField]private Gradient[] backGroundGradients2;
-    [SerializeField] private Material _backgroundMaterial;
+    [SerializeField]private Material _backgroundMaterial;
     [SerializeField]private int lastColorScore = 375;
     
     private static readonly int _ShaderBGColor1 = Shader.PropertyToID("_Color1");

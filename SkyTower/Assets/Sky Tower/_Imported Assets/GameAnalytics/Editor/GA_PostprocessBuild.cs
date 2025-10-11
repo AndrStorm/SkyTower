@@ -60,10 +60,14 @@ namespace GameAnalyticsSDK.Editor
                 /*var namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(group);
                 PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, definitions);*/
                 
+                /*var defines = new List<string>(PlayerSettings.
+                    GetScriptingDefineSymbolsForGroup(group).Split(new[] { ';' },
+                        StringSplitOptions.RemoveEmptyEntries));*/
                 
                 var defines = new List<string>(PlayerSettings.
-                    GetScriptingDefineSymbolsForGroup(group).Split(new[] { ';' },
-                        StringSplitOptions.RemoveEmptyEntries));
+                    GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(group)).
+                    Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                
                 var edited = false;
                 if (enabled && !defines.Contains(entry))
                 {
@@ -76,8 +80,12 @@ namespace GameAnalyticsSDK.Editor
                     edited = true;
                 }
                 if (edited) {
-                    PlayerSettings.SetScriptingDefineSymbolsForGroup
-                        (group, string.Join(";", defines.ToArray()));
+                    /*PlayerSettings.SetScriptingDefineSymbolsForGroup
+                        (group, string.Join(";", defines.ToArray()));*/
+                    
+                    PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup
+                        (group), string.Join(";", defines.ToArray()));
+                    
                 }
             }
         }

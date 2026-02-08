@@ -5863,11 +5863,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9255c7a0f38a55a42aa2d5f2df7a7ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _restartsToShowFullScreenAds: 5
+  _restartsToShowFullScreenAds: 10
   _isRandomRangeRestarts: 1
-  _maxRestartsToShowFSAds: 6
-  _minRestartsToShowFSAds: 4
-  _chanceToShowBanner: 50
+  _maxRestartsToShowFSAds: 21
+  _minRestartsToShowFSAds: 10
+  _chanceToShowBanner: 21
 --- !u!114 &1823188716
 MonoBehaviour:
   m_ObjectHideFlags: 0

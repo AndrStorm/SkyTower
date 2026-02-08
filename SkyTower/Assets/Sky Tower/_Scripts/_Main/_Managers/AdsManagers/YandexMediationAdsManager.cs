@@ -46,15 +46,6 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
 
     
     #region Interstitial
-    private void CloseInterstitialAdd()
-    {
-        if (_interstitial != null)
-        {
-            _interstitial.Destroy();
-            _interstitial = null; 
-        }
-    }
-    
     private void RequestInterstitial()
     {
         StartCoroutine(ShowInterstitialAdsCoroutine());
@@ -101,6 +92,21 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
         //DisplayMessage("Interstitial is requested");
     }
     
+    private void CloseInterstitialAdd()
+    {
+        if (_interstitial != null)
+        {
+            _interstitial.OnAdClicked -= HandleInterstitialAdClicked;
+            _interstitial.OnAdShown -= HandleInterstitialAdShown;
+            _interstitial.OnAdFailedToShow -= HandleInterstitialAdFailedToShow;
+            _interstitial.OnAdImpression -= HandleInterstitialImpression;
+            _interstitial.OnAdDismissed -= HandleInterstitialAdDismissed;
+            
+            _interstitial.Destroy();
+            _interstitial = null; 
+        }
+    }
+    
     private void ShowInterstitial()
     {
         if (_interstitial == null)
@@ -108,7 +114,7 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
             //DisplayMessage("Interstitial is not ready yet");
             return;
         }
-
+        
         _interstitial.OnAdClicked += HandleInterstitialAdClicked;
         _interstitial.OnAdShown += HandleInterstitialAdShown;
         _interstitial.OnAdFailedToShow += HandleInterstitialAdFailedToShow;
@@ -144,12 +150,12 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
     private void HandleInterstitialAdShown(object sender, EventArgs args)
     {
         //DisplayMessage("HandleAdShown event received");
+        RequestInterstitialLoad();
     }
 
     private void HandleInterstitialAdDismissed(object sender, EventArgs args)
     {
         //DisplayMessage("HandleAdDismissed event received");
-        CloseInterstitialAdd();
         RequestInterstitialLoad();
     }
 
@@ -162,6 +168,7 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
     private void HandleInterstitialAdFailedToShow(object sender, AdFailureEventArgs args)
     {
         DisplayMessage($"HandleInterstitialAdFailedToShow event received with message: {args.Message}");
+        RequestInterstitialLoad();
     }
 
     #endregion

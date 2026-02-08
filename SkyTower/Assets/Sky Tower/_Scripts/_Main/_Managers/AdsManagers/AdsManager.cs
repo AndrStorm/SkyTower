@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 
@@ -92,7 +93,7 @@ public class AdsManager : Singleton<AdsManager>
             _currentRestartsToShowAds = _restartsToShowFullScreenAds;
         }
         
-        Helper.Log($"Generate restarts number - {_currentRestartsToShowAds}");
+        //Helper.Log($"Generate restarts number - {_currentRestartsToShowAds}");
         SaveRestartNumber(_currentRestartsToShowAds);
         return _currentRestartsToShowAds;
     }
@@ -100,18 +101,19 @@ public class AdsManager : Singleton<AdsManager>
     
     public void ShowFullScreenAd()
     {
-        Helper.Log($"Show FS");
+        Helper.Log($"Show FS ad");
         GenerateNewRestartsToShowNumber();
         _currentAdsGiver.ShowFullScreenAd();
     }
 
     public void ShowBannerAd()
     {
-        if (Random.Range(1, 100) <= _chanceToShowBanner)
+        if (Random.Range(1, 100) > _chanceToShowBanner)
         {
             return;
         }
         
+        //Helper.Log($"Show B ad");
         _currentAdsGiver.ShowBannerAd();
     }
 
@@ -120,6 +122,19 @@ public class AdsManager : Singleton<AdsManager>
         _currentAdsGiver.HideBannerAd();
     }
 
+    
+#if UNITY_EDITOR
+    
+    [MenuItem("Developer/Clear restarts to ads counter")]
+    private static void ClearScoresSave()
+    {
+        PlayerPrefs.SetInt(RESTARTS_NUMBER,0);
+        PlayerPrefs.SetInt(GameController.RESTART_COUNTER,0);
+    }
+    
+#endif
+    
+    
     private class DefaultAdsGiver : IAdsGiver
     {
         public void InitAds()

@@ -431,6 +431,8 @@ public class GameController : Singleton<GameController>
             AdsManager.Instance.ShowFullScreenAd();
         }
     }
+    
+
 
     public void ResetIngameReviewValue()
     {
@@ -442,7 +444,7 @@ public class GameController : Singleton<GameController>
         if (PlayerPrefs.GetInt(MAKE_REVIEW_PRESSED) == 1) return;
         if (PlayerPrefs.GetInt(INGAME_REVIEW) == 1) return;
 
-        if (currentRestarts == restartsToAds - 1)
+        if (currentRestarts == restartsToAds - 2)
         {
             PlayerPrefs.SetInt(INGAME_REVIEW, 1);
             OnInGameReviewRequested?.Invoke();

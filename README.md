@@ -1,7 +1,13 @@
 # SkyTower
 A simple arcade game with a clicker-style gameplay based on time events
 
-### Example
+### Stores
+Google play https://play.google.com/store/apps/details?id=com.AndrStormGames.SkyTower \
+Ru store https://apps.rustore.ru/app/com.AndrStormGames.SkyTower \
+App gallery https://appgallery.huawei.com/app/C107614499
+
+
+### Gameplay trailer
 ![](https://github.com/AndrStorm/SkyTower/blob/main/ST_PromoVideoGif3o.gif)
 
 ### Settings

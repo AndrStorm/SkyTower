@@ -13,7 +13,7 @@ public class Singleton<T> : MonoBehaviour where T: MonoBehaviour
     protected void OnApplicationQuit()
     {
         Instance = null;
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
 }

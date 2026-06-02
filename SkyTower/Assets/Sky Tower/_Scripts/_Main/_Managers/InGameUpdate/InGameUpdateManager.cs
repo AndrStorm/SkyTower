@@ -25,10 +25,6 @@ public class InGameUpdateManager : MonoBehaviour
     private void OnDisable()
     {
         GameController.OnInGameUodateRequested -= OnGameUpdateRequested;
-        _updateHandler.OnGameUodateInfoReceived -= OnGameUodateInfoReceived;
-        _updateHandler.OnGameUodateDowloading -= OnGameUpdateDownloading;
-        _updateHandler.OnGameUodateDowloaded -= OnGameUpdateDownloaded;
-        _updateHandler.OnGameUodateFailed -= OnGameUpdateFailed;
     }
     
     private void Start()
@@ -38,10 +34,7 @@ public class InGameUpdateManager : MonoBehaviour
 #elif RS_BUILD
         _updateHandler = new RuStoreUpdateHandler();
 #endif
-        if (_updateHandler == null)
-        {
-            return;
-        }
+        if (_updateHandler == null) return;
         
         _updateHandler.OnGameUodateInfoReceived += OnGameUodateInfoReceived;
         _updateHandler.OnGameUodateDowloading += OnGameUpdateDownloading;
@@ -50,8 +43,17 @@ public class InGameUpdateManager : MonoBehaviour
         _updateHandler.Init();
     }
 
+    private void OnDestroy()
+    {
+        if (_updateHandler == null) return;
+        
+        _updateHandler.OnGameUodateInfoReceived -= OnGameUodateInfoReceived;
+        _updateHandler.OnGameUodateDowloading -= OnGameUpdateDownloading;
+        _updateHandler.OnGameUodateDowloaded -= OnGameUpdateDownloaded;
+        _updateHandler.OnGameUodateFailed -= OnGameUpdateFailed;
+    }
 
-    
+
     private void OnGameUodateInfoReceived(bool isUpdateAvailable,
         bool isUpdateDownloaded)
     {

@@ -83,7 +83,8 @@ namespace Tarodev {
             FetchConfig();
 
             var path = GetConfigPath();
-            EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<AutoSaveConfig>(path).GetInstanceID());
+            var config = AssetDatabase.LoadAssetAtPath<AutoSaveConfig>(path);
+            if (config != null) EditorGUIUtility.PingObject(config);
         }
         
         public override void OnInspectorGUI() {

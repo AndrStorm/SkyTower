@@ -51,7 +51,11 @@ namespace GameAnalyticsSDK
         #if UNITY_EDITOR
         void OnEnable()
         {
+#if UNITY_6000_3_OR_NEWER
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += GameAnalytics.HierarchyWindowCallback;
+#else
             EditorApplication.hierarchyWindowItemOnGUI += GameAnalytics.HierarchyWindowCallback;
+#endif
 
             if(Application.isPlaying)
                 _instance = this;
@@ -59,7 +63,11 @@ namespace GameAnalyticsSDK
 
         void OnDisable()
         {
+#if UNITY_6000_3_OR_NEWER
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= GameAnalytics.HierarchyWindowCallback;
+#else
             EditorApplication.hierarchyWindowItemOnGUI -= GameAnalytics.HierarchyWindowCallback;
+#endif
         }
         #else
         void OnEnable()
@@ -1111,9 +1119,15 @@ namespace GameAnalyticsSDK
 #endif
         }
 
+#if UNITY_6000_3_OR_NEWER
+        public static void HierarchyWindowCallback(EntityId entityId, Rect selectionRect)
+        {
+            GameObject go = EditorUtility.EntityIdToObject(entityId) as GameObject;
+#else
         public static void HierarchyWindowCallback(int instanceID, Rect selectionRect)
         {
             GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
+#endif
             if(go != null && go.GetComponent<GameAnalytics>() != null)
             {
                 float addX = 0;

@@ -1,0 +1,13 @@
+﻿<Solution>
+  <Project Path="Google.Android.AppBundle.Editor.csproj" />
+  <Project Path="RuStoreSDK.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="RuStoreSDK-Editor.csproj" />
+  <Project Path="Unity.Localization.Samples.PersistentVariables.csproj" />
+  <Project Path="lootlocker.lootlockersdk.runtime.csproj" />
+  <Project Path="Google.Play.Core.csproj" />
+  <Project Path="Google.Play.Common.csproj" />
+  <Project Path="Editor.csproj" />
+  <Project Path="Google.Play.Review.csproj" />
+</Solution>

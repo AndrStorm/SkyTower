@@ -11,6 +11,7 @@ using System;
 using System.Runtime.InteropServices;
 using YandexMobileAds.Base;
 using YandexMobileAds.Common;
+using UnityEngine;
 
 namespace YandexMobileAds.Platforms.iOS
 {
@@ -18,6 +19,7 @@ namespace YandexMobileAds.Platforms.iOS
 
     public class InterstitialClient : IInterstitialClient, IDisposable
     {
+
         internal delegate void YMAUnityInterstitialAdDidFailToShowCallback(IntPtr bannerClient, string error);
 
         internal delegate void YMAUnityInterstitialAdDidShowCallback(IntPtr bannerClient);
@@ -40,6 +42,7 @@ namespace YandexMobileAds.Platforms.iOS
 
         private readonly AdInfo _adInfo;
         private readonly IntPtr _selfPointer;
+        private readonly AudioSessionManagerClient _audioSessionClient;
 
         public InterstitialClient(string interstitialAdObjectId)
         {
@@ -57,10 +60,10 @@ namespace YandexMobileAds.Platforms.iOS
 
             string adInfoObjectId = InterstitialBridge.YMAUnityGetInterstitialInfo(this.ObjectId);
             AdInfoClient adInfoClient = new AdInfoClient(adInfoObjectId);
-            this._adInfo = new AdInfo(
-                adInfoClient.AdUnitId,
-                adInfoClient.AdSize
-            );
+            this._adInfo = new AdInfo(adInfoClient.AdUnitId, adInfoClient.ExtraData, adInfoClient.PartnerText, adInfoClient.Creatives);
+            
+            this._audioSessionClient = new AudioSessionManagerClient();
+            
             adInfoClient.Destroy();
         }
 
@@ -75,23 +78,25 @@ namespace YandexMobileAds.Platforms.iOS
         }
 
         public void Show()
-        {
+        {   
+            this._audioSessionClient.SetIsCustomManaged();
             InterstitialBridge.YMAUnityShowInterstitialAd(this.ObjectId);
         }
 
         public void Dispose()
-        {
+        {   
             this.Destroy();
         }
 
         public void Destroy()
-        {
+        {   
             this.OnAdShown = null;
             this.OnAdClicked = null;
             this.OnAdDismissed = null;
             this.OnAdFailedToShow = null;
             this.OnAdImpression = null;
 
+            this._audioSessionClient.Destroy();
             InterstitialBridge.YMAUnityDestroyInterstitialAd(this.ObjectId);
         }
 
@@ -164,7 +169,6 @@ namespace YandexMobileAds.Platforms.iOS
                 client.OnAdImpression(client, impressionData);
             }
         }
-
         #endregion
     }
 

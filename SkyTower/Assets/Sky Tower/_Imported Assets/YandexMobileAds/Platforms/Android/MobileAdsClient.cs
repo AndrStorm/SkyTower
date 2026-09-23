@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using YandexMobileAds.Common;
+using Io.AppMetrica.AdRevenueAdapter;
 
 namespace YandexMobileAds.Platforms.Android
 {
@@ -34,6 +35,7 @@ namespace YandexMobileAds.Platforms.Android
 
         private MobileAdsClient() : base(Utils.MobileAdsClassName)
         {
+            AppMetricaAdRevenueAdapter.Activate();
             this._mobileAdsClass = new AndroidJavaClass(Utils.MobileAdsClassName);
         }
 
@@ -42,14 +44,14 @@ namespace YandexMobileAds.Platforms.Android
             this._mobileAdsClass.CallStatic("setUserConsent", consent);
         }
 
-        public void SetLocationConsent(bool consent)
+        public void SetLocationTracking(bool enabled)
         {
-            this._mobileAdsClass.CallStatic("setLocationConsent", consent);
+            this._mobileAdsClass.CallStatic("setLocationTracking", enabled);
         }
 
-        public void SetAgeRestrictedUser(bool ageRestrictedUser)
+        public void SetAgeRestricted(bool ageRestricted)
         {
-            this._mobileAdsClass.CallStatic("setAgeRestrictedUser", ageRestrictedUser);
+            this._mobileAdsClass.CallStatic("setAgeRestricted", ageRestricted);
         }
 
         public void ShowDebugPanel()

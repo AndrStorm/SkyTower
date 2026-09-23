@@ -14,9 +14,8 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
 
     public void InitAds()
     {
+        
         _interstitialAdLoader = new InterstitialAdLoader();
-        _interstitialAdLoader.OnAdLoaded += HandleAdLoaded;
-        _interstitialAdLoader.OnAdFailedToLoad += HandleAdFailedToLoad;
         RequestInterstitialLoad();
     }
 
@@ -83,12 +82,16 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
         CloseInterstitialAdd();
         
         //Sets COPPA restriction for user age under 13
-        MobileAds.SetAgeRestrictedUser(true);
+        YandexAds.SetAgeRestricted(true);
         
         // Replace demo Unit ID 'demo-interstitial-yandex' with actual Ad Unit ID
         string adUnitId = "R-M-16170795-2";
         
-        _interstitialAdLoader.LoadAd(CreateAdRequest(adUnitId));
+        
+        _interstitialAdLoader.LoadAd(
+            CreateAdRequest(adUnitId),
+            onLoaded: HandleAdLoaded,
+            onFailed: HandleAdFailedToLoad);
         //DisplayMessage("Interstitial is requested");
     }
     
@@ -123,25 +126,32 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
 
         _interstitial.Show();
     }
-
-    private AdRequestConfiguration CreateAdRequest(string adUnitId)
+    
+    
+    private AdRequest CreateAdRequest(string adUnitId)
     {
-        return new AdRequestConfiguration.Builder(adUnitId).Build();
+        return new AdRequest(adUnitId);
     }
     
 
     #region Interstitial callback handlers
-
-    private void HandleAdLoaded(object sender, InterstitialAdLoadedEventArgs args)
+    
+    
+    private void HandleAdLoaded(Interstitial interstitial)
     {
         //DisplayMessage("HandleAdLoaded event received");
-        _interstitial = args.Interstitial;
+        _interstitial = interstitial;
     }
 
-    private void HandleAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
+    private void HandleAdFailedToLoad(AdFailedToLoadEventArgs args)
     {
         //DisplayMessage($"HandleAdFailedToLoad event received with message: {args.Message}");
     }
+    
+    
+    
+    
+    
     private void HandleInterstitialAdClicked(object sender, EventArgs args)
     {
         //DisplayMessage("HandleAdClicked event received");
@@ -188,26 +198,26 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
     private void RequestBanner()
     {
         //Sets COPPA restriction for user age under 13
-        MobileAds.SetAgeRestrictedUser(true);
+        YandexAds.SetAgeRestricted(true);
 
         // Replace demo Unit ID 'demo-banner-yandex' with actual Ad Unit ID
         string adUnitId = "R-M-16170795-1";
 
         CloseBannner();
         // Set sticky banner width
-        BannerAdSize bannerSize = BannerAdSize.StickySize(GetScreenWidthDp());
+        BannerAdSize bannerSize = BannerAdSize.Sticky(GetScreenWidthDp());
+        
         // Or set inline banner maximum width and height
         // BannerAdSize bannerSize = BannerAdSize.InlineSize(GetScreenWidthDp(), 300);
-        _banner = new Banner(adUnitId, bannerSize, AdPosition.TopCenter);
+        _banner = new Banner(bannerSize, AdPosition.TopCenter);
+        
 
         _banner.OnAdLoaded += HandleBannerAdLoaded;
         _banner.OnAdFailedToLoad += HandleBannerAdFailedToLoad;
-        _banner.OnReturnedToApplication += HandleBannerReturnedToApplication;
-        _banner.OnLeftApplication += HandleBannerLeftApplication;
         _banner.OnAdClicked += HandleBannerAdClicked;
         _banner.OnImpression += HandleBannerImpression;
 
-        _banner.LoadAd(CreateAdRequest());
+        _banner.LoadAd(CreateAdRequest(adUnitId));
         DisplayMessage("Banner is requested");
     }
 
@@ -217,11 +227,7 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
         int screenWidth = (int)Screen.safeArea.width;
         return ScreenUtils.ConvertPixelsToDp(screenWidth);
     }
-
-    private AdRequest CreateAdRequest()
-    {
-        return new AdRequest.Builder().Build();
-    }
+    
 
     #region Banner callback handlers
 
@@ -234,16 +240,6 @@ public class YandexMediationAdsManager : MonoBehaviour, IAdsGiver
     private void HandleBannerAdFailedToLoad(object sender, AdFailureEventArgs args)
     {
         this.DisplayMessage("HandleAdFailedToLoad event received with message: " + args.Message);
-    }
-
-    private void HandleBannerLeftApplication(object sender, EventArgs args)
-    {
-        //this.DisplayMessage("HandleLeftApplication event received");
-    }
-
-    private void HandleBannerReturnedToApplication(object sender, EventArgs args)
-    {
-        //this.DisplayMessage("HandleReturnedToApplication event received");
     }
 
     private void HandleBannerAdClicked(object sender, EventArgs args)

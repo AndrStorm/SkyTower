@@ -13,14 +13,16 @@
 #import "YMAUnityBannerTypes.h"
 #import "YMAUnityAdPosition.h"
 
+@class YMAAdInfo;
 @class YMAAdRequest;
 
 @interface YMAUnityBanner: NSObject
 
 - (instancetype)initWithClientRef:(YMAUnityBannerClientRef*)clientRef
-                         adUnitID:(char*)adUnitID
                            adSize:(YMABannerAdSize*)bannerAdSize
                          position:(YMAUnityAdPosition)position;
+
+- (YMAAdInfo*)getInfo;
 
 @property(nonatomic, assign) YMAUnityAdViewDidReceiveAdCallback adReceivedCallback;
 @property(nonatomic, assign) YMAUnityAdViewDidFailToReceiveAdWithErrorCallback loadingFailedCallback;

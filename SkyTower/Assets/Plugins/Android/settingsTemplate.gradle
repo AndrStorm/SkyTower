@@ -22,7 +22,7 @@ dependencyResolutionManagement {
             url "https://artifactory-external.vkpartner.ru/artifactory/maven" // Assets/Sky Tower/_Imported Assets/RuStoreSDK/Editor/AppUpdate/AppUpdateDependencies.xml:7, Assets/Sky Tower/_Imported Assets/RuStoreSDK/Editor/Common/CoreClientDependencies.xml:7, Assets/Sky Tower/_Imported Assets/RuStoreSDK/Editor/Review/ReviewDependencies.xml:7
         }
         maven {
-            url "https://maven.google.com/" // Assets/Sky Tower/_Imported Assets/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7, Assets/Sky Tower/_Imported Assets/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12, Packages/com.unity.ads/Editor/Source/Dependencies.xml:7
+            url "https://maven.google.com/" // Assets/Sky Tower/_Imported Assets/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7, Assets/Sky Tower/_Imported Assets/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12, Assets/Sky Tower/_Imported Assets/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17, Packages/com.unity.ads/Editor/Source/Dependencies.xml:7
         }
         mavenLocal()
 // Android Resolver Repos End

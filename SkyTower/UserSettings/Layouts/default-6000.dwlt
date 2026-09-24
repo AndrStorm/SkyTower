@@ -374,8 +374,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 321
-    y: 79
+    x: 322
+    y: 24
     width: 1242
     height: 870
   m_SerializedDataModeController:
@@ -1015,7 +1015,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.017257832, y: 0.9685197, z: -0.07015566, w: -0.2382439}
     speed: 2
-    m_Value: {x: -0.017257746, y: 0.96851486, z: -0.07015531, w: -0.2382427}
+    m_Value: {x: -0.017257746, y: 0.96851486, z: -0.070155315, w: -0.2382427}
   m_Size:
     m_Target: 6.0055475
     speed: 2
@@ -2426,8 +2426,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1565
-    y: 79
+    x: 1566
+    y: 24
     width: 496
     height: 870
   m_SerializedDataModeController:
@@ -2479,9 +2479,20 @@ MonoBehaviour:
       m_rawData: 0
     m_ExpandedIDs:
     - m_rawData: 0
-    - m_rawData: 6442450943
-    - m_rawData: 1099511654989
-    - m_rawData: 1099511654993
+    - m_rawData: 1099511657518
+    - m_rawData: 1099511657519
+    - m_rawData: 1099511657520
+    - m_rawData: 1099511657521
+    - m_rawData: 1099511657522
+    - m_rawData: 1099511657523
+    - m_rawData: 1099511657524
+    - m_rawData: 1099511657525
+    - m_rawData: 1099511657526
+    - m_rawData: 1099511657527
+    - m_rawData: 1099511657528
+    - m_rawData: 1099511657529
+    - m_rawData: 1099511657530
+    - m_rawData: 1099511657531
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2515,25 +2526,24 @@ MonoBehaviour:
       m_rawData: 0
     m_ExpandedIDs:
     - m_rawData: 0
-    - m_rawData: 1099511654981
-    - m_rawData: 1099511654984
-    - m_rawData: 1099511654985
-    - m_rawData: 1099511654987
-    - m_rawData: 1099511654988
-    - m_rawData: 1099511654989
-    - m_rawData: 1099511654990
-    - m_rawData: 1099511654991
-    - m_rawData: 1099511654993
-    - m_rawData: 1099511654999
-    - m_rawData: 1099511666790
-    - m_rawData: 1099511666842
-    - m_rawData: 1099511666879
-    - m_rawData: 3298534921823
-    - m_rawData: 12094627936309
+    - m_rawData: 1099511657518
+    - m_rawData: 1099511657519
+    - m_rawData: 1099511657520
+    - m_rawData: 1099511657521
+    - m_rawData: 1099511657522
+    - m_rawData: 1099511657523
+    - m_rawData: 1099511657524
+    - m_rawData: 1099511657525
+    - m_rawData: 1099511657526
+    - m_rawData: 1099511657527
+    - m_rawData: 1099511657528
+    - m_rawData: 1099511657529
+    - m_rawData: 1099511657530
+    - m_rawData: 1099511657531
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: YandexMediationAdsManager
-      m_OriginalName: YandexMediationAdsManager
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
@@ -2541,10 +2551,10 @@ MonoBehaviour:
         width: 0
         height: 0
       m_UserData:
-        m_rawData: 1099511652428
+        m_rawData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 10}
@@ -2614,7 +2624,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 975
+    y: 920
     width: 2062
     height: 371
   m_SerializedDataModeController:
@@ -2675,7 +2685,7 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_LastSelectedObjectID:
-    m_rawData: 1099511666790
+    m_rawData: 0
 --- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -2697,8 +2707,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 2063
-    y: 79
+    x: 2064
+    y: 24
     width: 496
     height: 1267
   m_SerializedDataModeController:
@@ -2875,7 +2885,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79
+    y: 24
     width: 320
     height: 870
   m_SerializedDataModeController:
@@ -2956,7 +2966,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 43
+    y: 0
     width: 2560
     height: 36
   m_SerializedDataModeController:
